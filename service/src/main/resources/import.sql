@@ -1,0 +1,1 @@
+insert into pacijent (id, created_at, broj_telefona, ime, jmbg, prezime) values ('201ab15f-3b22-4659-b839-235b9e6a728e', CURRENT_TIMESTAMP, '066656426', 'Jelena','11051974565555', 'Stevanovic');

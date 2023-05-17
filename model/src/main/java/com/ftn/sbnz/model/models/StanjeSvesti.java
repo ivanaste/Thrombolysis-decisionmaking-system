@@ -1,0 +1,9 @@
+package com.ftn.sbnz.model.models;
+
+public enum StanjeSvesti {
+	PRI_SVESTI,
+	POREMECAJ_U_RAZUMEVANJU_GOVORA,
+	POREMECAJ_U_IZRAZAVANJU_GOVORA,
+	MENTALNO_RETARDIRAN,
+	DEMENTAN
+}
