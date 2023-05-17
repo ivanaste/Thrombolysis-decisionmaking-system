@@ -1,5 +1,7 @@
 package com.ftn.sbnz.model.dto.request;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,8 @@ import lombok.Setter;
 public class NIHHSRequest {
 
 	public String jmbgPacijenta;
+
+	public UUID idOdluke;
 	public Integer stanjeSvesti;
 	public Integer stanjeSvestiPitanja;
 	private Integer stanjeSvestiNalozi;
@@ -24,7 +28,8 @@ public class NIHHSRequest {
 	private Integer dizartrija;
 	private Integer fenomenNeglekta;
 
-	public NIHHSRequest() {}
+	public NIHHSRequest() {
+	}
 
 	public int calculateSumOfProperties() {
 		int sum = 0;

@@ -1,0 +1,11 @@
+package com.ftn.sbnz.model.models;
+
+public enum ZnakIshemije {
+	GUBITAK_GRANICE_IZMEDJU_BELE_I_SIVE_MASE,
+	EDAMATOZNI_GIRUS,
+	HIPERDENZNI_ARTERIJSKI_ZNAK,
+	HIPOATENUACIJA_BAZALNIH_GANGLIJA;
+
+	ZnakIshemije() {
+	}
+}

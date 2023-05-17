@@ -1,11 +1,9 @@
 package com.ftn.sbnz.model.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -28,11 +26,6 @@ public class Odluka extends BaseEntity {
 
 	@ManyToOne
 	private Pacijent pacijent;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	private Simptomi simptomi;
-
-	private boolean postojeSvedoci;
 
 	@Enumerated(EnumType.STRING)
 	private StatusOdluke status = StatusOdluke.PRIHVACENA_FAZA_1;

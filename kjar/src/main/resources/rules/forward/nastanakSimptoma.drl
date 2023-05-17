@@ -1,6 +1,6 @@
 package forward;
 
-import com.ftn.sbnz.model.models.Odluka;
+import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.StanjeSvesti;
 import com.ftn.sbnz.model.models.StatusOdluke;
 import com.ftn.sbnz.model.events.HeartBeatEvent;
@@ -11,28 +11,28 @@ import java.time.LocalDateTime;
 rule "Faza 1 - Proslo vise od 4 ipo sata nakon simptoma"
 no-loop true
 	when
-		$t1: Odluka($trenutak: simptomi.getTrenutakNastanka(), $trenutak != null)
+		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1, $trenutak: simptomi.getTrenutakNastanka(), $trenutak != null)
 		$duration: Duration() from Duration.between($trenutak, LocalDateTime.now())
     	eval($duration.toHours() > 4 || ($duration.toHours() == 4 && $duration.toMinutesPart() >= 30))
 	then
 		System.out.println("Proslo vise od 4 ipo sata nakon simptoma");
-    	modify ($t1) { setStatus(StatusOdluke.ODBIJENA) };
+    	modify ($t1) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
 
 rule "Faza 1 - Simptomi nastali u toku visesatnog sna"
 no-loop true
 	when
-		$t1: Odluka(simptomi.isNastaliUTokuSna() == true)
+		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1, simptomi.isNastaliUTokuSna() == true)
 	then
 		System.out.println("Simptomi nastali u toku sna");
-    	modify ($t1) { setStatus(StatusOdluke.ODBIJENA) };
+    	modify ($t1) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
 
 rule "Faza 1 - Pacijent ima poremecaj u govoru, dementan ili mentalno retardiran, a nema svedoka"
 no-loop true
 when
-    $t1: Odluka
-    ($stanjeSvesti: simptomi.getStanjeSvesti(),
+    $t1: OdlukaOTromboliziEvent
+    (statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1, $stanjeSvesti: simptomi.getStanjeSvesti(),
     	(
     		$stanjeSvesti == StanjeSvesti.POREMECAJ_U_IZRAZAVANJU_GOVORA ||
     		$stanjeSvesti == StanjeSvesti.POREMECAJ_U_RAZUMEVANJU_GOVORA ||
@@ -42,5 +42,5 @@ when
 	)
 then
     System.out.println("Pacijent ima poremecaj, a nema svedoka");
-    modify ($t1) { setStatus(StatusOdluke.ODBIJENA) };
+    modify ($t1) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end

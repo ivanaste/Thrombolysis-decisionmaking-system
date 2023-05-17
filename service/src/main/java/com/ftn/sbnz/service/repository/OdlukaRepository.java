@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OdlukaRepository extends JpaRepository<Odluka, UUID> {
 
-	Odluka getOdlukaByPacijentAndStatusNotIn(Pacijent pacijent, List<StatusOdluke> statusi);
+	Optional<Odluka> getOdlukaByPacijentAndStatusNotIn(Pacijent pacijent, List<StatusOdluke> statusi);
 
 	Odluka getFirstByPacijent_JmbgOrderByCreatedAtDesc(String jmbg);
 }
