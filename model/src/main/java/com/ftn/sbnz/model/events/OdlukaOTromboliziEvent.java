@@ -1,9 +1,8 @@
 package com.ftn.sbnz.model.events;
 
-import com.ftn.sbnz.model.models.Simptomi;
-import com.ftn.sbnz.model.models.StatusOdluke;
-import com.ftn.sbnz.model.models.ZnakIshemije;
+import com.ftn.sbnz.model.models.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +19,6 @@ import lombok.Setter;
 public class OdlukaOTromboliziEvent {
 
 	private UUID idOdluke;
-	private String jmbgPacijenta;
 
 	private StatusOdluke statusOdluke;
 
@@ -28,26 +26,46 @@ public class OdlukaOTromboliziEvent {
 
 	private boolean postojeSvedoci;
 
+	private Monitoring monitoring;
+
 	private List<ZnakIshemije> znaciIshemije;
+
+	private Laboratorija laboratorija;
+
+	private List<Kontraindikacija> kontraindikacije;
 
 	public OdlukaOTromboliziEvent() {
 	}
 
-	public OdlukaOTromboliziEvent(final UUID idOdluke, final String jmbgPacijenta, final StatusOdluke statusOdluke) {
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke) {
 		this.idOdluke = idOdluke;
-		this.jmbgPacijenta = jmbgPacijenta;
 		this.statusOdluke = statusOdluke;
 	}
 
-	public OdlukaOTromboliziEvent(final UUID idOdluke, final String jmbgPacijenta, final StatusOdluke statusOdluke, final Simptomi simptomi,
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final Simptomi simptomi,
 		final boolean postojeSvedoci) {
-		this(idOdluke, jmbgPacijenta, statusOdluke);
+		this(idOdluke, statusOdluke);
 		this.simptomi = simptomi;
 		this.postojeSvedoci = postojeSvedoci;
 	}
 
 	public OdlukaOTromboliziEvent(final UUID idOdluke, final String jmbgPacijenta, final StatusOdluke statusOdluke, final List<ZnakIshemije> znaciIshemije) {
-		this(idOdluke, jmbgPacijenta, statusOdluke);
+		this(idOdluke, statusOdluke);
 		this.znaciIshemije = znaciIshemije;
+	}
+
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final Laboratorija laboratorija) {
+		this(idOdluke, statusOdluke);
+		this.laboratorija = laboratorija;
+	}
+
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final List<Kontraindikacija> kontraindikacije) {
+		this(idOdluke, statusOdluke);
+		this.kontraindikacije = kontraindikacije;
+	}
+
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final Monitoring monitoring) {
+		this(idOdluke, statusOdluke);
+		this.monitoring = monitoring;
 	}
 }

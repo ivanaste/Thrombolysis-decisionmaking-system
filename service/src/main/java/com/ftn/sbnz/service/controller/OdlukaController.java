@@ -2,6 +2,7 @@ package com.ftn.sbnz.service.controller;
 
 import com.ftn.sbnz.model.dto.request.NIHHSRequest;
 import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
+import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.service.services.OdlukaService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,9 @@ public class OdlukaController {
 	}
 
 	@PostMapping(value = "/neuroloskiPregled", produces = "application/json")
-	public String proveraOdlukeNaOsnovuNeuroloskogPregled(@RequestBody NastanakSimptomaRequest nastanakSimptomaRequest) {
+	public String proveraOdlukeNaOsnovuNeuroloskogPregled(@RequestBody NeuroloskiPregledRequest neuroloskiPregledRequest) {
 
-		return sampleService.proveriOdlukuNaOsnovuNastankaSimptoma(nastanakSimptomaRequest);
+		return sampleService.proveriOdlukuNaOsnovuNeuroloskogPregleda(neuroloskiPregledRequest);
 	}
 
 	@PostMapping(value = "/nihhsSkor", produces = "application/json")
