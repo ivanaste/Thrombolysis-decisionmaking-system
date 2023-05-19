@@ -48,10 +48,17 @@ rule "Ukoliko se poslednjih 5 RR intervala znatno razlikuju (razlika ≥ 4), sum
 	when
 		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval != null)
 
-		$posljednjih5: List() from collect(
-                OtkucajSrcaEvent(jmbgPacijenta == $jmbgPacijenta1, rrInterval != null) over window:length(5) from $otkucaj1
+		$posljednjih5: List(size >= 5) from collect(
+                OtkucajSrcaEvent(jmbgPacijenta == $jmbgPacijenta1, rrInterval != null) over window:length(5)
             )
-		not(AlarmZaRadSrca(jmbgPacijenta == $jmbgPacijenta1, reason == RadSrca.USPOREN))
+        accumulate(
+                $i: OtkucajSrcaEvent() from $poslednjih5,
+                $prev: OtkucajSrcaEvent(this != $i) from $poslednjih5,
+                $difference: Integer(this != null) from ($i.getLength() - $prev.getLength());
+                $differences: List() from collect($difference)
+                $totalDifference: Integer() from sum($differences)
+            )
+		not(AlarmZaRadSrca(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.USPOREN))
 	then
 		System.out.println("ALARM ZA ATRIJALNU FIBRILACIJU");
 		insert(new AlarmZaRadSrca($jmbgPacijenta1, RadSrca.USPOREN));
