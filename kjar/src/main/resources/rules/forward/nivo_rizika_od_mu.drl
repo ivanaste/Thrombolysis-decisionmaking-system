@@ -1,0 +1,33 @@
+package forward;
+
+import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
+import com.ftn.sbnz.model.models.NivoRizikaOdMU;
+
+
+rule "Nivo rizika - Ukoliko je ABCD2 skor 0-4 poena, pacijent ima nizak rizik od MU."
+no-loop true
+	when
+		$nivoRizika: ProcenaRizikaOdMUEvent($skor: ABCD2Skor, ABCD2Skor < 4)
+
+	then
+		System.out.println("Pacijent ciji je ABCD2 skor " + $skor + " ima nizak rizik od MU.");
+		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK) };
+end
+
+rule "Nivo rizika - Ukoliko je stenoza simptomatskog krvnog suda < 50%, pacijent ima nizak rizik od MU."
+no-loop true
+	when
+		$nivoRizika: ProcenaRizikaOdMUEvent($stenoza: stenozaKrvnogSuda, ABCD2Skor >= 4, ABCD2Skor < 6, $stenoza < 50)
+	then
+		System.out.println("Stenoza simptomatskog krvnog suda je " + $stenoza + "%, te pacijent ima nizak rizik od MU.");
+		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK) };
+end
+
+rule "Nivo rizika - Ukoliko je ABCD2 skor veci ili jednak 6 poena, pacijent ima visok rizik od MU."
+no-loop true
+	when
+		$nivoRizika: ProcenaRizikaOdMUEvent($skor: ABCD2Skor, ABCD2Skor >= 6)
+	then
+		System.out.println("Pacijent ciji je ABCD2 skor " + $skor + " ima visok rizik od MU.");
+		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
+end

@@ -2,7 +2,10 @@
     <kbase name="bwBase" packages="backward">
         <ksession name="bwKsession"/>
     </kbase>
-    <kbase name="cepKbase" eventProcessingMode="stream" packages="cep, forward">
-        <ksession name="cepKsession" clockType="pseudo" default="true"/>
+    <kbase name="forward" eventProcessingMode="stream" packages="forward, cep">
+        <ksession name="forwardSession" clockType="pseudo" default="true"/>
+    </kbase>
+    <kbase name="cepKbase" eventProcessingMode="stream" packages="cep">
+        <ksession name="cepKsession" clockType="pseudo"/>
     </kbase>
 </kmodule>

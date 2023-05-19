@@ -5,6 +5,7 @@ import com.ftn.sbnz.model.models.StatusOdluke;
 
 rule "Faza 3 - Ukoliko je sistolni pritisak preko 185 mmHg ili dijastolni preko 110 mmHg, pacijent nije podoban za terapiju."
 no-loop true
+salience 1000
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_3, monitoring.getPritisak().getSistolni() > 185 || monitoring.getPritisak().getDijastolni() > 110)
 	then

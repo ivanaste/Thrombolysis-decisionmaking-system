@@ -20,6 +20,7 @@ import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OdlukaService {
-
-	private static final Logger log = LoggerFactory.getLogger(OdlukaService.class);
-
 	private final KieSession kieSession;
 
 	private final OdlukaRepository odlukaRepository;
@@ -45,7 +43,6 @@ public class OdlukaService {
 
 	@Autowired
 	public OdlukaService(final KieSession kieSession, final OdlukaRepository odlukaRepository, final KorisnikService korisnikService) {
-		log.info("Initialising a new example session.");
 		this.kieSession = kieSession;
 		this.odlukaRepository = odlukaRepository;
 		this.korisnikService = korisnikService;
@@ -63,6 +60,8 @@ public class OdlukaService {
 		kieSession.insert(odlukaEvent);
 		kieSession.fireAllRules();
 		//kieSession.dispose();
+		//return odlukaRepository.getReferenceById(neuroloskiPregled.getIdOdluke()).getStatus().getOpis();
+		//moze ovo
 		return odlukaRepository.getFirstByPacijent_JmbgOrderByCreatedAtDesc(nastanakSimptomaRequest.getJmbgPacijenta()).getStatus().getOpis();
 	}
 
@@ -116,6 +115,7 @@ public class OdlukaService {
 	}
 
 	public Odluka izmeniOdlukuZaZadatogPacijenta(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
+		//nije dobro ime metode
 		final Odluka odluka = odlukaRepository.getReferenceById(idOdluke);
 		odluka.setStatus(noviStatusOdluke);
 		odlukaRepository.save(odluka);
@@ -159,6 +159,7 @@ public class OdlukaService {
 		final Monitoring monitoring = monitoringSimulacija.simulirajMerenjePritiska();
 		//monitoring.getPritisak().setDijastolni(105);
 		monitoring.setPritisak(new Pritisak(200, 100));
+		System.out.println("Sistolni" + monitoring.getPritisak().getSistolni());
 
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
 				StatusOdluke.PRIHVACENA_FAZA_3, monitoring);

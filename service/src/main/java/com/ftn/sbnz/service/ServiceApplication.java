@@ -13,9 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "com.ftn.sbnz.model.models" })  // scan JPA entities
+@EnableScheduling
 public class ServiceApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(ServiceApplication.class);

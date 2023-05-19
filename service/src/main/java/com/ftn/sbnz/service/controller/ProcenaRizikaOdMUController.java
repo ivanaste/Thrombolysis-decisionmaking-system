@@ -1,7 +1,7 @@
 package com.ftn.sbnz.service.controller;
 
-import com.ftn.sbnz.model.models.TIARequest;
-import com.ftn.sbnz.service.services.TIAService;
+import com.ftn.sbnz.model.dto.request.TIARequest;
+import com.ftn.sbnz.service.services.ProcenaRizikaOdMUService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class TIAController {
+public class ProcenaRizikaOdMUController {
 
-	private final TIAService tiaService;
+	private final ProcenaRizikaOdMUService procenaRizikaOdMUService;
 
 	@PostMapping(value = "/rizikOdMU", produces = "application/json")
-	public void utvrdjivanjeNivoaRizikaOdMU(@RequestBody final TIARequest tiaRequest) {
+	public String utvrdjivanjeNivoaRizikaOdMU(@RequestBody final TIARequest tiaRequest) {
 
-		tiaService.utvrdiNivoRizikaOdMU(tiaRequest);
+		return procenaRizikaOdMUService.utvrdiNivoRizikaOdMU(tiaRequest);
 	}
 
 }
