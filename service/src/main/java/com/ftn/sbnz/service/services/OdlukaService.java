@@ -4,22 +4,27 @@ import com.ftn.sbnz.model.dto.request.NIHHSRequest;
 import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
 import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
-import com.ftn.sbnz.model.models.*;
+import com.ftn.sbnz.model.models.Laboratorija;
+import com.ftn.sbnz.model.models.Monitoring;
+import com.ftn.sbnz.model.models.NIHHS;
+import com.ftn.sbnz.model.models.Odluka;
+import com.ftn.sbnz.model.models.Pritisak;
+import com.ftn.sbnz.model.models.Simptomi;
+import com.ftn.sbnz.model.models.StatusOdluke;
+import com.ftn.sbnz.model.models.ZnakIshemije;
 import com.ftn.sbnz.service.repository.OdlukaRepository;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
+import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
+import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
-import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.management.monitor.Monitor;
 
 @Service
 public class OdlukaService {
@@ -61,7 +66,7 @@ public class OdlukaService {
 		return odlukaRepository.getFirstByPacijent_JmbgOrderByCreatedAtDesc(nastanakSimptomaRequest.getJmbgPacijenta()).getStatus().getOpis();
 	}
 
-	public String proveriOdlukuNaOsnovuNeuroloskogPregleda(NeuroloskiPregledRequest neuroloskiPregled) {
+	public String proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(neuroloskiPregled.getIdOdluke(),
 				StatusOdluke.PRIHVACENA_FAZA_2,
 				neuroloskiPregled.kreirajKontraindikacije());
@@ -111,15 +116,6 @@ public class OdlukaService {
 	}
 
 	public Odluka izmeniOdlukuZaZadatogPacijenta(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
-		//		final Optional<Odluka> odlukaOptional = odlukaRepository.getReferenceById(idOdluke);
-		//		Odluka odluka = null;
-		//		if (odlukaOptional.isPresent()) {
-		//			odluka = odlukaOptional.get();
-		//			odluka.setStatus(noviStatusOdluke);
-		//		} else if (noviStatusOdluke.equals(StatusOdluke.PRIHVACENA_FAZA_1) || noviStatusOdluke.equals(StatusOdluke.ODBIJENA)) {
-		//			odluka = new Odluka(pacijent, noviStatusOdluke);
-		//		}
-		//		odlukaRepository.save(odluka);
 		final Odluka odluka = odlukaRepository.getReferenceById(idOdluke);
 		odluka.setStatus(noviStatusOdluke);
 		odlukaRepository.save(odluka);
@@ -130,7 +126,7 @@ public class OdlukaService {
 		//simulirajCT
 		if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_4)) {
 			//final List<ZnakIshemije> znaci = ctSimulacija.simulirajOcitavanjeCTa();
-			List<ZnakIshemije> znaci = List.of(ZnakIshemije.GUBITAK_GRANICE_IZMEDJU_BELE_I_SIVE_MASE);
+			final List<ZnakIshemije> znaci = List.of(ZnakIshemije.GUBITAK_GRANICE_IZMEDJU_BELE_I_SIVE_MASE);
 			System.out.println("Znaci " + znaci);
 			final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(izmenjenaOdluka.getId(), izmenjenaOdluka.getPacijent().getJmbg(),
 				izmenjenaOdluka.getStatus(), znaci);
@@ -141,7 +137,7 @@ public class OdlukaService {
 	}
 
 	public void simulirajLaboratoriju(final Odluka odluka) {
-		Laboratorija laboratorija = laboratorijaSimulacija.simulirajLaboratoriju();
+		final Laboratorija laboratorija = laboratorijaSimulacija.simulirajLaboratoriju();
 		laboratorija.setTrombociti(110000.00);
 		laboratorija.setGlikemija(20.00);
 		laboratorija.setINR(1.65);
@@ -160,8 +156,9 @@ public class OdlukaService {
 	}
 
 	public void simulirajMonitoring(final Odluka odluka) {
-		Monitoring monitoring = monitoringSimulacija.simulirajMerenjePritiska();
-		monitoring.getPritisak().setDijastolni(115);
+		final Monitoring monitoring = monitoringSimulacija.simulirajMerenjePritiska();
+		//monitoring.getPritisak().setDijastolni(105);
+		monitoring.setPritisak(new Pritisak(200, 100));
 
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
 				StatusOdluke.PRIHVACENA_FAZA_3, monitoring);

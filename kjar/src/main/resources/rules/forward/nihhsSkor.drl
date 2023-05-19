@@ -26,9 +26,8 @@ end
 
 rule "Odluka o trombolizi insertovana"
 	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4)
+		$odlukaEvent: OdlukaOTromboliziEvent((statusOdluke != StatusOdluke.ODBIJENA) || (statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4) || (statusOdluke != StatusOdluke.PRIHVACENA_FAZA_3))
 	then
-		System.out.println("u pravilu odluka " + $odlukaEvent.getIdOdluke());
 		System.out.println("Promena odluke o primeni trombolize na: " + $odlukaEvent.getStatusOdluke());
 		retract($odlukaEvent)
 end

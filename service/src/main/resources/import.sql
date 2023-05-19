@@ -1,2 +1,2 @@
-insert into pacijent (id, created_at, broj_telefona, ime, jmbg, prezime) values ('201ab15f-3b22-4659-b839-235b9e6a728e', CURRENT_TIMESTAMP, '066656426', 'Jelena', '11051974565555', 'Stevanovic');
+insert into pacijent (id, created_at, broj_telefona, ime, jmbg, prezime, datum_rodjenja) values ('201ab15f-3b22-4659-b839-235b9e6a728e', CURRENT_TIMESTAMP, '066656426', 'Jelena', '11051974565555', 'Stevanovic', '1999-12-31');
 insert into odluka (id, created_at, status, pacijent_id) values ('f74d01d4-0348-448b-815d-59b68b408c77', CURRENT_TIMESTAMP, 'PRIHVACENA_FAZA_1', '201ab15f-3b22-4659-b839-235b9e6a728e');

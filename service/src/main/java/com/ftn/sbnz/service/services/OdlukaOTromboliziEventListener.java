@@ -30,7 +30,6 @@ public class OdlukaOTromboliziEventListener extends DefaultAgendaEventListener {
 		if (matchedObject instanceof OdlukaOTromboliziEvent) {
 			final OdlukaOTromboliziEvent ruleEvent = (OdlukaOTromboliziEvent) matchedObject;
 			final Odluka izmenjenaOdluka = odlukaService.izmeniOdlukuZaZadatogPacijenta(ruleEvent.getIdOdluke(), ruleEvent.getStatusOdluke());
-			System.out.println("Izmenjena odluka" + izmenjenaOdluka.getStatus());
 
 			if (!event.getMatch().getRule().getName().contains("Faza 5")) {
 				odlukaService.simuliraj(izmenjenaOdluka);
