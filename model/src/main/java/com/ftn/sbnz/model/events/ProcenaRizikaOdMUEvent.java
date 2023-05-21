@@ -17,11 +17,19 @@ public class ProcenaRizikaOdMUEvent {
     private NivoRizikaOdMU nivoRizika;
     private Integer ABCD2Skor;
     private Integer stenozaKrvnogSuda;
+    private String jmbgPacijenta;
 
-    public ProcenaRizikaOdMUEvent(UUID idProceneRizika, NivoRizikaOdMU nivoRizika, Integer ABCD2Skor, Integer stenozaKrvnogSuda) {
+    public ProcenaRizikaOdMUEvent(UUID idProceneRizika, String jmbgPacijenta, NivoRizikaOdMU nivoRizika, Integer ABCD2Skor, Integer stenozaKrvnogSuda) {
         this.idProceneRizika = idProceneRizika;
+        this.jmbgPacijenta = jmbgPacijenta;
         this.nivoRizika = nivoRizika;
         this.ABCD2Skor = ABCD2Skor;
         this.stenozaKrvnogSuda = stenozaKrvnogSuda;
+    }
+
+    public ProcenaRizikaOdMUEvent(UUID idProceneRizika, String jmbgPacijenta, NivoRizikaOdMU nivoRizika) {
+        this.idProceneRizika = idProceneRizika;
+        this.jmbgPacijenta = jmbgPacijenta;
+        this.nivoRizika = nivoRizika;
     }
 }

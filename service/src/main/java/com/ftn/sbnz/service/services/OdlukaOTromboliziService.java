@@ -5,7 +5,6 @@ import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
 import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.Laboratorija;
-import com.ftn.sbnz.model.models.Monitoring;
 import com.ftn.sbnz.model.models.NIHHS;
 import com.ftn.sbnz.model.models.Odluka;
 import com.ftn.sbnz.model.models.Pritisak;
@@ -22,13 +21,11 @@ import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OdlukaService {
+@RequiredArgsConstructor
+public class OdlukaOTromboliziService {
 	private final KieSession kieSession;
 
 	private final OdlukaRepository odlukaRepository;
@@ -39,14 +36,8 @@ public class OdlukaService {
 
 	private final LaboratorijaSimulacija laboratorijaSimulacija = new LaboratorijaSimulacija();
 
-	private final MonitoringSimulacija monitoringSimulacija = new MonitoringSimulacija();
+	private final MonitoringSimulacija monitoringSimulacija;
 
-	@Autowired
-	public OdlukaService(final KieSession kieSession, final OdlukaRepository odlukaRepository, final KorisnikService korisnikService) {
-		this.kieSession = kieSession;
-		this.odlukaRepository = odlukaRepository;
-		this.korisnikService = korisnikService;
-	}
 
 	public String proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
 		final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),
@@ -122,7 +113,7 @@ public class OdlukaService {
 		return odluka;
 	}
 
-	public void simuliraj(final Odluka izmenjenaOdluka) {
+	public void simulirajCT(final Odluka izmenjenaOdluka) {
 		//simulirajCT
 		if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_4)) {
 			//final List<ZnakIshemije> znaci = ctSimulacija.simulirajOcitavanjeCTa();
@@ -156,13 +147,12 @@ public class OdlukaService {
 	}
 
 	public void simulirajMonitoring(final Odluka odluka) {
-		final Monitoring monitoring = monitoringSimulacija.simulirajMerenjePritiska();
+		final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
 		//monitoring.getPritisak().setDijastolni(105);
-		monitoring.setPritisak(new Pritisak(200, 100));
-		System.out.println("Sistolni" + monitoring.getPritisak().getSistolni());
+		//System.out.println("Sistolni" + monitoring.getPritisak().getSistolni());
 
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
-				StatusOdluke.PRIHVACENA_FAZA_3, monitoring);
+				StatusOdluke.PRIHVACENA_FAZA_3, pritisak);
 		kieSession.insert(odlukaEvent);
 		kieSession.fireAllRules();
 	}

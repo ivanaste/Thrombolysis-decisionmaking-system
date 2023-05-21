@@ -7,7 +7,7 @@ rule "Faza 3 - Ukoliko je sistolni pritisak preko 185 mmHg ili dijastolni preko 
 no-loop true
 salience 1000
 	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_3, monitoring.getPritisak().getSistolni() > 185 || monitoring.getPritisak().getDijastolni() > 110)
+		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_3, pritisak.getSistolni() > 185 || pritisak.getDijastolni() > 110)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju jer ima visok pritisak.");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };

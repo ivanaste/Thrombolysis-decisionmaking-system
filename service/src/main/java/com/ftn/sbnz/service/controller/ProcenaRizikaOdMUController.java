@@ -1,6 +1,6 @@
 package com.ftn.sbnz.service.controller;
 
-import com.ftn.sbnz.model.dto.request.TIARequest;
+import com.ftn.sbnz.model.dto.request.ProcenaRizikaOdMURequest;
 import com.ftn.sbnz.service.services.ProcenaRizikaOdMUService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +16,9 @@ public class ProcenaRizikaOdMUController {
 	private final ProcenaRizikaOdMUService procenaRizikaOdMUService;
 
 	@PostMapping(value = "/rizikOdMU", produces = "application/json")
-	public String utvrdjivanjeNivoaRizikaOdMU(@RequestBody final TIARequest tiaRequest) {
+	public String utvrdjivanjeNivoaRizikaOdMU(@RequestBody final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) {
 
-		return procenaRizikaOdMUService.utvrdiNivoRizikaOdMU(tiaRequest);
+		return procenaRizikaOdMUService.utvrdiNivoRizikaOdMU(procenaRizikaOdMURequest);
 	}
 
 }

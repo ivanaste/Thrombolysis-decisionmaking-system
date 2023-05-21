@@ -1,8 +1,6 @@
 package com.ftn.sbnz.model.events;
 
-import com.ftn.sbnz.model.models.RRInterval;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
@@ -20,14 +18,14 @@ public class OtkucajSrcaEvent {
 
     private String jmbgPacijenta;
 
-    private RRInterval rrInterval;
+    private Integer rrInterval;
 
     public OtkucajSrcaEvent(String jmbgPacijenta) {
         this.executionTime = new Date();
         this.jmbgPacijenta = jmbgPacijenta;
     }
 
-    public OtkucajSrcaEvent(String jmbgPacijenta, RRInterval rrInterval) {
+    public OtkucajSrcaEvent(String jmbgPacijenta, Integer rrInterval) {
         this(jmbgPacijenta);
         this.rrInterval = rrInterval;
     }

@@ -3,7 +3,7 @@ package com.ftn.sbnz.model.dto.request;
 import lombok.Getter;
 
 @Getter
-public class TIARequest {
+public class ProcenaRizikaOdMURequest {
 	private String jmbgPacijenta;
 	private boolean hemipareza;
 	private boolean hemiplegija;

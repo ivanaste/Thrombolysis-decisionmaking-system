@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-public class RRInterval {
+public class AlarmEKG {
+    private String jmbgPacijenta;
+    private RadSrca radSrca;
 }

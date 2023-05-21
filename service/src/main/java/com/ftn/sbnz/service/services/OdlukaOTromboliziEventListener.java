@@ -2,8 +2,6 @@ package com.ftn.sbnz.service.services;
 
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.Odluka;
-import com.ftn.sbnz.model.models.StatusOdluke;
-import com.ftn.sbnz.service.simulation.CTSimulacija;
 
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.DefaultAgendaEventListener;
@@ -13,35 +11,46 @@ import org.springframework.stereotype.Component;
 @Component
 public class OdlukaOTromboliziEventListener extends DefaultAgendaEventListener {
 
-	private final OdlukaService odlukaService;
-
-	private final CTSimulacija ctSimulacija = new CTSimulacija();
+	private final OdlukaOTromboliziService odlukaOTromboliziService;
 
 	@Autowired
-	public OdlukaOTromboliziEventListener(final OdlukaService odlukaService) {
-		this.odlukaService = odlukaService;
+	public OdlukaOTromboliziEventListener(final OdlukaOTromboliziService odlukaOTromboliziService) {
+		this.odlukaOTromboliziService = odlukaOTromboliziService;
 	}
 
 	@Override
 	public void afterMatchFired(final AfterMatchFiredEvent event) {
 		final Object matchedObject = event.getMatch().getObjects().get(0);
-		System.out.println(matchedObject);
-		System.out.println("Ime pravila " + event.getMatch().getRule().getName());
 		if (matchedObject instanceof OdlukaOTromboliziEvent) {
 			final OdlukaOTromboliziEvent ruleEvent = (OdlukaOTromboliziEvent) matchedObject;
-			final Odluka izmenjenaOdluka = odlukaService.izmeniOdlukuZaZadatogPacijenta(ruleEvent.getIdOdluke(), ruleEvent.getStatusOdluke());
-
-			if (!event.getMatch().getRule().getName().contains("Faza 5")) {
-				odlukaService.simuliraj(izmenjenaOdluka);
+			final Odluka izmenjenaOdluka = odlukaOTromboliziService.izmeniOdlukuZaZadatogPacijenta(ruleEvent.getIdOdluke(), ruleEvent.getStatusOdluke());
+			switch (izmenjenaOdluka.getStatus()) {
+				case PRIHVACENA_FAZA_2:
+					odlukaOTromboliziService.simulirajMonitoring(izmenjenaOdluka);
+					break;
+				case PRIHVACENA_FAZA_4:
+					odlukaOTromboliziService.simulirajCT(izmenjenaOdluka);
+					break;
+				case PRIHVACENA_FAZA_5:
+					odlukaOTromboliziService.simulirajLaboratoriju(izmenjenaOdluka);
+					break;
 			}
+//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_2)) {
+//				odlukaService.simulirajMonitoring(izmenjenaOdluka);
+//			}
+//
+//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_5)) {
+//				odlukaService.simulirajLaboratoriju(izmenjenaOdluka);
+//			}
+//
+//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_4)) {
+//				odlukaService.simulirajCT(izmenjenaOdluka);
+//			}
 
-			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_5)) {
-				odlukaService.simulirajLaboratoriju(izmenjenaOdluka);
-			}
 
-			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_2)) {
-				odlukaService.simulirajMonitoring(izmenjenaOdluka);
-			}
+//			if (!event.getMatch().getRule().getName().contains("Faza 5")) {
+//				odlukaService.simulirajCT(izmenjenaOdluka);
+//			}
 		}
 	}
 }

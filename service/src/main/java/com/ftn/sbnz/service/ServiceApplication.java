@@ -1,7 +1,10 @@
 package com.ftn.sbnz.service;
 
-import java.util.Arrays;
+import java.util.*;
 
+import com.ftn.sbnz.model.models.Pacijent;
+import com.ftn.sbnz.service.repository.KorisnikRepository;
+import lombok.RequiredArgsConstructor;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
@@ -18,9 +21,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EntityScan(basePackages = { "com.ftn.sbnz.model.models" })  // scan JPA entities
 @EnableScheduling
+@RequiredArgsConstructor
 public class ServiceApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(ServiceApplication.class);
+
+	private final Map<String, Pacijent> pacijentiNaEKGu = new HashMap<>();
+
+	private final KorisnikRepository korisnikRepository;
 
 	public static void main(final String[] args) {
 		final ApplicationContext ctx = SpringApplication.run(ServiceApplication.class, args);
@@ -51,4 +59,11 @@ public class ServiceApplication {
 		//KieBase kieBase = kieContainer.getKieBase();
 		return kieContainer.newKieSession();
 	}
+
+	@Bean
+	public Map<String, Pacijent> PacijentiNaEKGu() {
+		pacijentiNaEKGu.put("11051974565555", korisnikRepository.getPacijentByJmbg("11051974565555"));
+		return pacijentiNaEKGu;
+	}
+
 }

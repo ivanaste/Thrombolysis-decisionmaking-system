@@ -2,6 +2,8 @@ package forward;
 
 import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
 import com.ftn.sbnz.model.models.NivoRizikaOdMU;
+import com.ftn.sbnz.model.models.AlarmEKG;
+import com.ftn.sbnz.model.models.RadSrca;
 
 
 rule "Nivo rizika - Ukoliko je ABCD2 skor 0-4 poena, pacijent ima nizak rizik od MU."
@@ -14,6 +16,7 @@ no-loop true
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK) };
 end
 
+
 rule "Nivo rizika - Ukoliko je stenoza simptomatskog krvnog suda < 50%, pacijent ima nizak rizik od MU."
 no-loop true
 	when
@@ -23,6 +26,7 @@ no-loop true
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK) };
 end
 
+
 rule "Nivo rizika - Ukoliko je ABCD2 skor veci ili jednak 6 poena, pacijent ima visok rizik od MU."
 no-loop true
 	when
@@ -31,3 +35,39 @@ no-loop true
 		System.out.println("Pacijent ciji je ABCD2 skor " + $skor + " ima visok rizik od MU.");
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
 end
+
+
+//ako je status procena u toku, znaci da su prosle prve tri faze, proverava da li postoji ijedan alarm za atrijalnu fibrilaciju
+rule "Ukoliko je utvrdjena atrijalna fibrilacija, pacijent ima visok rizik od MU"
+	when
+		$nivoRizika: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta, nivoRizika == NivoRizikaOdMU.PROCENA_U_TOKU)
+		Number(intValue >= 1) from accumulate(
+        		    $alarm: AlarmEKG(
+        		        jmbgPacijenta == $jmbgPacijenta1,
+        		        radSrca == RadSrca.ATRIJALNA_FIBRILACIJA
+        		    ),
+        		    count($alarm)
+        		)
+	then
+		System.out.println("Pacijent ima visok rizik od MU, jer je uocena atrijalna fibrilacija");
+		//treba da se posalje websocket
+		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
+end
+
+
+//ako je status procena u toku, proveravas da li postoji ijedan alarm za atrijalnu fibrilaciju
+//rule "Ukoliko se kod pacijenta TIA javi unutar tri dana, postoji visok rizik od MU."
+//	when
+//		$nivoRizika1: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta, nivoRizika == NivoRizikaOdMU.PROCENA_U_TOKU)
+//		Number(intValue >= 1) from accumulate(
+//        		    $nivoRizika2: ProcenaRizikaOdMUEvent(
+//        		        jmbgPacijenta == $jmbgPacijenta1,
+//        		        nivoRizika == NivoRizikaOdMU.NIZAK_RIZIK || nivoRizika == NivoRizikaOdMU.VISOK_RIZIK,
+//        		        this meets[3d] $nivoRizika1
+//        		    ),
+//        		    count($nivoRizika2)
+//        		)
+//	then
+//		System.out.println("Pacijent ima visok rizik od MU, jer se TIA ponovio unutar tri dana.");
+//		modify ($nivoRizika1) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
+//end
