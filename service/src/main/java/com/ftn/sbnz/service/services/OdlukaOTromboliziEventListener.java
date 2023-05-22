@@ -23,10 +23,10 @@ public class OdlukaOTromboliziEventListener extends DefaultAgendaEventListener {
 		final Object matchedObject = event.getMatch().getObjects().get(0);
 		if (matchedObject instanceof OdlukaOTromboliziEvent) {
 			final OdlukaOTromboliziEvent ruleEvent = (OdlukaOTromboliziEvent) matchedObject;
-			final Odluka izmenjenaOdluka = odlukaOTromboliziService.izmeniOdlukuZaZadatogPacijenta(ruleEvent.getIdOdluke(), ruleEvent.getStatusOdluke());
+			final Odluka izmenjenaOdluka = odlukaOTromboliziService.izmeniStatusOdluke(ruleEvent.getIdOdluke(), ruleEvent.getStatusOdluke());
 			switch (izmenjenaOdluka.getStatus()) {
 				case PRIHVACENA_FAZA_2:
-					odlukaOTromboliziService.simulirajMonitoring(izmenjenaOdluka);
+					odlukaOTromboliziService.simulirajMerenjePritiska(izmenjenaOdluka);
 					break;
 				case PRIHVACENA_FAZA_4:
 					odlukaOTromboliziService.simulirajCT(izmenjenaOdluka);
@@ -35,22 +35,6 @@ public class OdlukaOTromboliziEventListener extends DefaultAgendaEventListener {
 					odlukaOTromboliziService.simulirajLaboratoriju(izmenjenaOdluka);
 					break;
 			}
-//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_2)) {
-//				odlukaService.simulirajMonitoring(izmenjenaOdluka);
-//			}
-//
-//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_5)) {
-//				odlukaService.simulirajLaboratoriju(izmenjenaOdluka);
-//			}
-//
-//			if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_4)) {
-//				odlukaService.simulirajCT(izmenjenaOdluka);
-//			}
-
-
-//			if (!event.getMatch().getRule().getName().contains("Faza 5")) {
-//				odlukaService.simulirajCT(izmenjenaOdluka);
-//			}
 		}
 	}
 }

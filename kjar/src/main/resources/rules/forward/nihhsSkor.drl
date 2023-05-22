@@ -7,6 +7,7 @@ import com.ftn.sbnz.model.models.ZnakIshemije;
 
 
 rule "Faza 4 - Pacijent nije podoban za primenu terapije na osnovu NIHHS skora"
+salience 20
 	when
 		$nihhs: NIHHS(skor < 4 || skor > 20)
 	then
@@ -15,21 +16,23 @@ rule "Faza 4 - Pacijent nije podoban za primenu terapije na osnovu NIHHS skora"
 end
 
 rule "Faza 4 - Pacijent jeste podoban za primenu terapije na osnovu NIHHS skora"
+salience 20
 	when
 		$nihhs: NIHHS(skor >= 4 && skor <= 20)
 	then
-		System.out.println("u pravilu nihhs " + $nihhs.getIdOdluke());
 		System.out.println("Pacijent ciji je NIHHS skor " + $nihhs.getSkor() + " je podoban za primenu terapije.");
 		insert(new OdlukaOTromboliziEvent($nihhs.getIdOdluke(), StatusOdluke.PRIHVACENA_FAZA_4));
 end
 
 
 rule "Odluka o trombolizi insertovana"
+salience 10
+no-loop true
 	when
-		$odlukaEvent: OdlukaOTromboliziEvent((statusOdluke != StatusOdluke.ODBIJENA) || (statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4) || (statusOdluke != StatusOdluke.PRIHVACENA_FAZA_3))
+		$odlukaEvent: OdlukaOTromboliziEvent(((statusOdluke != StatusOdluke.PRIHVACENA_FAZA_1) && (statusOdluke != StatusOdluke.PRIHVACENA_FAZA_6)) || (statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4))
 	then
 		System.out.println("Promena odluke o primeni trombolize na: " + $odlukaEvent.getStatusOdluke());
-		retract($odlukaEvent)
+		retract($odlukaEvent);
 end
 
 
@@ -37,24 +40,21 @@ rule "Faza 5 - Ukoliko postoji hiperdenzni arterijski znak ili edamatozni girus 
 no-loop true
 salience 100
 	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4, $znaciIshemije: znaciIshemije)
+		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_5, $znaciIshemije: znaciIshemije)
 		$znakIshemije: ZnakIshemije() from $znaciIshemije
 		eval($znakIshemije.ordinal() == 1 || $znakIshemije.ordinal() == 2)
 	then
-		System.out.println("Ne primenjuj terapiju: " + $znakIshemije);
-		System.out.println("Ne primenjuj terapiju: " + $znaciIshemije);
-
+		System.out.println("Na CT-u je primecen " + $znakIshemije + ", tako da se pacijentu ne moze primeniti terapija");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
 
-rule "Faza 5 - Ukoliko postoji gubitak granice između sive i bele mase ili hipoatenuacija bazalnih ganglija, primena terapije je moguća"
-no-loop true
-salience 10
-	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4, $znaciIshemije: znaciIshemije)
-		$znakIshemije: ZnakIshemije() from $znaciIshemije
-		eval($znakIshemije.ordinal() == 0 || $znakIshemije.ordinal() == 3)
-	then
-		System.out.println("Primeni terapiju: " + $znakIshemije);
-		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.PRIHVACENA_FAZA_5) };
-end
+//rule "Faza 5 - Ukoliko postoji gubitak granice između sive i bele mase ili hipoatenuacija bazalnih ganglija, primena terapije je moguća"
+//no-loop true
+//salience 20
+//	when
+//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4, $znaciIshemije: znaciIshemije)
+//		$znakIshemije: ZnakIshemije() from $znaciIshemije
+//		eval($znakIshemije.ordinal() == 0 || $znakIshemije.ordinal() == 3)
+//	then
+//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.PRIHVACENA_FAZA_5) };
+//end

@@ -56,7 +56,6 @@ public class ServiceApplication {
 	@Bean
 	public KieSession kieSession() {
 		final KieContainer kieContainer = kieContainer();
-		//KieBase kieBase = kieContainer.getKieBase();
 		return kieContainer.newKieSession();
 	}
 

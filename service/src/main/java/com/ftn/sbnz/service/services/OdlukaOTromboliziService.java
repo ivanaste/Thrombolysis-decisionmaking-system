@@ -16,11 +16,14 @@ import com.ftn.sbnz.service.simulation.CTSimulacija;
 import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,40 +49,29 @@ public class OdlukaOTromboliziService {
 		odlukaRepository.save(odluka);
 
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_1, simptomi, nastanakSimptomaRequest.isPostojeSvedoci());
-
-		kieSession.addEventListener(new OdlukaOTromboliziEventListener(this));
+		OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
+		if (kieSession.getAgendaEventListeners().size() == 0) kieSession.addEventListener(eventListener);
 		kieSession.insert(odlukaEvent);
 		kieSession.fireAllRules();
-		//kieSession.dispose();
-		//return odlukaRepository.getReferenceById(neuroloskiPregled.getIdOdluke()).getStatus().getOpis();
-		//moze ovo
-		return odlukaRepository.getFirstByPacijent_JmbgOrderByCreatedAtDesc(nastanakSimptomaRequest.getJmbgPacijenta()).getStatus().getOpis();
+
+		return odluka.getStatus().getOpis();
 	}
 
 	public String proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(neuroloskiPregled.getIdOdluke(),
 				StatusOdluke.PRIHVACENA_FAZA_2,
 				neuroloskiPregled.kreirajKontraindikacije());
-		System.out.println(odlukaEvent.getKontraindikacije().get(0).getVrsta());
-		System.out.println(odlukaEvent.getKontraindikacije().get(0).getDatum());
-
-		kieSession.addEventListener(new OdlukaOTromboliziEventListener(this));
+		Odluka odluka = izmeniStatusOdluke(neuroloskiPregled.getIdOdluke(), StatusOdluke.PRIHVACENA_FAZA_2);
 		kieSession.insert(odlukaEvent);
 		kieSession.fireAllRules();
-
-		return odlukaRepository.getReferenceById(neuroloskiPregled.getIdOdluke()).getStatus().getOpis();
+		return odluka.getStatus().getOpis();
 	}
 
 	public String proveriOdlukuNaOsnovuNIHHSSkora(final NIHHSRequest nihhsRequest) {
-		//final KieSession kieSession = this.kieContainer.newKieSession();
 		final Integer skor = izracunajNIHHSSkor(nihhsRequest);
 		final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke());
-
-		kieSession.addEventListener(new OdlukaOTromboliziEventListener(this));
 		kieSession.insert(nihhs);
-
 		kieSession.fireAllRules();
-		//kieSession.dispose();
 		return odlukaRepository.getReferenceById(nihhsRequest.getIdOdluke()).getStatus().getOpis();
 	}
 
@@ -105,8 +97,20 @@ public class OdlukaOTromboliziService {
 		return sum;
 	}
 
-	public Odluka izmeniOdlukuZaZadatogPacijenta(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
-		//nije dobro ime metode
+	public void simulirajMerenjePritiska(final Odluka odluka) {
+		final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
+		System.out.println("Sistolni pritisak: " + pritisak.getSistolni());
+		System.out.println("Dijastolni pritisak: " + pritisak.getDijastolni());
+		pritisak.setDijastolni(100);
+		pritisak.setSistolni(120);
+
+		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
+				StatusOdluke.PRIHVACENA_FAZA_3, pritisak);
+		kieSession.insert(odlukaEvent);
+		kieSession.fireAllRules();
+	}
+
+	public Odluka izmeniStatusOdluke(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
 		final Odluka odluka = odlukaRepository.getReferenceById(idOdluke);
 		odluka.setStatus(noviStatusOdluke);
 		odlukaRepository.save(odluka);
@@ -114,17 +118,12 @@ public class OdlukaOTromboliziService {
 	}
 
 	public void simulirajCT(final Odluka izmenjenaOdluka) {
-		//simulirajCT
-		if (izmenjenaOdluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_4)) {
-			//final List<ZnakIshemije> znaci = ctSimulacija.simulirajOcitavanjeCTa();
-			final List<ZnakIshemije> znaci = List.of(ZnakIshemije.GUBITAK_GRANICE_IZMEDJU_BELE_I_SIVE_MASE);
-			System.out.println("Znaci " + znaci);
-			final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(izmenjenaOdluka.getId(), izmenjenaOdluka.getPacijent().getJmbg(),
-				izmenjenaOdluka.getStatus(), znaci);
-
-			kieSession.insert(odlukaEvent);
-			kieSession.fireAllRules();
-		}
+		final List<ZnakIshemije> znaci = ctSimulacija.simulirajOcitavanjeCTa();
+		//final List<ZnakIshemije> znaci = Arrays.asList(ZnakIshemije.GUBITAK_GRANICE_IZMEDJU_BELE_I_SIVE_MASE, ZnakIshemije.HIPOATENUACIJA_BAZALNIH_GANGLIJA);
+		System.out.println("Znaci ishemije: " + znaci);
+		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(izmenjenaOdluka.getId(), izmenjenaOdluka.getPacijent().getJmbg(), StatusOdluke.PRIHVACENA_FAZA_5, znaci);
+		kieSession.insert(odlukaEvent);
+		kieSession.fireAllRules();
 	}
 
 	public void simulirajLaboratoriju(final Odluka odluka) {
@@ -132,27 +131,10 @@ public class OdlukaOTromboliziService {
 		laboratorija.setTrombociti(110000.00);
 		laboratorija.setGlikemija(20.00);
 		laboratorija.setINR(1.65);
-
+		System.out.println(laboratorija);
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
 				StatusOdluke.PRIHVACENA_FAZA_6, laboratorija);
-
-
-		System.out.println("Laboratorija: " + laboratorija.toString());
-		System.out.println();
-		System.out.println();
-
-		kieSession.insert(odlukaEvent);
-		kieSession.fireAllRules();
-
-	}
-
-	public void simulirajMonitoring(final Odluka odluka) {
-		final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
-		//monitoring.getPritisak().setDijastolni(105);
-		//System.out.println("Sistolni" + monitoring.getPritisak().getSistolni());
-
-		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
-				StatusOdluke.PRIHVACENA_FAZA_3, pritisak);
+		izmeniStatusOdluke(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_6);
 		kieSession.insert(odlukaEvent);
 		kieSession.fireAllRules();
 	}

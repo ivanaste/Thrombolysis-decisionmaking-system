@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 rule "Faza 2 - Ukoliko je pacijent, u prethodna tri meseca, imao intrakranijalnu hemoragiju ili akutni infarkt miokarda, nije podoban za terapiju."
 no-loop true
+salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
@@ -22,6 +23,7 @@ end
 
 rule "Faza 2 - Ukoliko je pacijent, u prethodnih 14 dana, imao vecu operativnu intervenciju, nije podoban za terapiju."
 no-loop true
+salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
@@ -34,6 +36,7 @@ end
 
 rule "Faza 2 - Ukoliko je pacijent, u prethodnih 7 dana, imao arterijsku ili lumbalnu punkciju, nije podoban za terapiju."
 no-loop true
+salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
@@ -46,6 +49,7 @@ end
 
 rule "Faza 2 - Ukoliko je pacijent, u prethodnom 21 danu, imao gastrointestinalno ili urogenitalno krvarenje, nije podoban za terapiju."
 no-loop true
+salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije

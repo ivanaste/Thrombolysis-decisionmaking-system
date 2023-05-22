@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class OdlukaController {
+public class OdlukaOTromboliziController {
 
 	private final OdlukaOTromboliziService sampleService;
 
