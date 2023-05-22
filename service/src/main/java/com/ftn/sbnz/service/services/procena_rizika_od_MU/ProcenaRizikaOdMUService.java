@@ -1,16 +1,19 @@
-package com.ftn.sbnz.service.services;
+package com.ftn.sbnz.service.services.procena_rizika_od_MU;
 
 import com.ftn.sbnz.model.dto.request.ProcenaRizikaOdMURequest;
 import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
 import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.ProcenaRizikaOdMURepository;
+import com.ftn.sbnz.service.services.korisnik.KorisnikService;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,27 +37,34 @@ public class ProcenaRizikaOdMUService {
 		//PacijentiNaEKGu.put(procenaRizika.getPacijent().getJmbg(), procenaRizika.getPacijent());
 
 		final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
-		kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));
+		if (kieSession.getAgendaEventListeners().size() == 0) kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));
+		kieSession.insert(procenaRizika.getId());
 		kieSession.insert(procenaRizikaEvent);
 		kieSession.fireAllRules();
 
-		NivoRizikaOdMU nivoRizika = procenaRizikaOdMURepository.getReferenceById(procenaRizika.getId()).getNivoRizika();
+		ProcenaRizikaOdMU izmenjenaProcena = procenaRizikaOdMURepository.getReferenceById(procenaRizika.getId());
+		NivoRizikaOdMU nivoRizika = izmenjenaProcena.getNivoRizika();
 		if (nivoRizika.equals(NivoRizikaOdMU.PROCENA_U_TOKU)) {
-			kieSession.insert(new ProcenaRizikaOdMUEvent(procenaRizika.getId(), procenaRizika.getPacijent().getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU));
+			kieSession.insert(new ProcenaRizikaOdMUEvent(izmenjenaProcena.getId(), izmenjenaProcena.getPacijent().getJmbg(), NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE));
 			kieSession.fireAllRules();
 		}
 
-		nivoRizika = dobaviKonacniNivoRizika(procenaRizika.getId());
+		nivoRizika = dobaviKonacniNivoRizika(izmenjenaProcena);
 		PacijentiNaEKGu.remove(pacijent.getJmbg());
+
+		//brisanje zbog pravila: TIA unutar tri dana
+		FactHandle factHandle = kieSession.getFactHandle(procenaRizika.getId());
+		kieSession.delete(factHandle);
+
 		return nivoRizika.name();
 	}
 
-	public NivoRizikaOdMU dobaviKonacniNivoRizika(UUID idProcene) {
-		NivoRizikaOdMU nivoRizika = procenaRizikaOdMURepository.getReferenceById(idProcene).getNivoRizika();
-		if (nivoRizika.equals(NivoRizikaOdMU.PROCENA_U_TOKU)) {
-			nivoRizika = NivoRizikaOdMU.NIZAK_RIZIK;
+	public NivoRizikaOdMU dobaviKonacniNivoRizika(ProcenaRizikaOdMU procena) {
+		if (procena.getNivoRizika().equals(NivoRizikaOdMU.PROCENA_U_TOKU)) {
+			procena.setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK);
+			procenaRizikaOdMURepository.save(procena);
 		}
-		return nivoRizika;
+		return procena.getNivoRizika();
 	}
 
 	public Integer izracunajABCD2Skor(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest, final Pacijent pacijent) {

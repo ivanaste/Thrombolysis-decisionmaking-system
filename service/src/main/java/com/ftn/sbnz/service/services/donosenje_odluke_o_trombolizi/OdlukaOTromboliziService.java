@@ -1,29 +1,21 @@
-package com.ftn.sbnz.service.services;
+package com.ftn.sbnz.service.services.donosenje_odluke_o_trombolizi;
 
 import com.ftn.sbnz.model.dto.request.NIHHSRequest;
 import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
 import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
-import com.ftn.sbnz.model.models.Laboratorija;
-import com.ftn.sbnz.model.models.NIHHS;
-import com.ftn.sbnz.model.models.Odluka;
-import com.ftn.sbnz.model.models.Pritisak;
-import com.ftn.sbnz.model.models.Simptomi;
-import com.ftn.sbnz.model.models.StatusOdluke;
-import com.ftn.sbnz.model.models.ZnakIshemije;
-import com.ftn.sbnz.service.repository.OdlukaRepository;
+import com.ftn.sbnz.model.models.*;
+import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
+import com.ftn.sbnz.service.services.korisnik.KorisnikService;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
 import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class OdlukaOTromboliziService {
 	private final KieSession kieSession;
 
-	private final OdlukaRepository odlukaRepository;
+	private final OdlukaOTromboliziRepository odlukaOTromboliziRepository;
 
 	private final KorisnikService korisnikService;
 
@@ -46,7 +38,7 @@ public class OdlukaOTromboliziService {
 		final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),
 			nastanakSimptomaRequest.isNastaliUTokuSna());
 		final Odluka odluka = new Odluka(korisnikService.getPacijentByJmbg(nastanakSimptomaRequest.getJmbgPacijenta()), StatusOdluke.PRIHVACENA_FAZA_1);
-		odlukaRepository.save(odluka);
+		odlukaOTromboliziRepository.save(odluka);
 
 		final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_1, simptomi, nastanakSimptomaRequest.isPostojeSvedoci());
 		OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
@@ -72,7 +64,7 @@ public class OdlukaOTromboliziService {
 		final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke());
 		kieSession.insert(nihhs);
 		kieSession.fireAllRules();
-		return odlukaRepository.getReferenceById(nihhsRequest.getIdOdluke()).getStatus().getOpis();
+		return odlukaOTromboliziRepository.getReferenceById(nihhsRequest.getIdOdluke()).getStatus().getOpis();
 	}
 
 	public Integer izracunajNIHHSSkor(final NIHHSRequest nihhsRequest) {
@@ -111,9 +103,9 @@ public class OdlukaOTromboliziService {
 	}
 
 	public Odluka izmeniStatusOdluke(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
-		final Odluka odluka = odlukaRepository.getReferenceById(idOdluke);
+		final Odluka odluka = odlukaOTromboliziRepository.getReferenceById(idOdluke);
 		odluka.setStatus(noviStatusOdluke);
-		odlukaRepository.save(odluka);
+		odlukaOTromboliziRepository.save(odluka);
 		return odluka;
 	}
 

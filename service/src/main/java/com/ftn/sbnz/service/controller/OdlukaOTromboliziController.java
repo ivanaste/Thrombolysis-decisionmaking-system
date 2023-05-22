@@ -3,7 +3,7 @@ package com.ftn.sbnz.service.controller;
 import com.ftn.sbnz.model.dto.request.NIHHSRequest;
 import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
 import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
-import com.ftn.sbnz.service.services.OdlukaOTromboliziService;
+import com.ftn.sbnz.service.services.donosenje_odluke_o_trombolizi.OdlukaOTromboliziService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package com.ftn.sbnz.service.services;
+package com.ftn.sbnz.service.services.donosenje_odluke_o_trombolizi;
 
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.Odluka;
@@ -7,6 +7,8 @@ import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.DefaultAgendaEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class OdlukaOTromboliziEventListener extends DefaultAgendaEventListener {

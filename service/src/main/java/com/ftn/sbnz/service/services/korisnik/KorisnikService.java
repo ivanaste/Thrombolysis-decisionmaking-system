@@ -1,4 +1,4 @@
-package com.ftn.sbnz.service.services;
+package com.ftn.sbnz.service.services.korisnik;
 
 import com.ftn.sbnz.model.models.Pacijent;
 import com.ftn.sbnz.service.repository.KorisnikRepository;

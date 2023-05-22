@@ -1,7 +1,7 @@
 package com.ftn.sbnz.service.controller;
 
 import com.ftn.sbnz.model.dto.request.ProcenaRizikaOdMURequest;
-import com.ftn.sbnz.service.services.ProcenaRizikaOdMUService;
+import com.ftn.sbnz.service.services.procena_rizika_od_MU.ProcenaRizikaOdMUService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

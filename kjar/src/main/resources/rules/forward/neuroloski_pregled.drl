@@ -60,6 +60,7 @@ salience 20
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
 
+
 //rule "Faza 2 - Ukoliko je pacijent, u prethodna 3 meseca, imao MU ili TIA, nije podoban za terapiju."
 //no-loop true
 //	when

@@ -2,12 +2,9 @@ package com.ftn.sbnz.service.simulation;
 
 import com.ftn.sbnz.model.events.OtkucajSrcaEvent;
 import com.ftn.sbnz.model.models.*;
-import com.ftn.sbnz.service.services.ProcenaRizikaOdMUService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +43,7 @@ public class MonitoringSimulacija {
         int randomDelay = random.nextInt(2000) + 100; // Random delay between 0.1 and 2.1 seconds
 
         for(String jmbgPacijenta: pacijentiNaEKGu.keySet()) {
-            System.out.println("Otkucaj srca pacijenta ciji je jmbg: " + jmbgPacijenta);
+            System.out.println("Otkucaj srca pacijenta ciji je jmbg " + jmbgPacijenta);
             this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta));
             this.kieSession.fireAllRules();
         }
@@ -59,7 +56,7 @@ public class MonitoringSimulacija {
         int randomDelay = random.nextInt(4000) + 100;
 
         for(String jmbgPacijenta: pacijentiNaEKGu.keySet()) {
-            System.out.println("RR signal " + randomDelay);
+            System.out.println("RR signal " + randomDelay + " pacijenta ciji je jmbg " + jmbgPacijenta);
             this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta, randomDelay));
             this.kieSession.fireAllRules();
         }
