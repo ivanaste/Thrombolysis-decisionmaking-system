@@ -16,7 +16,7 @@ public class ProcenaRizikaOdMUEvent {
     private UUID idProceneRizika;
     private NivoRizikaOdMU nivoRizika;
     private Integer ABCD2Skor;
-    private Integer stenozaKrvnogSuda;
+    private int stenozaKrvnogSuda;
     private String jmbgPacijenta;
 
     public ProcenaRizikaOdMUEvent(UUID idProceneRizika, String jmbgPacijenta, NivoRizikaOdMU nivoRizika, Integer ABCD2Skor, Integer stenozaKrvnogSuda) {

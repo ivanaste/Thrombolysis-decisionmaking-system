@@ -21,4 +21,10 @@ public class ProcenaRizikaOdMUController {
 		return procenaRizikaOdMUService.utvrdiNivoRizikaOdMU(procenaRizikaOdMURequest);
 	}
 
+	@PostMapping(value = "/rizikOdMUTemplejt", produces = "application/json")
+	public String utvrdjivanjeNivoaRizikaOdMUTemplejt(@RequestBody final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) {
+
+		return procenaRizikaOdMUService.utvrdiNivoRizikaTemplejt(procenaRizikaOdMURequest);
+	}
+
 }

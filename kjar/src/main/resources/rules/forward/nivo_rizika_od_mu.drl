@@ -4,14 +4,13 @@ import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
 import com.ftn.sbnz.model.models.NivoRizikaOdMU;
 import com.ftn.sbnz.model.models.AlarmEKG;
 import com.ftn.sbnz.model.models.RadSrca;
-import java.util.UUID
+import java.util.UUID;
 
 
 rule "Nivo rizika - Ukoliko je ABCD2 skor 0-4 poena, pacijent ima nizak rizik od MU."
 no-loop true
 	when
 		$nivoRizika: ProcenaRizikaOdMUEvent($skor: ABCD2Skor, ABCD2Skor < 4, nivoRizika == NivoRizikaOdMU.PROCENA_U_TOKU)
-
 	then
 		System.out.println("Pacijent ciji je ABCD2 skor " + $skor + " ima nizak rizik od MU.");
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.NIZAK_RIZIK) };

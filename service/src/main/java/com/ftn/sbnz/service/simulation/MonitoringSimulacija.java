@@ -62,4 +62,10 @@ public class MonitoringSimulacija {
         }
         Thread.sleep(randomDelay);
     }
+
+    @Scheduled(fixedDelay = 10000)
+    public void upisiNule() throws InterruptedException {
+        kieSession.setGlobal("razlikaIntervalaGlobal", 0);
+        kieSession.setGlobal("indexGlobal", 0);
+    }
 }

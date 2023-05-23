@@ -6,13 +6,15 @@ import com.ftn.sbnz.model.models.AlarmEKG;
 import java.util.List;
 import java.lang.Math;
 import java.util.Date;
-
+import java.lang.Integer;
 
 declare ProveraRRIntervala
     jmbgPacijenta: String
-    razlikaIntervala: Integer
+    razlikaIntervala: Double
 end
 
+global java.lang.Integer razlikaIntervalaGlobal;
+global java.lang.Integer indexGlobal;
 
 rule "Ukoliko je broj otkucaja srca manji od 60/min, to ukazuje na bradikardiju."
 	when
@@ -50,6 +52,24 @@ rule "Ukoliko je broj otkucaja srca veći od 100/min, to ukazuje na tahikardiju.
 		insert(new AlarmEKG($jmbgPacijenta1, RadSrca.UBRZAN));
 end
 
+//
+//rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."
+//	when
+//		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval != null)
+//		$posljednjih5: List(size >= 5) from collect(
+//                OtkucajSrcaEvent(jmbgPacijenta == $jmbgPacijenta1, rrInterval != null) over window:length(5)
+//            )
+//        not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
+//	then
+//		int razlikaIntervala = 0;
+//		for(int i = 0; i < $posljednjih5.size() - 1; i++) {
+//            OtkucajSrcaEvent otkucajSrca = (OtkucajSrcaEvent) $posljednjih5.get(i);
+//            OtkucajSrcaEvent otkucajSrcaNext = (OtkucajSrcaEvent) $posljednjih5.get(i+1);
+//            razlikaIntervala += Math.abs(otkucajSrca.getRrInterval() - otkucajSrcaNext.getRrInterval());
+//		}
+//		insert(new ProveraRRIntervala($jmbgPacijenta1, razlikaIntervala));
+//end
+
 
 rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."
 	when
@@ -58,22 +78,39 @@ rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."
                 OtkucajSrcaEvent(jmbgPacijenta == $jmbgPacijenta1, rrInterval != null) over window:length(5)
             )
         not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
+        $prviOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(0))
+        $drugiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(1))
+        $treciOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(2))
+        $cetvrtiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(3))
+        $petiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(4))
+        eval(
+            (Math.abs($prviOtkucaj.getRrInterval() - $drugiOtkucaj.getRrInterval())
+            +
+            Math.abs($drugiOtkucaj.getRrInterval() - $treciOtkucaj.getRrInterval())
+            +
+            Math.abs($treciOtkucaj.getRrInterval() - $cetvrtiOtkucaj.getRrInterval())
+            +
+            Math.abs($cetvrtiOtkucaj.getRrInterval() - $petiOtkucaj.getRrInterval())) >= 4000
+        )
 	then
-		int razlikaIntervala = 0;
-		for(int i = 0; i < $posljednjih5.size() - 1; i++) {
-            OtkucajSrcaEvent otkucajSrca = (OtkucajSrcaEvent) $posljednjih5.get(i);
-            OtkucajSrcaEvent otkucajSrcaNext = (OtkucajSrcaEvent) $posljednjih5.get(i+1);
-            razlikaIntervala += Math.abs(otkucajSrca.getRrInterval() - otkucajSrcaNext.getRrInterval());
-		}
-		insert(new ProveraRRIntervala($jmbgPacijenta1, razlikaIntervala));
+	    int razlika = Math.abs($prviOtkucaj.getRrInterval() - $drugiOtkucaj.getRrInterval())
+                                     +
+                                     Math.abs($drugiOtkucaj.getRrInterval() - $treciOtkucaj.getRrInterval())
+                                     +
+                                     Math.abs($treciOtkucaj.getRrInterval() - $cetvrtiOtkucaj.getRrInterval())
+                                     +
+                                     Math.abs($cetvrtiOtkucaj.getRrInterval() - $petiOtkucaj.getRrInterval());
+	    System.out.println("razlika " + razlika);
+	    System.out.println("Alarm - Kod pacijenta se sumnja na atrijalnu fibrilaciju");
+        insert(new AlarmEKG($jmbgPacijenta1, RadSrca.ATRIJALNA_FIBRILACIJA));
 end
 
 
-rule "Ukoliko je razlika poslednjih 5 RR intervala veca ili jednaka od 4 sekunde, sumnja se na atrijalnu fibrilaciju"
-	when
-		$razlika: ProveraRRIntervala(razlikaIntervala >= 4000, $jmbgPacijenta1: jmbgPacijenta)
-		not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
-	then
-		System.out.println("Alarm - Kod pacijenta se sumnja na atrijalnu fibrilaciju");
-		insert(new AlarmEKG($jmbgPacijenta1, RadSrca.ATRIJALNA_FIBRILACIJA));
-end
+//rule "Ukoliko je razlika poslednjih 5 RR intervala veca ili jednaka od 4 sekunde, sumnja se na atrijalnu fibrilaciju"
+//	when
+//		$razlika: ProveraRRIntervala(razlikaIntervala >= 4000, $jmbgPacijenta1: jmbgPacijenta)
+//		not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
+//	then
+//		System.out.println("Alarm - Kod pacijenta se sumnja na atrijalnu fibrilaciju");
+//		insert(new AlarmEKG($jmbgPacijenta1, RadSrca.ATRIJALNA_FIBRILACIJA));
+//end

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EntityScan(basePackages = { "com.ftn.sbnz.model.models" })  // scan JPA entities
+@EntityScan(basePackages = { "com.ftn.sbnz.model.models", "com.ftn.sbnz.kjar"})  // scan JPA entities
 @EnableScheduling
 @RequiredArgsConstructor
 public class ServiceApplication {
