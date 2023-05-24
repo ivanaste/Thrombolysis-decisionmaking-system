@@ -44,51 +44,19 @@ public class ProcenaRizikaOdMUService {
 
 	private final KorisnikService korisnikService;
 	private final KieSession kieSession;
-	private final KieContainer kieContainer;
 	private final ProcenaRizikaOdMURepository procenaRizikaOdMURepository;
 	private final Map<String, Pacijent> PacijentiNaEKGu;
 	private final MonitoringSimulacija monitoringSimulacija;
-
-	public String utvrdiNivoRizikaOdMU(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) {
-//		final Pacijent pacijent = korisnikService.getPacijentByJmbg(procenaRizikaOdMURequest.getJmbgPacijenta());
-//		final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);
-//
-//		ProcenaRizikaOdMU procenaRizika = new ProcenaRizikaOdMU(pacijent, NivoRizikaOdMU.PROCENA_U_TOKU);
-//		procenaRizika = procenaRizikaOdMURepository.save(procenaRizika);
-//
-//		//PacijentiNaEKGu.put(procenaRizika.getPacijent().getJmbg(), procenaRizika.getPacijent());
-//
-//		final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
-//		if (kieSession.getAgendaEventListeners().size() == 0) kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));
-//		kieSession.insert(procenaRizika.getId());
-//		kieSession.insert(procenaRizikaEvent);
-//		kieSession.fireAllRules();
-//
-//		ProcenaRizikaOdMU izmenjenaProcena = procenaRizikaOdMURepository.getReferenceById(procenaRizika.getId());
-//		NivoRizikaOdMU nivoRizika = izmenjenaProcena.getNivoRizika();
-//		if (nivoRizika.equals(NivoRizikaOdMU.PROCENA_U_TOKU)) {
-//			kieSession.insert(new ProcenaRizikaOdMUEvent(izmenjenaProcena.getId(), izmenjenaProcena.getPacijent().getJmbg(), NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE));
-//			kieSession.fireAllRules();
-//		}
-//
-//		nivoRizika = dobaviKonacniNivoRizika(izmenjenaProcena);
-//		PacijentiNaEKGu.remove(pacijent.getJmbg());
-//
-//		//brisanje zbog pravila: TIA unutar tri dana
-//		FactHandle factHandle = kieSession.getFactHandle(procenaRizika.getId());
-//		kieSession.delete(factHandle);
-//
-//		return nivoRizika.name();
-		return "";
-	}
 
 	public String utvrdiNivoRizikaTemplejt(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
 		final Pacijent pacijent = korisnikService.getPacijentByJmbg(procenaRizikaOdMURequest.getJmbgPacijenta());
 		final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);
 
-		System.out.println("ABC" + ABCD2Skor);
+		System.out.println("ABCD2 skor: " + ABCD2Skor);
 		ProcenaRizikaOdMU procenaRizika = new ProcenaRizikaOdMU(pacijent, NivoRizikaOdMU.PROCENA_U_TOKU);
 		procenaRizika = procenaRizikaOdMURepository.save(procenaRizika);
+
+		//PacijentiNaEKGu.put(procenaRizika.getPacijent().getJmbg(), procenaRizika.getPacijent());
 
 		final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
 		if (kieSession.getAgendaEventListeners().size() == 0) kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));

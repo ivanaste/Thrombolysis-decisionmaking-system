@@ -22,7 +22,9 @@ public class MonitoringSimulacija {
     private final KieSession kieSession;
     private final Map<String, Pacijent> pacijentiNaEKGu;
 
-    private LocalDateTime lastMinuteCheckTime = LocalDateTime.now();
+    private boolean prvaSimulacija = true;
+
+    private LocalDateTime lastMinuteCheckTime;
 
     public Pritisak simulirajMerenjePritiska() {
         Pritisak pritisak = new Pritisak();
@@ -31,23 +33,23 @@ public class MonitoringSimulacija {
         return pritisak;
     }
 
-    @Scheduled(fixedDelay = 400)
+    @Scheduled(fixedDelay = 100)
     public void simulirajOtkucajeSrca() throws InterruptedException {
-
+        if (prvaSimulacija) lastMinuteCheckTime = LocalDateTime.now();
+        prvaSimulacija = false;
         Duration duration = Duration.between(lastMinuteCheckTime, LocalDateTime.now());
         if (duration.toMinutes() == 1) {
             this.kieSession.insert("First Minute Passed");
             this.kieSession.fireAllRules();
         }
-
-        int randomDelay = random.nextInt(2000) + 100; // Random delay between 0.1 and 2.1 seconds
+        //int randomDelay = random.nextInt(100) + 100;
 
         for(String jmbgPacijenta: pacijentiNaEKGu.keySet()) {
             System.out.println("Otkucaj srca pacijenta ciji je jmbg " + jmbgPacijenta);
             this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta));
             this.kieSession.fireAllRules();
         }
-        Thread.sleep(randomDelay);
+        //Thread.sleep(randomDelay);
     }
 
     @Scheduled(fixedDelay = 400)
@@ -61,11 +63,5 @@ public class MonitoringSimulacija {
             this.kieSession.fireAllRules();
         }
         Thread.sleep(randomDelay);
-    }
-
-    @Scheduled(fixedDelay = 10000)
-    public void upisiNule() throws InterruptedException {
-        kieSession.setGlobal("razlikaIntervalaGlobal", 0);
-        kieSession.setGlobal("indexGlobal", 0);
     }
 }

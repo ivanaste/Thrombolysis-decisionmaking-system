@@ -10,16 +10,15 @@ package template;
 import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
 import com.ftn.sbnz.model.models.NivoRizikaOdMU;
 
-
-
 template "nivoRizika"
 
-rule "procena_nivoa_rizika_@{row.rowNumber}"
+rule "procena_nivoa_rizika_ABCD2_skor_@{row.rowNumber}"
+salience 110
 no-loop true
     when
         $nivoRizika: ProcenaRizikaOdMUEvent($skor: ABCD2Skor, ABCD2Skor >= @{minSkor}, ABCD2Skor < @{maxSkor}, nivoRizika == NivoRizikaOdMU.@{stariNivoRizika}, stenozaKrvnogSuda < @{stenozaKrvnogSuda})
     then
-        System.out.println("Pacijent ima ABCD2 skor " + $skor + ".");
+        System.out.println("Pacijent ima ABCD2 skor " + $skor + ", te je nivo rizika od MU: @{noviNivoRizika}.");
     	modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.@{noviNivoRizika}) };
 end
 

@@ -1,7 +1,9 @@
 package com.ftn.sbnz.service.services.procena_rizika_od_MU;
 
 import com.ftn.sbnz.model.models.NivoRizikaOdMU;
-import com.ftn.sbnz.model.models.TemplateModel;
+import com.ftn.sbnz.model.models.NivoRizikaTemplateModel;
+import com.ftn.sbnz.model.models.OtkucajiSrcaTemplateModel;
+import com.ftn.sbnz.model.models.RadSrca;
 import lombok.RequiredArgsConstructor;
 import org.drools.core.BeliefSystemType;
 import org.drools.core.SessionConfiguration;
@@ -58,7 +60,9 @@ public class LoadKieSession {
             kieHelper.addContent(readInputStreamAsString(inputStream), ResourceType.DRL);
         }
 
-        String templateDrl = generateTemplateDrl();
+        kieHelper.addContent(generisiNivoRizikaTemplate(), ResourceType.DRL);
+
+        String templateDrl = generisiOtkucajiSrcaTemplate();
         System.out.println(templateDrl);
         kieHelper.addContent(templateDrl, ResourceType.DRL);
 
@@ -86,17 +90,27 @@ public class LoadKieSession {
         }
     }
 
-    public String generateTemplateDrl() {
-        InputStream template = ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/template/template.drt");
+    public String generisiNivoRizikaTemplate() {
+        InputStream nivo_rizika_template = ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/template/nivo_rizika_template.drt");
 
-        List<TemplateModel> data = new ArrayList<>();
-        data.add(new TemplateModel(0, 4, 1, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
-        data.add(new TemplateModel(4, 6, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
-        data.add(new TemplateModel(6, 8, 1, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.VISOK_RIZIK));
+        List<NivoRizikaTemplateModel> data = new ArrayList<>();
+        data.add(new NivoRizikaTemplateModel(0, 4, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
+        data.add(new NivoRizikaTemplateModel(4, 6, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
+        data.add(new NivoRizikaTemplateModel(6, 8, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.VISOK_RIZIK));
 
         ObjectDataCompiler converter = new ObjectDataCompiler();
-        String drl = converter.compile(data, template);
-        return drl;
+        return converter.compile(data, nivo_rizika_template);
+    }
+
+    public String generisiOtkucajiSrcaTemplate() {
+        InputStream otkucaji_srca_template = ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/template/otkucaji_srca_template.drt");
+
+        List<OtkucajiSrcaTemplateModel> data = new ArrayList<>();
+        data.add(new OtkucajiSrcaTemplateModel(20, 60, RadSrca.USPOREN));
+        data.add(new OtkucajiSrcaTemplateModel(100, 200, RadSrca.UBRZAN));
+
+        ObjectDataCompiler converter = new ObjectDataCompiler();
+        return converter.compile(data, otkucaji_srca_template);
     }
 
     public void printDrl(KieSession kSession) {

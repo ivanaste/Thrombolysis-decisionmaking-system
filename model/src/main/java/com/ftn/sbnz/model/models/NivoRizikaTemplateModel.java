@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TemplateModel {
+public class NivoRizikaTemplateModel {
     private Integer minSkor;
     private Integer maxSkor;
     private Integer stenozaKrvnogSuda;
@@ -14,14 +14,14 @@ public class TemplateModel {
 
     private NivoRizikaOdMU noviNivoRizika;
 
-    public TemplateModel(Integer minSkor, Integer maxSkor, NivoRizikaOdMU stariNivoRizika, NivoRizikaOdMU noviNivoRizika) {
+    public NivoRizikaTemplateModel(Integer minSkor, Integer maxSkor, NivoRizikaOdMU stariNivoRizika, NivoRizikaOdMU noviNivoRizika) {
         this.minSkor = minSkor;
         this.maxSkor = maxSkor;
         this.stariNivoRizika = stariNivoRizika;
         this.noviNivoRizika = noviNivoRizika;
     }
 
-    public TemplateModel(Integer minSkor, Integer maxSkor, Integer stenozaKrvnogSuda, NivoRizikaOdMU stariNivoRizika, NivoRizikaOdMU noviNivoRizika) {
+    public NivoRizikaTemplateModel(Integer minSkor, Integer maxSkor, Integer stenozaKrvnogSuda, NivoRizikaOdMU stariNivoRizika, NivoRizikaOdMU noviNivoRizika) {
         this(minSkor, maxSkor, stariNivoRizika, noviNivoRizika);
         this.stenozaKrvnogSuda = stenozaKrvnogSuda;
     }
