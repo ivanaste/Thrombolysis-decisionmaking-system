@@ -1,12 +1,14 @@
 package com.ftn.sbnz.service;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.ftn.sbnz.model.models.Pacijent;
 import com.ftn.sbnz.service.repository.KorisnikRepository;
+import com.ftn.sbnz.service.services.procena_rizika_od_MU.LoadKieSession;
 import lombok.RequiredArgsConstructor;
 import org.kie.api.KieServices;
-import org.kie.api.builder.KieScanner;
+import org.kie.api.builder.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
@@ -29,6 +31,8 @@ public class ServiceApplication {
 	private final Map<String, Pacijent> pacijentiNaEKGu = new HashMap<>();
 
 	private final KorisnikRepository korisnikRepository;
+
+	private final LoadKieSession loadKieSession;
 
 	public static void main(final String[] args) {
 		final ApplicationContext ctx = SpringApplication.run(ServiceApplication.class, args);
@@ -54,9 +58,8 @@ public class ServiceApplication {
 	}
 
 	@Bean
-	public KieSession kieSession() {
-		final KieContainer kieContainer = kieContainer();
-		return kieContainer.newKieSession();
+	public KieSession kieSession() throws IOException {
+		return loadKieSession.execute();
 	}
 
 	@Bean

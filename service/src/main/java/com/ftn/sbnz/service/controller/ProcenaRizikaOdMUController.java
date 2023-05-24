@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 public class ProcenaRizikaOdMUController {
@@ -22,7 +24,7 @@ public class ProcenaRizikaOdMUController {
 	}
 
 	@PostMapping(value = "/rizikOdMUTemplejt", produces = "application/json")
-	public String utvrdjivanjeNivoaRizikaOdMUTemplejt(@RequestBody final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) {
+	public String utvrdjivanjeNivoaRizikaOdMUTemplejt(@RequestBody final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
 
 		return procenaRizikaOdMUService.utvrdiNivoRizikaTemplejt(procenaRizikaOdMURequest);
 	}
