@@ -1,0 +1,9 @@
+<div class="form-navigation">
+  <div *ngFor="let step of steps; let i = index"
+       [ngClass]="{ 'step': true, 'active': step.active, 'empty': !step.filled }"
+       (click)="onStepClick(i)">
+    <div class="number">{{ i + 1 }}</div>
+    <div class="label">{{ step.label }}</div>
+  </div>
+  <div class="progress-bar" [style.width]="progressWidth + '%'"></div>
+</div>

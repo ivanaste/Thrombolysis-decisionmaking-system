@@ -4,10 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +26,8 @@ public class Pacijent extends BaseEntity {
 	private String prezime;
 	private String brojTelefona;
 	private LocalDate datumRodjenja;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pacijent")
 	private List<Odluka> odlukeOTrombolizi;

@@ -1,0 +1,70 @@
+<div class="container">
+  <section class="main-services">
+    <h3 style="grid-column: 1 / span 3; grid-row: 1">Our Main Services</h3>
+    <h4 style="grid-column: 1 / span 3; grid-row: 2">These are the main services we provide by Smart home</h4>
+    <mat-card class="mat-elevation-z10" (mouseenter)="showSurveillance=true" (mouseleave)="showSurveillance=false">
+      <mat-icon svgIcon="camera" class="green-btn-icon"></mat-icon>
+      <h5>Constant Surveillance</h5>
+      <p [ngClass]="{'visible': showSurveillance}">Have constant insight into your surveillance system and its
+        functioning</p>
+    </mat-card>
+    <mat-card (mouseenter)="showTemperature=true" (mouseleave)="showTemperature=false">
+      <mat-icon svgIcon="temperature" class="green-btn-icon"></mat-icon>
+      <h5>Adjust Temperature</h5>
+      <p [ngClass]="{'visible': showTemperature}">Keep your home cold during summer and hot during winter when you are
+        away</p>
+    </mat-card>
+    <mat-card (mouseenter)="showLightning=true" (mouseleave)="showLightning=false">
+      <mat-icon svgIcon="light" class="green-btn-icon"></mat-icon>
+      <h5>Control Lightning</h5>
+      <p [ngClass]="{'visible': showLightning}">Control your lights without getting off the comfortable sofa</p>
+    </mat-card>
+    <mat-card (mouseenter)="showSecurity=true" (mouseleave)="showSecurity=false">
+      <mat-icon svgIcon="security" class="green-btn-icon"></mat-icon>
+      <h5>Smart Security</h5>
+      <p [ngClass]="{'visible': showSecurity}">We made assure that you and your data are safe</p>
+    </mat-card>
+    <mat-card (mouseenter)="showNotifications=true" (mouseleave)="showNotifications=false">
+      <mat-icon svgIcon="notification" class="green-btn-icon"></mat-icon>
+      <h5>Real-time Notifications</h5>
+      <p [ngClass]="{'visible': showNotifications}">Receive notifications in real time for system changes</p>
+    </mat-card>
+    <mat-card (mouseenter)="showNetwork=true" (mouseleave)="showNetwork=false">
+      <mat-icon svgIcon="network" class="green-btn-icon"></mat-icon>
+      <h5>Fast Network</h5>
+      <p [ngClass]="{'visible': showNetwork}">Optimized and well structured network</p>
+    </mat-card>
+  </section>
+
+  <section class="about-us">
+    <h3 style="grid-column: 1 / span 3; grid-row: 1">Who are we?</h3>
+    <p>Welcome to our website! We are a team of enthusiastic students who share a passion for software engineering. Our
+      names are Ivana Stevanović, Mićo Milić, and Uroš Prijović. As budding software engineers, we are constantly
+      seeking new challenges and opportunities to learn and grow.
+      <br> <br>
+      Our team is committed to creating high-quality software that meets the needs of our users. We are dedicated to
+      staying up-to-date with the latest technologies and best practices in software development to ensure that our
+      products are reliable, efficient, and user-friendly.
+      <br> <br>
+      At our core, we believe in the power of collaboration and teamwork. We work closely with each other and with our
+      clients to ensure that we are delivering software that meets their specific needs and exceeds their expectations.
+      <br> <br>
+      We are always looking for new opportunities to expand our knowledge and skills, so if you have any questions or
+      would like to learn more about us, please don't hesitate to get in touch. You can contact us using the information
+      provided on our website, and we will be more than happy to answer any questions you may have.
+      <br> <br>
+      Thank you for taking the time to learn more about us, and we look forward to hearing from you soon!</p>
+  </section>
+
+  <section class="start-using">
+    <h3 style="grid-column: 1 / span 3; grid-row: 1">Start using Smart Home</h3>
+    <p>Welcome to Smart Home! With our app, you can control your home's temperature, lighting, and security from
+      anywhere, anytime. To get started, simply create an account.
+      <br> <br>
+      Thank you for choosing Smart Home. We're excited to have you join our community of smart homeowners and smart
+      tenants!</p>
+    <a routerLink="/auth/sign-up" class="btn" mat-flat-button color="accent">Sign Up</a>
+  </section>
+</div>
+
+

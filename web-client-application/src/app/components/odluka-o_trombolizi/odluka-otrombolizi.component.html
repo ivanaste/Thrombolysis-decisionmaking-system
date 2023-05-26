@@ -1,0 +1,65 @@
+<aw-wizard style="margin-top: 2%">
+  <aw-wizard-step stepTitle="Nastanak simptoma">
+    <app-trenutak-nastanka-simptoma></app-trenutak-nastanka-simptoma>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="Neuroloski pregled">
+    <div class="row" style="margin-top: 5%">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div>
+          <div *ngFor="let bolest of bolesti; let i = index">
+            <div class="row">
+              <div class="col-6">
+                <mat-checkbox [(ngModel)]="bolest.checked">{{ bolest.ime }}</mat-checkbox>
+              </div>
+              <div class="col-6">
+                <mat-form-field appearance="fill">
+                  <mat-label>Date</mat-label>
+                  <input matInput [matDatepicker]="picker" [(ngModel)]="bolest.datum">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <div class="row" style="margin-top: 5%">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+
+            <button mat-button
+                    class="odlukaButton"
+                    style="justify-self: center; margin-left: 15%; color: white"
+                    type="button">Proveri odluku
+            </button>
+          </div>
+          <div class="col-6">
+            <button mat-button
+                    class="odlukaButton"
+                    style="justify-self: center; margin-left: 15%; color: white"
+                    type="button"
+                    awNextStep>Sledeći korak
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <button type="button" awPreviousStep>Go to previous step</button>
+    <button type="button" awNextStep>Go to next step</button>
+    <button type="button" (click)="op()">Finish</button>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="NIHHS skala">
+    Content of Step 3
+    <button type="button" awPreviousStep>Previous Step</button>
+    <!--    <button type="button" (click)="finishFunction()">Finish</button>-->
+  </aw-wizard-step>
+</aw-wizard>

@@ -1,0 +1,93 @@
+<div class="row" style="margin-top: 5%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <form [formGroup]="myForm">
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 80%">
+            <mat-label>Vreme nastanka simptoma</mat-label>
+            <input
+              type="text"
+              matInput
+              [ngxMatTimepicker]="timepicker"
+              [format]="24"
+              readonly
+              formControlName="trenutakNastankaSimptoma"
+            />
+
+            <mat-icon
+              matPrefix
+              *ngIf="myForm.controls['stanjeSvesti'].value && !myForm.controls['stanjeSvesti'].disabled"
+              (click)="onClear()"
+              style="margin-right: 5%"
+            >
+              close
+            </mat-icon>
+
+            <mat-icon
+              matSuffix
+              *ngIf="!myForm.controls['trenutakNastankaSimptoma'].disabled"
+              (click)="openFromIcon(timepicker)"
+            >schedule
+            </mat-icon
+            >
+          </mat-form-field>
+
+          <ngx-mat-timepicker
+            #timepicker
+            [enableKeyboardInput]="true"
+          ></ngx-mat-timepicker>
+        </div>
+        <div class="col-6">
+          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
+            nastali u toku
+            sna
+          </mat-checkbox>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 80%">
+            <mat-label>Stanje svesti</mat-label>
+            <mat-select formControlName="stanjeSvesti" required>
+              <mat-option *ngFor="let stanje of stanjaSvesti" [value]="stanje">
+                {{stanje}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-checkbox color="green" formControlName="postojeSvedoci"
+                        [hidden]="myForm.controls['stanjeSvesti'].value === 'Pri svesti'">Postoje svedoci
+          </mat-checkbox>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-3"></div>
+</div>
+<div class="row" style="margin-top: 5%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-6">
+        <button mat-button
+                class="odlukaButton"
+                style="justify-self: center; margin-left: 15%; color: white"
+                type="button" (click)="finishFunction()">Proveri odluku
+        </button>
+      </div>
+      <div class="col-6">
+        <button mat-button
+                class="odlukaButton"
+                style="justify-self: center; margin-left: 15%; color: white"
+                type="button"
+                awNextStep>Sledeći korak
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3"></div>
+</div>

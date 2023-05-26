@@ -1,0 +1,3 @@
+<app-welcoming-page *ngIf="!userRole"></app-welcoming-page>
+<app-admin-home-page *ngIf="userRole === 'ADMIN'"></app-admin-home-page>
+<app-user-home-page *ngIf="userRole && userRole !== 'ADMIN'"></app-user-home-page>

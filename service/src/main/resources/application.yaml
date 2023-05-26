@@ -9,3 +9,17 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+custom:
+  jwtSecret: superepiksecret
+  clientUrl: http://localhost:4200
+  authTokenExpirationMilliseconds: 86400000
+  jwtActivateEmailTokenExpiration: 86400000
+  jwtForgotPasswordExpiration: 3600000
+  createUserTokenExpirationMilliseconds: 2592000000
+  messageSource: messages
+  defaultLocale: en
+  senderEmail: milicftn@gmail.com
+server:
+  servlet:
+    contextPath: /api
+  port: '8080'

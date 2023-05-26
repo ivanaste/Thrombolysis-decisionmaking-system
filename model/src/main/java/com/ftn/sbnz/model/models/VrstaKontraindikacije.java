@@ -1,8 +1,6 @@
 package com.ftn.sbnz.model.models;
 
 public enum VrstaKontraindikacije {
-    MU,
-    TRAUMA_GLAVE,
     OPERATIVNA_INTERVENCIJA,
     INTRAKRANIJALNA_HEMORAGIJA,
     GASTROINTESTINALNO_KRVARENJE,

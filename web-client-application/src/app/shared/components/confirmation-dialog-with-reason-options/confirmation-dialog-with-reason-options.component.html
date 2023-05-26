@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content [formGroup]="form">
+  <p [innerHTML]="data.text"></p>
+
+  <div class="input-row">
+    <mat-form-field *ngIf="hasOptions()">
+      <mat-label>Select the reason</mat-label>
+      <mat-select formControlName="selectedOption">
+        <mat-option *ngFor="let option of data.options" [value]="option">{{ option }}</mat-option>
+        <mat-option *ngIf="data.addCustom" value="custom">Custom</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="input-row">
+    <mat-form-field *ngIf="selectedOption?.value === 'custom'">
+      <mat-label>Enter a custom reason</mat-label>
+      <textarea matInput formControlName="customOption"></textarea>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close cdkFocusInitial>Cancel</button>
+  <button mat-raised-button color="accent" mat-dialog-close [mat-dialog-close]="getSelectedOption()">Confirm</button>
+</div>
+

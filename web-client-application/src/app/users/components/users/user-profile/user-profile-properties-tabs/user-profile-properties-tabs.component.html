@@ -1,0 +1,24 @@
+<mat-tab-group class="property-tabs" mat-stretch-tabs="true" mat-align-tabs="center">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon svgIcon="my-property"></mat-icon>
+      {{firstTabLabel}}
+    </ng-template>
+    <app-user-property-card *ngFor="let property of myProperties" [property]="property">
+    </app-user-property-card>
+    <p *ngIf="myProperties.length === 0">
+      There are no properties to show.
+    </p>
+  </mat-tab>
+  <mat-tab *ngIf="user.role !== 'TENANT'">
+    <ng-template mat-tab-label>
+      <mat-icon svgIcon="visible-property"></mat-icon>
+      Visible Properties
+    </ng-template>
+    <app-user-property-card *ngFor="let property of guestProperties" [property]="property">
+    </app-user-property-card>
+    <p *ngIf="guestProperties.length === 0">
+      There are no properties to show.
+    </p>
+  </mat-tab>
+</mat-tab-group>

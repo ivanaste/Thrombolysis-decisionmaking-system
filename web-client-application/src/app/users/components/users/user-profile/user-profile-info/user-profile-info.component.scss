@@ -1,0 +1,57 @@
+@import "src/app/users/components/users/users.component";
+
+.btn {
+  min-width: 100% !important;
+  box-shadow: none;
+}
+
+mat-card {
+  height: fit-content;
+  width: 100%;
+}
+
+.title {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+mat-icon {
+  width: 40%;
+  height: 40%;
+}
+
+mat-card-title {
+  font-size: 22px;
+  font-weight: bolder;
+  color: $tds-dark-gray;
+}
+
+mat-card-title::after {
+  content: '';
+  display: block;
+  width: calc(100% + 40px);
+  height: 1px;
+  background-color: $tds-gray;
+  margin-top: 5px;
+  translate: -20px;
+}
+
+mat-card-content {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}

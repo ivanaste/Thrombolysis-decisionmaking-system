@@ -1,0 +1,43 @@
+<mat-card class="form">
+  <mat-card-header class="form">
+    <mat-card-title>{{mode === FormMode.NEW ? 'User Creation' : 'User Edit'}}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="form">
+    <form [formGroup]="userProfileForm" (ngSubmit)="submitUserProfileForm()">
+
+      <section>
+        <div class="input-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Enter your email" formControlName="email">
+            <mat-error *ngIf="userProfileForm.controls['email'].hasError('required')">Email is a mandatory field
+            </mat-error>
+            <mat-error *ngIf="userProfileForm.controls['email'].hasError('email')">Email is invalid</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="input-row">
+          <mat-form-field appearance="fill">
+            <mat-label>User Role</mat-label>
+            <mat-select formControlName="role">
+              <mat-option value="OWNER">Owner</mat-option>
+              <mat-option value="TENANT">Tenant</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <div class="button-row">
+        <button mat-raised-button class="btn" [disabled]="!userChanged && mode !== FormMode.NEW"
+                color="primary">{{mode === FormMode.NEW ? 'Create User' : 'Save Changes'}}</button>
+      </div>
+
+      <div *ngIf="mode === FormMode.EDIT" class="button-row">
+        <button mat-raised-button class="btn"
+                color="warn" (click)="deleteUser($event)">Delete User
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

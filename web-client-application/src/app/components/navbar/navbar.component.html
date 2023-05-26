@@ -1,0 +1,23 @@
+<nav>
+  <div class="container">
+    <div class="row" style="justify-content: space-between;">
+      <a id="logo" class="navbar-logo" routerLink="/">
+        <img src="../../../assets/logo.png" alt="Thromoblysis" width="40px" height="50px">
+      </a>
+      <button class="toggle-button" *ngIf="!welcomingPageIsActive" [ngClass]="showMobileMenu ? 'active' : null"
+              (click)="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="row" style="justify-content: center">
+      <div class="menu" [ngClass]="{'glass': welcomingPageIsActive , 'show': showMobileMenu}">
+        <a *ngIf="userRole === 'ADMIN'" routerLink="/admin/users/all">Users</a>
+        <a *ngIf="userRole" routerLink="/" (click)="logout()">Log Out</a>
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/trenutakNastanka">Trenutak nastanka</a>
+      </div>
+    </div>
+  </div>
+</nav>
