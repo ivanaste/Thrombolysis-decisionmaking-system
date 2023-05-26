@@ -11,6 +11,7 @@ import {ErrorInterceptor} from './error.interceptor';
 import {UsersEffects} from '../users/store/users.effects';
 import {PasswordEffects} from '../password/store/password.effects';
 import {reducers} from "./store/core.reducer";
+import {DecisionsEffects} from "../decisions/store/decisions-effects";
 
 @NgModule({
   providers: [
@@ -35,6 +36,7 @@ import {reducers} from "./store/core.reducer";
       AuthEffects,
       UsersEffects,
       PasswordEffects,
+      DecisionsEffects,
     ]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
   ],

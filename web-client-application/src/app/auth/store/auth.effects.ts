@@ -19,6 +19,7 @@ export class AuthEffects {
           .sendSecondStepLoginRequest(action.email, action.password)
           .pipe(
             map((authToken) => {
+              this.router.navigate(['doctor/trenutakNastanka']);
               return AuthActions.loginSuccess({
                 token: authToken.token,
               });
@@ -48,7 +49,6 @@ export class AuthEffects {
         map((action) => {
           sessionStorage.setItem('token', action.token);
           this.authService.setLogoutTimer();
-          this.router.navigate(['doctor/trenutakNastanka']);
         })
       );
     },

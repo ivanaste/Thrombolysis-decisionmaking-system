@@ -13,6 +13,7 @@ import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -137,5 +138,10 @@ public class OdlukaOTromboliziService {
         izmeniStatusOdluke(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_6);
         kieSession.insert(odlukaEvent);
         kieSession.fireAllRules();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Odluka> dobaviOdluke() {
+        return odlukaOTromboliziRepository.findAll();
     }
 }
