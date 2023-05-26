@@ -13,6 +13,6 @@ public class GetUserByEmail {
 
     @Transactional(readOnly = true)
     public Person execute(final String email) {
-        return userRepository.getByEmail(email);
+        return userRepository.findByEmail(email);
     }
 }

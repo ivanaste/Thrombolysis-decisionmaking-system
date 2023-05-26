@@ -20,7 +20,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Person user = getUserByEmail.execute(username);
 
-
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("DOCTOR")));
     }
 }

@@ -5,6 +5,7 @@ import com.ftn.sbnz.service.services.jwt.JwtValidateAndGetUsername;
 import com.ftn.sbnz.service.services.user.GetUserByEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
 
         final Person user = getUserByEmail.execute(username);
-        final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, token);
+        final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("DOCTOR")));
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
