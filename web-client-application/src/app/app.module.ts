@@ -29,6 +29,8 @@ import {
   TrenutakNastankaSimptomaComponent
 } from './components/odluka-o_trombolizi/trenutak-nastanka-simptoma/trenutak-nastanka-simptoma.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { NeuroloskiPregledComponent } from './components/odluka-o_trombolizi/neuroloski-pregled/neuroloski-pregled.component';
+import { NIHHSSkorComponent } from './components/odluka-o_trombolizi/nihhsskor/nihhsskor.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     UserHomePageCsrComponent,
     OdlukaOTromboliziComponent,
     TrenutakNastankaSimptomaComponent,
+    NeuroloskiPregledComponent,
+    NIHHSSkorComponent,
   ],
   imports: [
     BrowserModule,

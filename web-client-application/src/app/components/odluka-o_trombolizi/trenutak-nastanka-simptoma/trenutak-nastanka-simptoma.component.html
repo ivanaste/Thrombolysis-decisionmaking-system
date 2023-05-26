@@ -5,6 +5,22 @@
       <div class="row">
         <div class="col-6">
           <mat-form-field style="width: 80%">
+            <mat-label>Jmbg pacijenta</mat-label>
+            <input matInput formControlName="jmbgPacijenta">
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field style="width: 80%">
+            <mat-label>Datum rodjenja pacijenta</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="datumRodjenjaPacijenta">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 80%">
             <mat-label>Vreme nastanka simptoma</mat-label>
             <input
               type="text"
@@ -59,7 +75,7 @@
         </div>
         <div class="col-6">
           <mat-checkbox color="green" formControlName="postojeSvedoci"
-                        [hidden]="myForm.controls['stanjeSvesti'].value === 'Pri svesti'">Postoje svedoci
+                        *ngIf="myForm.controls['stanjeSvesti'].value !== 'Pri svesti'">Postoje svedoci
           </mat-checkbox>
         </div>
       </div>
