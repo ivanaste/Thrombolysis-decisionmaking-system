@@ -25,6 +25,12 @@ const routes: Routes = [
       import('./users/users.module').then((module) => module.UsersModule),
     canActivate: [],
   },
+  {
+    path: 'decisions',
+    loadChildren: () =>
+      import('./decisions/decisions.module').then((module) => module.DecisionsModule),
+    canActivate: [],
+  }
 ];
 
 @NgModule({
