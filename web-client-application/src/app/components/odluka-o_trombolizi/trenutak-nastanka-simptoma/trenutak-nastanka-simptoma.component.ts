@@ -13,6 +13,8 @@ export class TrenutakNastankaSimptomaComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.myForm = this.formBuilder.group({
+      jmbgPacijenta: ['', Validators.required],
+      datumRodjenjaPacijenta: ['', Validators.required],
       simptomiNastaliUTokuSna: [''],
       postojeSvedoci: [''],
       trenutakNastankaSimptoma: ['', Validators.required],
