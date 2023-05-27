@@ -1,0 +1,35 @@
+<div class="risk-estimation-table-container">
+  <div class="risk-estimation-table-content">
+    <mat-table class="risk-estimation-table" [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="Jmbg Pacijenta">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> JMBG Pacijenta</mat-header-cell>
+        <mat-cell *matCellDef="let riskEstimation"> {{ riskEstimation.pacijent.jmbg }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Datum zahteva</mat-header-cell>
+        <mat-cell
+          *matCellDef="let riskEstimation"> {{ riskEstimation.createdAt | date: 'dd MMM yyyy, HH:mm:ss' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Nivo Rizika">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Nivo Rizika</mat-header-cell>
+        <mat-cell
+          *matCellDef="let riskEstimation"> {{ riskEstimation.nivoRizika | capitalizedLowerCase }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Birth Date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Datum rodjenja</mat-header-cell>
+        <mat-cell
+          *matCellDef="let riskEstimation"> {{ riskEstimation.pacijent.datumRodjenja | date }} </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
