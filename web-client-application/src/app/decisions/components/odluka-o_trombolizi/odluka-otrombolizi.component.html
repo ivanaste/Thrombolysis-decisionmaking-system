@@ -1,8 +1,7 @@
-Opa
-{{odlukaOTrombolizi$ | async}}
 <aw-wizard style="margin-top: 2%">
   <aw-wizard-step stepTitle="Nastanak simptoma">
-    <app-trenutak-nastanka-simptoma (trenutakNastankaObj)="proveriOdlukuPrvaFaza($event)" [odlukaOTrombolizi]="odlukaOTrombolizi$ | async"></app-trenutak-nastanka-simptoma>
+    <app-trenutak-nastanka-simptoma (trenutakNastankaObj)="proveriOdlukuPrvaFaza($event)"
+                                    [odlukaOTrombolizi]="odlukaOTrombolizi$"></app-trenutak-nastanka-simptoma>
   </aw-wizard-step>
   <aw-wizard-step stepTitle="Neuroloski pregled">
     <app-neuroloski-pregled></app-neuroloski-pregled>

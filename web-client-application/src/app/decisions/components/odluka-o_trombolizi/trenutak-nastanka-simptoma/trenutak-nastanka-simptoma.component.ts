@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TrenutakNastanka} from "../../../model/TrenutakNastanka";
-import {Observable} from "rxjs";
 import {StatusOdluke} from "../../../model/StatusOdluke";
 import {Decision} from "../../../model/decision";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-trenutak-nastanka-simptoma',
@@ -16,7 +16,7 @@ export class TrenutakNastankaSimptomaComponent {
   @ViewChild('timepicker') timepicker: any;
 
   @Output() trenutakNastankaObj: EventEmitter<TrenutakNastanka> = new EventEmitter<TrenutakNastanka>();
-  @Input() odlukaOTrombolizi: Decision | null;
+  @Input() odlukaOTrombolizi: Observable<Decision> | null;
 
   constructor(private formBuilder: FormBuilder) {
     this.myForm = this.formBuilder.group({
@@ -44,7 +44,7 @@ export class TrenutakNastankaSimptomaComponent {
     const formValues = this.myForm.value;
     const trenutakNastanka = new TrenutakNastanka(
       formValues.jmbgPacijenta,
-      formValues.datumRodjenjaPacijenta,
+      this.adjustTimeZoneOffset(formValues.datumRodjenjaPacijenta),
       formValues.simptomiNastaliUTokuSna,
       formValues.postojeSvedoci,
       this.mergeTimeWithDate(formValues.vremeNastankaSimptoma, formValues.datumNastankaSimptoma),
@@ -55,10 +55,16 @@ export class TrenutakNastankaSimptomaComponent {
 
   mergeTimeWithDate(time: string, date: Date): Date {
     const [hours, minutes] = time.split(':');
-    let mergedDateTime = new Date(date);
+    const mergedDateTime = new Date(date);
     mergedDateTime.setHours(Number(hours));
     mergedDateTime.setMinutes(Number(minutes));
-    return mergedDateTime;
+    return this.adjustTimeZoneOffset(mergedDateTime);
+  }
+
+  private adjustTimeZoneOffset(date: Date): Date {
+    const timezoneOffset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - timezoneOffset);
+    return date;
   }
 
   protected readonly StatusOdluke = StatusOdluke;
