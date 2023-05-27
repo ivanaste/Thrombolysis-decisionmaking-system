@@ -8,6 +8,9 @@ import {DecisionsTableComponent} from './components/decisions-table/decisions-ta
 import {DecisionsComponent} from './components/decisions/decisions.component';
 import {SharedModule} from "../shared/shared.module";
 import {CapitalizedLowerCasePipe} from './pipes/capitalized-lower-case.pipe';
+import { ProcenaRizikaOdMUComponent } from './components/procena-rizika-od-mu/procena-rizika-od-mu.component';
+import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
+import {MatRadioModule} from "@angular/material/radio";
 
 
 @NgModule({
@@ -15,12 +18,15 @@ import {CapitalizedLowerCasePipe} from './pipes/capitalized-lower-case.pipe';
     DecisionsTableComponent,
     DecisionsComponent,
     CapitalizedLowerCasePipe,
+    ProcenaRizikaOdMUComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     DecisionsRoutingModule,
-    StoreModule.forFeature('decisions', fromDecisions.reducer)
+    StoreModule.forFeature('decisions', fromDecisions.reducer),
+    NgxMatTimepickerModule,
+    MatRadioModule
   ]
 })
 export class DecisionsModule {

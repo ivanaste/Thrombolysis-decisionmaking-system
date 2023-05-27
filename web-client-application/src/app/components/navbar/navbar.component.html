@@ -6,6 +6,7 @@
       </a>
       <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka</a>
       <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/trenutakNastanka">Trenutak nastanka</a>
+      <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/procenaRizikaOdMU">Procena rizika od MU</a>
 
       <button class="toggle-button" *ngIf="!welcomingPageIsActive" [ngClass]="showMobileMenu ? 'active' : null"
               (click)="toggleMobileMenu()">
