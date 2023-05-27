@@ -13,7 +13,7 @@ import {StatusOdluke} from "../../model/StatusOdluke";
   styleUrls: ['./odluka-otrombolizi.component.scss']
 })
 export class OdlukaOTromboliziComponent implements OnInit {
-  odlukaOTrombolizi$: Observable<StatusOdluke>;
+  odlukaOTrombolizi$: Observable<Decision>;
 
   constructor(private store: Store) {
   }

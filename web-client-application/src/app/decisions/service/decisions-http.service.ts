@@ -22,6 +22,6 @@ export class DecisionsHttpService {
   }
 
   proveriOdlukuPrvaFaza(trenutakNastanka: TrenutakNastanka) {
-    return this.http.post<boolean>(this.config.apiEndpoint + this.GET_ODLUKA_PRVA_FAZA, trenutakNastanka);
+    return this.http.post<Decision>(this.config.apiEndpoint + this.GET_ODLUKA_PRVA_FAZA, trenutakNastanka);
   }
 }

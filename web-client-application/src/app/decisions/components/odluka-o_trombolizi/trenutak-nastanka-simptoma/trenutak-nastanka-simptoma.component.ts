@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TrenutakNastanka} from "../../../model/TrenutakNastanka";
 import {Observable} from "rxjs";
 import {StatusOdluke} from "../../../model/StatusOdluke";
+import {Decision} from "../../../model/decision";
 
 @Component({
   selector: 'app-trenutak-nastanka-simptoma',
@@ -15,7 +16,7 @@ export class TrenutakNastankaSimptomaComponent {
   @ViewChild('timepicker') timepicker: any;
 
   @Output() trenutakNastankaObj: EventEmitter<TrenutakNastanka> = new EventEmitter<TrenutakNastanka>();
-  @Input() odlukaOTrombolizi: StatusOdluke | null;
+  @Input() odlukaOTrombolizi: Decision | null;
 
   constructor(private formBuilder: FormBuilder) {
     this.myForm = this.formBuilder.group({

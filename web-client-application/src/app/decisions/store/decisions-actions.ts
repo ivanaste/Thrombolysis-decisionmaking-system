@@ -8,6 +8,10 @@ export const getDecisions = createAction('[Decisions] Get Decisions');
 export const dobaviOdlukuPrvaFaza = createAction(
   '[Decisions] Odluka Prva Faza', props<{trenutakNastanka: TrenutakNastanka}>()
 );
+
+export const setOdluka = createAction(
+  '[Decisions] Set Odluka', props<{odluka: Decision}>()
+);
 export const setStatusOdluke = createAction(
   '[Decisions] Set Status Odluke', props<{status: StatusOdluke}>()
 );

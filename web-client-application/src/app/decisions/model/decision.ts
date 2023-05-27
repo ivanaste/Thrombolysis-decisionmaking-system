@@ -3,7 +3,7 @@ import {Patient} from "./patient";
 
 export interface Decision {
   id: string,
-  createdAt: Date,
   status: DecisionStatus,
-  pacijent: Patient,
+  createdAt?: Date,
+  pacijent?: Patient,
 }

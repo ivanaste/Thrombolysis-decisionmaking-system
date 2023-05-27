@@ -1,4 +1,5 @@
 export enum DecisionStatus {
+  U_PROCESU,
   PRIHVACENA = "prihvacena",
   ODBIJENA = "odbijena",
   PRIHVACENA_FAZA_1 = "prihvacena na osnovu trenutka nastanka",

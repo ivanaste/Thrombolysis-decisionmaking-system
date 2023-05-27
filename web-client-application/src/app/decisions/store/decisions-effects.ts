@@ -30,8 +30,7 @@ export class DecisionsEffects {
         return this.httpService
           .proveriOdlukuPrvaFaza(action.trenutakNastanka)
           .pipe(map((odluka) => {
-            let status = odluka ? StatusOdluke.PRIHVACENA_FAZA_1 : StatusOdluke.ODBIJENA;
-            return DecisionActions.setStatusOdluke({status: status})
+            return DecisionActions.setOdluka({odluka: odluka})
           }));
       })
     );

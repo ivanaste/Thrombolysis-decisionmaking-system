@@ -1,16 +1,19 @@
 import {Action, createReducer, on} from '@ngrx/store';
 import * as DecisionActions from "../store/decisions-actions";
 import {Decision} from "../model/decision";
-import {StatusOdluke} from "../model/StatusOdluke";
+import {DecisionStatus} from "../model/decision-status";
 
 export interface State {
   decisions: Decision[];
-  statusOdluke: StatusOdluke
+  odluka: Decision
 }
 
 const initialState: State = {
   decisions: [],
-  statusOdluke: StatusOdluke.U_PROCESU
+  odluka: {
+    id: '',
+    status: DecisionStatus.U_PROCESU
+  }
 };
 
 const decisionsReducer = createReducer(
@@ -19,9 +22,13 @@ const decisionsReducer = createReducer(
     ...state,
     decisions: decisions,
   })),
-  on(DecisionActions.setStatusOdluke, (state, {status}) => ({
+  // on(DecisionActions.setStatusOdluke, (state, {status}) => ({
+  //   ...state,
+  //   statusOdluke: status,
+  // })),
+  on(DecisionActions.setOdluka, (state, {odluka}) => ({
     ...state,
-    statusOdluke: status,
+    odluka: odluka,
   })),
 );
 

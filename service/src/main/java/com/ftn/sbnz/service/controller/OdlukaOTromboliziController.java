@@ -18,7 +18,7 @@ public class OdlukaOTromboliziController {
     private final OdlukaOTromboliziService odlukaOTromboliziService;
 
     @PostMapping(value = "/nastanakSimptoma", produces = "application/json")
-    public Boolean proveraOdlukeNaOsnovuNastankaSimptoma(@RequestBody NastanakSimptomaRequest nastanakSimptomaRequest) {
+    public Odluka proveraOdlukeNaOsnovuNastankaSimptoma(@RequestBody NastanakSimptomaRequest nastanakSimptomaRequest) {
 
         return odlukaOTromboliziService.proveriOdlukuNaOsnovuNastankaSimptoma(nastanakSimptomaRequest);
     }

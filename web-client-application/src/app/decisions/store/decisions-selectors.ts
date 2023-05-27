@@ -2,7 +2,7 @@ import {createFeatureSelector, createSelector} from "@ngrx/store";
 import {State} from "./decisions-reducer";
 
 export const selectDecisionsState = createFeatureSelector<State>('decisions');
-export const selectOdlukaState = createFeatureSelector<State>('statusOdluke');
+export const selectOdlukaState = createFeatureSelector<State>('odluka');
 
 export const selectDecisions = createSelector(
   selectDecisionsState,
@@ -11,5 +11,5 @@ export const selectDecisions = createSelector(
 
 export const selectOdluka = createSelector(
   selectOdlukaState,
-  (state) => state.statusOdluke
+  (state) => state.odluka
 );
