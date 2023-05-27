@@ -4,8 +4,7 @@ import {Store} from "@ngrx/store";
 import * as DecisionActions from '../../store/decisions-actions'
 import {Observable} from "rxjs";
 import {Decision} from "../../model/decision";
-import {selectDecisions, selectOdluka} from "../../store/decisions-selectors";
-import {StatusOdluke} from "../../model/StatusOdluke";
+import {selectOdluka} from "../../store/decisions-selectors";
 
 @Component({
   selector: 'app-odluka-otrombolizi',

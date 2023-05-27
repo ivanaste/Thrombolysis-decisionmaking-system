@@ -6,14 +6,14 @@ import {StatusOdluke} from "../model/StatusOdluke";
 
 export const getDecisions = createAction('[Decisions] Get Decisions');
 export const dobaviOdlukuPrvaFaza = createAction(
-  '[Decisions] Odluka Prva Faza', props<{trenutakNastanka: TrenutakNastanka}>()
+  '[Decisions] Odluka Prva Faza', props<{ trenutakNastanka: TrenutakNastanka }>()
 );
 
 export const setOdluka = createAction(
-  '[Decisions] Set Odluka', props<{odluka: Decision}>()
+  '[Decisions] Set Odluka', props<{ odluka: Decision }>()
 );
 export const setStatusOdluke = createAction(
-  '[Decisions] Set Status Odluke', props<{status: StatusOdluke}>()
+  '[Decisions] Set Status Odluke', props<{ status: StatusOdluke }>()
 );
 export const setDecisions = createAction(
   '[Decisions] Set Decisions',
@@ -24,6 +24,7 @@ const all = union({
   getDecisions,
   setDecisions,
   dobaviOdlukuPrvaFaza,
+  setStatusOdluke
 });
 
 export type DecisionsActionsUnion = typeof all;

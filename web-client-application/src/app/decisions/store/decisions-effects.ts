@@ -5,7 +5,6 @@ import {Injectable} from "@angular/core";
 import {NotifierService} from "../../core/notifier.service";
 import {Router} from "@angular/router";
 import {DecisionsHttpService} from "../service/decisions-http.service";
-import {StatusOdluke} from "../model/StatusOdluke";
 
 
 @Injectable()

@@ -12,6 +12,7 @@ import {UsersEffects} from '../users/store/users.effects';
 import {PasswordEffects} from '../password/store/password.effects';
 import {reducers} from "./store/core.reducer";
 import {DecisionsEffects} from "../decisions/store/decisions-effects";
+import {RiskEstimationEffects} from "../risk-estimation/store/risk-estimation-effects";
 
 @NgModule({
   providers: [
@@ -37,6 +38,7 @@ import {DecisionsEffects} from "../decisions/store/decisions-effects";
       UsersEffects,
       PasswordEffects,
       DecisionsEffects,
+      RiskEstimationEffects,
     ]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
   ],
