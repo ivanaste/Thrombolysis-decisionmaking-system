@@ -18,9 +18,6 @@ import java.util.List;
 public class Pacijent extends BaseEntity {
 
     private String jmbg;
-    private String ime;
-    private String prezime;
-    private String brojTelefona;
     private LocalDate datumRodjenja;
     @Enumerated(EnumType.STRING)
     private Role role;
