@@ -5,5 +5,5 @@ export interface Decision {
   id: string,
   createdAt: Date,
   status: DecisionStatus,
-  patient: Patient,
+  pacijent: Patient,
 }
