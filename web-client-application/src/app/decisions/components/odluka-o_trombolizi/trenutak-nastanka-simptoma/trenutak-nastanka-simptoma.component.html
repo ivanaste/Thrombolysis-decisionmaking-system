@@ -21,6 +21,14 @@
       <div class="row">
         <div class="col-6">
           <mat-form-field style="width: 80%">
+            <mat-label>Datum nastanka simptoma</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="datumNastankaSimptoma">
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field style="width: 80%">
             <mat-label>Vreme nastanka simptoma</mat-label>
             <input
               type="text"
@@ -28,7 +36,7 @@
               [ngxMatTimepicker]="timepicker"
               [format]="24"
               readonly
-              formControlName="trenutakNastankaSimptoma"
+              formControlName="vremeNastankaSimptoma"
             />
 
             <mat-icon
@@ -42,7 +50,7 @@
 
             <mat-icon
               matSuffix
-              *ngIf="!myForm.controls['trenutakNastankaSimptoma'].disabled"
+              *ngIf="!myForm.controls['vremeNastankaSimptoma'].disabled"
               (click)="openFromIcon(timepicker)"
             >schedule
             </mat-icon
@@ -53,12 +61,6 @@
             #timepicker
             [enableKeyboardInput]="true"
           ></ngx-mat-timepicker>
-        </div>
-        <div class="col-6">
-          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
-            nastali u toku
-            sna
-          </mat-checkbox>
         </div>
 
       </div>
@@ -79,6 +81,14 @@
           </mat-checkbox>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
+            nastali u toku
+            sna
+          </mat-checkbox>
+        </div>
+      </div>
     </form>
   </div>
   <div class="col-3"></div>
@@ -91,11 +101,11 @@
         <button mat-button
                 class="odlukaButton"
                 style="justify-self: center; margin-left: 15%; color: white"
-                type="button" (click)="finishFunction()">Proveri odluku
+                type="button" (click)="proveriOdluku()">Proveri odluku
         </button>
       </div>
       <div class="col-6">
-        <button mat-button
+        <button mat-button [disabled]="odlukaOTrombolizi === StatusOdluke.PRIHVACENA_FAZA_1"
                 class="odlukaButton"
                 style="justify-self: center; margin-left: 15%; color: white"
                 type="button"

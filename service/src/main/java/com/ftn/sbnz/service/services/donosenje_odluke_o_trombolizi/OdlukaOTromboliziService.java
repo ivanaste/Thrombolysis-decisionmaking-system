@@ -46,16 +46,17 @@ public class OdlukaOTromboliziService {
     private final MonitoringSimulacija monitoringSimulacija;
 
 
-    public String proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
+    public Boolean proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
+        Pacijent pacijent = korisnikService.sacuvajPacijenta(nastanakSimptomaRequest.getJmbgPacijenta(), nastanakSimptomaRequest.getDatumRodjenjaPacijenta());
         final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),
                 nastanakSimptomaRequest.isNastaliUTokuSna());
-        final Odluka odluka = new Odluka(korisnikService.getPacijentByJmbg(nastanakSimptomaRequest.getJmbgPacijenta()), StatusOdluke.PRIHVACENA_FAZA_1);
+        final Odluka odluka = new Odluka(pacijent, StatusOdluke.PRIHVACENA_FAZA_1);
         odlukaOTromboliziRepository.save(odluka);
         final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_1, simptomi, nastanakSimptomaRequest.isPostojeSvedoci());
         kieSession.insert(odlukaEvent);
         kieSession.fireAllRules();
 
-        return odluka.getStatus().getOpis();
+        return odluka.getStatus() != StatusOdluke.ODBIJENA;
     }
 
     public String proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {

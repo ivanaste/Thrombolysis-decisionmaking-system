@@ -22,15 +22,15 @@ import {
 import {
   UserHomePageCsrComponent
 } from './components/home-page/user-home-page/user-home-page-csr/user-home-page-csr.component';
-import {OdlukaOTromboliziComponent} from './components/odluka-o_trombolizi/odluka-otrombolizi.component';
+import {OdlukaOTromboliziComponent} from './decisions/components/odluka-o_trombolizi/odluka-otrombolizi.component';
 import {ArchwizardModule} from "angular-archwizard";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
 import {
   TrenutakNastankaSimptomaComponent
-} from './components/odluka-o_trombolizi/trenutak-nastanka-simptoma/trenutak-nastanka-simptoma.component';
+} from './decisions/components/odluka-o_trombolizi/trenutak-nastanka-simptoma/trenutak-nastanka-simptoma.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { NeuroloskiPregledComponent } from './components/odluka-o_trombolizi/neuroloski-pregled/neuroloski-pregled.component';
-import { NIHHSSkorComponent } from './components/odluka-o_trombolizi/nihhsskor/nihhsskor.component';
+import { NeuroloskiPregledComponent } from './decisions/components/odluka-o_trombolizi/neuroloski-pregled/neuroloski-pregled.component';
+import { NIHHSSkorComponent } from './decisions/components/odluka-o_trombolizi/nihhsskor/nihhsskor.component';
 
 @NgModule({
   declarations: [

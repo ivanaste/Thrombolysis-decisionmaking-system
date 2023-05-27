@@ -2,6 +2,7 @@ package com.ftn.sbnz.model.dto.request;
 
 import com.ftn.sbnz.model.models.StanjeSvesti;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,8 @@ import lombok.Setter;
 public class NastanakSimptomaRequest {
 
 	private String jmbgPacijenta;
+
+	private LocalDate datumRodjenjaPacijenta;
 
 	private LocalDateTime trenutakNastanka;
 

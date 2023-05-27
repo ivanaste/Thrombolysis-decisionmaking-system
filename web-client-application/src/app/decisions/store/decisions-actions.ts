@@ -1,9 +1,16 @@
 import {createAction, props, union} from "@ngrx/store";
 import {Decision} from "../model/decision";
+import {TrenutakNastanka} from "../model/TrenutakNastanka";
+import {StatusOdluke} from "../model/StatusOdluke";
 
 
 export const getDecisions = createAction('[Decisions] Get Decisions');
-
+export const dobaviOdlukuPrvaFaza = createAction(
+  '[Decisions] Odluka Prva Faza', props<{trenutakNastanka: TrenutakNastanka}>()
+);
+export const setStatusOdluke = createAction(
+  '[Decisions] Set Status Odluke', props<{status: StatusOdluke}>()
+);
 export const setDecisions = createAction(
   '[Decisions] Set Decisions',
   props<{ decisions: Decision[] }>()
@@ -12,6 +19,7 @@ export const setDecisions = createAction(
 const all = union({
   getDecisions,
   setDecisions,
+  dobaviOdlukuPrvaFaza,
 });
 
 export type DecisionsActionsUnion = typeof all;
