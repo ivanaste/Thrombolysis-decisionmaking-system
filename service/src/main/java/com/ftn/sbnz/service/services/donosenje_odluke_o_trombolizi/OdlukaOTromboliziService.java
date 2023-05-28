@@ -18,15 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija) {
+    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
@@ -35,6 +35,7 @@ public class OdlukaOTromboliziService {
         this.ctSimulacija = new CTSimulacija();
         this.sendMail = sendMail;
         this.personRepository = personRepository;
+        this.PacijentiNaEKGu = PacijentiNaEKGu;
         OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
         AlarmListener alarmListener = new AlarmListener(this.sendMail, this.personRepository);
         kieSession.addEventListener(eventListener);
@@ -54,10 +55,13 @@ public class OdlukaOTromboliziService {
     private final MonitoringSimulacija monitoringSimulacija;
     private final SendMail sendMail;
     private final PersonRepository personRepository;
+    private final Map<String, Pacijent> PacijentiNaEKGu;
 
 
     public Odluka proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
         Pacijent pacijent = korisnikService.sacuvajPacijenta(nastanakSimptomaRequest.getJmbgPacijenta(), nastanakSimptomaRequest.getDatumRodjenjaPacijenta());
+        PacijentiNaEKGu.putIfAbsent(pacijent.getJmbg(), pacijent);
+
         final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),
                 nastanakSimptomaRequest.isNastaliUTokuSna());
         final Odluka odluka = new Odluka(pacijent, StatusOdluke.PRIHVACENA_FAZA_1);
@@ -86,6 +90,7 @@ public class OdlukaOTromboliziService {
         kieSession.fireAllRules();
         Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(nihhsRequest.getIdOdluke());
         if (odluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_6)) odluka.setStatus(StatusOdluke.PRIHVACENA);
+        PacijentiNaEKGu.remove(nihhsRequest.getJmbgPacijenta());
         return odlukaOTromboliziRepository.save(odluka);
     }
 
@@ -115,8 +120,8 @@ public class OdlukaOTromboliziService {
         final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
         System.out.println("Sistolni pritisak: " + pritisak.getSistolni());
         System.out.println("Dijastolni pritisak: " + pritisak.getDijastolni());
-        pritisak.setDijastolni(100);
-        pritisak.setSistolni(120);
+//        pritisak.setDijastolni(100);
+//        pritisak.setSistolni(120);
 
         final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(),
                 StatusOdluke.PRIHVACENA_FAZA_3, pritisak);
@@ -154,8 +159,6 @@ public class OdlukaOTromboliziService {
 
     @Transactional(readOnly = true)
     public List<Odluka> dobaviOdluke() {
-        List<Odluka> odluke = odlukaOTromboliziRepository.findAllByStatusIn(List.of(StatusOdluke.PRIHVACENA, StatusOdluke.ODBIJENA));
-        Collections.reverse(odluke);
-        return odluke;
+        return odlukaOTromboliziRepository.findAllByStatusInOrderByCreatedAtDesc(List.of(StatusOdluke.PRIHVACENA, StatusOdluke.ODBIJENA));
     }
 }

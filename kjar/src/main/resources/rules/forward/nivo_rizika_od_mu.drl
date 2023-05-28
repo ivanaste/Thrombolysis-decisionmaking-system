@@ -39,7 +39,7 @@ import java.util.UUID;
 
 //ako je status procena u toku, znaci da su prosle prve tri faze, proverava da li postoji ijedan alarm za atrijalnu fibrilaciju
 rule "Ukoliko je utvrdjena atrijalna fibrilacija, pacijent ima visok rizik od MU"
-salience 1000
+salience 10000
 	when
 		$nivoRizika: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta, nivoRizika == NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE)
 		Number(intValue >= 1) from accumulate(

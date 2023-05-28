@@ -1,5 +1,12 @@
 <div class="decisions-table-container">
   <div class="decisions-table-content">
+    <mat-form-field appearance="fill" style="width: 25%">
+      <mat-label>Search</mat-label>
+      <button matTooltip="Search" matPrefix mat-icon-button>
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+      <input matInput [(ngModel)]="search" placeholder="Search" (ngModelChange)="onSearchInput()">
+    </mat-form-field>
     <mat-table class="decisions-table" [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="pacijent.jmbg">

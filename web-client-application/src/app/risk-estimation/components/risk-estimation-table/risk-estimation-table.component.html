@@ -1,5 +1,12 @@
 <div class="risk-estimation-table-container">
   <div class="risk-estimation-table-content">
+    <mat-form-field appearance="fill" style="width: 25%">
+      <mat-label>Search</mat-label>
+      <button matTooltip="Search" matPrefix mat-icon-button>
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+      <input matInput [(ngModel)]="search" placeholder="Search" (ngModelChange)="onSearchInput()">
+    </mat-form-field>
     <mat-table class="risk-estimation-table" [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Jmbg Pacijenta">

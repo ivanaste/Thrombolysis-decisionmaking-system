@@ -11,4 +11,7 @@ import java.util.UUID;
 @Repository
 public interface ProcenaRizikaOdMURepository extends JpaRepository<ProcenaRizikaOdMU, UUID> {
     List<ProcenaRizikaOdMU> findAllByNivoRizikaEquals(NivoRizikaOdMU nivoRizika);
+
+    List<ProcenaRizikaOdMU> findAllByOrderByCreatedAtDesc();
+
 }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,20 +41,18 @@ public class ProcenaRizikaOdMUService {
 
     @Transactional(readOnly = true)
     public List<ProcenaRizikaOdMU> getAll() {
-        List<ProcenaRizikaOdMU> procene = procenaRizikaOdMURepository.findAll();
-        Collections.reverse(procene);
-        return procene;
+        return procenaRizikaOdMURepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public NivoRizikaOdMU utvrdiNivoRizikaTemplejt(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
+    public NivoRizikaOdMU utvrdiNivoRizika(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
         Pacijent pacijent = korisnikService.sacuvajPacijenta(procenaRizikaOdMURequest.getJmbgPacijenta(), procenaRizikaOdMURequest.getDatumRodjenjaPacijenta());
+        PacijentiNaEKGu.putIfAbsent(pacijent.getJmbg(), pacijent);
+
         final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);
 
         System.out.println("ABCD2 skor: " + ABCD2Skor);
         ProcenaRizikaOdMU procenaRizika = new ProcenaRizikaOdMU(pacijent, NivoRizikaOdMU.PROCENA_U_TOKU);
         procenaRizika = procenaRizikaOdMURepository.save(procenaRizika);
-
-        //PacijentiNaEKGu.put(procenaRizika.getPacijent().getJmbg(), procenaRizika.getPacijent());
 
         final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
         kieSession.insert(procenaRizika.getId());

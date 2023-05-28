@@ -1,7 +1,6 @@
 package com.ftn.sbnz.service;
 
 import com.ftn.sbnz.model.models.Pacijent;
-import com.ftn.sbnz.service.repository.KorisnikRepository;
 import com.ftn.sbnz.service.services.procena_rizika_od_MU.LoadKieSession;
 import lombok.RequiredArgsConstructor;
 import org.kie.api.KieServices;
@@ -33,9 +32,7 @@ public class ServiceApplication {
     private static final Logger log = LoggerFactory.getLogger(ServiceApplication.class);
 
     private final Map<String, Pacijent> pacijentiNaEKGu = new HashMap<>();
-
-    private final KorisnikRepository korisnikRepository;
-
+    
     private final LoadKieSession loadKieSession;
 
     public static void main(final String[] args) {
@@ -68,7 +65,6 @@ public class ServiceApplication {
 
     @Bean
     public Map<String, Pacijent> PacijentiNaEKGu() {
-        pacijentiNaEKGu.put("11051974565555", korisnikRepository.getPacijentByJmbg("11051974565555"));
         return pacijentiNaEKGu;
     }
 

@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface OdlukaOTromboliziRepository extends JpaRepository<Odluka, UUID> {
     Odluka findOdlukaById(UUID id);
 
-    List<Odluka> findAllByStatusIn(List<StatusOdluke> statusi);
+    List<Odluka> findAllByStatusInOrderByCreatedAtDesc(List<StatusOdluke> statusi);
+
 }

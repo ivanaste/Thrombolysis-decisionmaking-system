@@ -20,7 +20,7 @@ public class ProcenaRizikaOdMUController {
     @PostMapping(value = "/rizikOdMU", produces = "application/json")
     public NivoRizikaOdMU utvrdjivanjeNivoaRizikaOdMUTemplejt(@RequestBody final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
 
-        return procenaRizikaOdMUService.utvrdiNivoRizikaTemplejt(procenaRizikaOdMURequest);
+        return procenaRizikaOdMUService.utvrdiNivoRizika(procenaRizikaOdMURequest);
     }
 
     @GetMapping("/all")
