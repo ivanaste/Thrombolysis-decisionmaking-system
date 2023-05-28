@@ -22,6 +22,20 @@ export class RiskEstimationEffects {
     );
   });
 
+  calculateRisk = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(RiskEstimationActions.calculateRisk.type),
+      switchMap((action) => {
+        return this.httpService
+          .utvrdiRizik(action.request)
+          .pipe(map((rizik) => {
+            this.notifierService.notifySuccess("Utvrdjen je nivo rizika: " + rizik.toString());
+            return RiskEstimationActions.setRisk({rizik: rizik})
+          }));
+      })
+    );
+  });
+
 
   constructor(
     private notifierService: NotifierService,

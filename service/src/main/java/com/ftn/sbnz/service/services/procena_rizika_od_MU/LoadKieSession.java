@@ -22,7 +22,10 @@ import org.kie.api.runtime.KieSessionConfiguration;
 import org.kie.internal.utils.KieHelper;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +46,7 @@ public class LoadKieSession {
     private KieSession createKieSessionFromDRL() throws IOException {
         KieBaseConfiguration config = KnowledgeBaseFactory.newKnowledgeBaseConfiguration();
 
-        config.setOption( EventProcessingOption.STREAM );
+        config.setOption(EventProcessingOption.STREAM);
 
         KieHelper kieHelper = new KieHelper();
         List<InputStream> inputStreams = new ArrayList<>();
@@ -56,7 +59,7 @@ public class LoadKieSession {
         inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/neuroloski_pregled.drl"));
         inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/nihhsSkor.drl"));
 
-        for (InputStream inputStream: inputStreams) {
+        for (InputStream inputStream : inputStreams) {
             kieHelper.addContent(readInputStreamAsString(inputStream), ResourceType.DRL);
         }
 
@@ -68,19 +71,19 @@ public class LoadKieSession {
 
         Results results = kieHelper.verify();
 
-        if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)){
+        if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)) {
             List<Message> messages = results.getMessages(Message.Level.WARNING, Message.Level.ERROR);
             for (Message message : messages) {
-                System.out.println("Error: "+message.getText());
+                System.out.println("Error: " + message.getText());
             }
 
             throw new IllegalStateException("Compilation errors were found. Check the logs.");
         }
-        KieBase kieBase = kieHelper.build( config );
+        KieBase kieBase = kieHelper.build(config);
 
         KieSessionConfiguration ksConf = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).setBeliefSystemType( BeliefSystemType.DEFEASIBLE );
-        return kieBase.newKieSession( ksConf, null );
+        ((SessionConfiguration) ksConf).setBeliefSystemType(BeliefSystemType.DEFEASIBLE);
+        return kieBase.newKieSession(ksConf, null);
     }
 
 
@@ -96,7 +99,7 @@ public class LoadKieSession {
         List<NivoRizikaTemplateModel> data = new ArrayList<>();
         data.add(new NivoRizikaTemplateModel(0, 4, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
         data.add(new NivoRizikaTemplateModel(4, 6, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.NIZAK_RIZIK));
-        data.add(new NivoRizikaTemplateModel(6, 8, 50, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.VISOK_RIZIK));
+        data.add(new NivoRizikaTemplateModel(6, 8, 100, NivoRizikaOdMU.PROCENA_U_TOKU, NivoRizikaOdMU.VISOK_RIZIK));
 
         ObjectDataCompiler converter = new ObjectDataCompiler();
         return converter.compile(data, nivo_rizika_template);

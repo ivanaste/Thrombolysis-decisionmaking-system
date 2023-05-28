@@ -1,7 +1,7 @@
 import {createAction, props, union} from "@ngrx/store";
 import {Decision} from "../model/decision";
-import {TrenutakNastanka} from "../model/TrenutakNastanka";
 import {StatusOdluke} from "../model/StatusOdluke";
+import {TrenutakNastanka} from "../model/TrenutakNastanka";
 
 
 export const getDecisions = createAction('[Decisions] Get Decisions');

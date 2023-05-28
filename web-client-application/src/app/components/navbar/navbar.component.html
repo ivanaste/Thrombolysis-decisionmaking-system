@@ -1,26 +1,19 @@
 <nav>
   <div class="container">
     <div class="row" style="justify-content: space-between;">
-      <a id="logo" class="navbar-logo" routerLink="/">
+      <a id="logo" class="navbar-logo">
         <img src="../../../assets/logo.png" alt="Thromoblysis" width="40px" height="50px">
       </a>
-      <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka</a>
-      <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Istorija procena nivoa rizika od MU</a>
-
-      <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/trenutakNastanka">Trenutak nastanka</a>
-      <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/procenaRizikaOdMU">Procena rizika od MU</a>
-
-      <button class="toggle-button" *ngIf="!welcomingPageIsActive" [ngClass]="showMobileMenu ? 'active' : null"
-              (click)="toggleMobileMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div class="menu">
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka</a>
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Istorija procena nivoa rizika od MU</a>
+      </div>
     </div>
 
     <div class="row" style="justify-content: center">
-      <div class="menu" [ngClass]="{'glass': welcomingPageIsActive , 'show': showMobileMenu}">
-        <a *ngIf="userRole === 'ADMIN'" routerLink="/admin/users/all">Users</a>
+      <div class="menu">
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/doctor/trenutakNastanka">Trenutak nastanka</a>
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations/procenaRizikaOdMU">Procena rizika od MU</a>
         <a *ngIf="userRole" routerLink="/" (click)="logout()">Log Out</a>
       </div>
     </div>

@@ -9,9 +9,9 @@ import com.ftn.sbnz.model.models.ProcenaRizikaOdMU;
 import com.ftn.sbnz.service.repository.ProcenaRizikaOdMURepository;
 import com.ftn.sbnz.service.services.korisnik.KorisnikService;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
-import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class ProcenaRizikaOdMUService {
 
     private final KorisnikService korisnikService;
@@ -30,13 +29,23 @@ public class ProcenaRizikaOdMUService {
     private final Map<String, Pacijent> PacijentiNaEKGu;
     private final MonitoringSimulacija monitoringSimulacija;
 
+    @Autowired
+    public ProcenaRizikaOdMUService(KorisnikService korisnikService, KieSession kieSession, ProcenaRizikaOdMURepository procenaRizikaOdMURepository, Map<String, Pacijent> pacijentiNaEKGu, MonitoringSimulacija monitoringSimulacija) {
+        this.korisnikService = korisnikService;
+        this.kieSession = kieSession;
+        this.procenaRizikaOdMURepository = procenaRizikaOdMURepository;
+        PacijentiNaEKGu = pacijentiNaEKGu;
+        this.monitoringSimulacija = monitoringSimulacija;
+        kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));
+    }
+
     @Transactional(readOnly = true)
     public List<ProcenaRizikaOdMU> getAll() {
         return procenaRizikaOdMURepository.findAll();
     }
 
-    public String utvrdiNivoRizikaTemplejt(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
-        final Pacijent pacijent = korisnikService.getPacijentByJmbg(procenaRizikaOdMURequest.getJmbgPacijenta());
+    public NivoRizikaOdMU utvrdiNivoRizikaTemplejt(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
+        Pacijent pacijent = korisnikService.sacuvajPacijenta(procenaRizikaOdMURequest.getJmbgPacijenta(), procenaRizikaOdMURequest.getDatumRodjenjaPacijenta());
         final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);
 
         System.out.println("ABCD2 skor: " + ABCD2Skor);
@@ -46,8 +55,6 @@ public class ProcenaRizikaOdMUService {
         //PacijentiNaEKGu.put(procenaRizika.getPacijent().getJmbg(), procenaRizika.getPacijent());
 
         final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
-        if (kieSession.getAgendaEventListeners().size() == 0)
-            kieSession.addEventListener(new ProcenaRizikaOdMUEventListener(this, PacijentiNaEKGu));
         kieSession.insert(procenaRizika.getId());
         kieSession.insert(procenaRizikaEvent);
         kieSession.fireAllRules();
@@ -66,7 +73,7 @@ public class ProcenaRizikaOdMUService {
         FactHandle factHandle = kieSession.getFactHandle(procenaRizika.getId());
         kieSession.delete(factHandle);
 
-        return nivoRizika.name();
+        return nivoRizika;
     }
 
 
@@ -82,7 +89,8 @@ public class ProcenaRizikaOdMUService {
         int skor = 0;
         final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
         if ((pritisak.getSistolni() > 140) || (pritisak.getDijastolni() > 90)) skor += 1;
-        if (pacijent.dobaviGodine() > 60) skor += 1;
+        int razlika = pacijent.dobaviGodine();
+        if (razlika > 60) skor += 1;
         if (procenaRizikaOdMURequest.isHemipareza() || procenaRizikaOdMURequest.isHemiplegija()) skor += 2;
         if (procenaRizikaOdMURequest.isSmetnjeGovora()) skor += 1;
         if (procenaRizikaOdMURequest.getTrajanjeSimptoma() >= 60) skor += 2;

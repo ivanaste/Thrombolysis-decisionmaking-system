@@ -6,7 +6,10 @@ import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
+import com.ftn.sbnz.service.repository.PersonRepository;
+import com.ftn.sbnz.service.services.alarm.AlarmListener;
 import com.ftn.sbnz.service.services.korisnik.KorisnikService;
+import com.ftn.sbnz.service.services.mail.SendMail;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
 import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
@@ -22,15 +25,19 @@ import java.util.UUID;
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija) {
+    public OdlukaOTromboliziService(final KieSession kieSession, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
         this.monitoringSimulacija = monitoringSimulacija;
         this.laboratorijaSimulacija = new LaboratorijaSimulacija();
         this.ctSimulacija = new CTSimulacija();
+        this.sendMail = sendMail;
+        this.personRepository = personRepository;
         OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
-        if (kieSession.getAgendaEventListeners().size() == 0) kieSession.addEventListener(eventListener);
+        AlarmListener alarmListener = new AlarmListener(this.sendMail, this.personRepository);
+        kieSession.addEventListener(eventListener);
+        kieSession.addEventListener(alarmListener);
     }
 
     private final KieSession kieSession;
@@ -44,6 +51,8 @@ public class OdlukaOTromboliziService {
     private final LaboratorijaSimulacija laboratorijaSimulacija;
 
     private final MonitoringSimulacija monitoringSimulacija;
+    private final SendMail sendMail;
+    private final PersonRepository personRepository;
 
 
     public Odluka proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {

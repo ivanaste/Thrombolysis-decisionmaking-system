@@ -5,7 +5,6 @@ import {AllUsersTableComponent} from './components/users/all-users-table/all-use
 import {UsersResolver} from './resolvers/users.resolver';
 import {UserProfileFormComponent} from './components/users/user-profile-form/user-profile-form.component';
 import {OdlukaOTromboliziComponent} from "../decisions/components/odluka-o_trombolizi/odluka-otrombolizi.component";
-import {ProcenaRizikaOdMUComponent} from "../decisions/components/procena-rizika-od-mu/procena-rizika-od-mu.component";
 
 const routes: Routes = [
   {
@@ -29,10 +28,6 @@ const routes: Routes = [
         path: 'trenutakNastanka',
         component: OdlukaOTromboliziComponent,
       },
-      {
-        path: 'procenaRizikaOdMU',
-        component: ProcenaRizikaOdMUComponent,
-      }
     ],
   },
 ];

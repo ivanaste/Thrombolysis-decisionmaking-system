@@ -74,3 +74,10 @@ salience 1000
 		System.out.println("Pacijent ima visok rizik od MU, jer se TIA ponovio unutar tri dana.");
 		modify ($procenaRizika1) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
 end
+
+rule "Ukoliko se javio alarm, obavesti doktora."
+	when
+		$alarm: AlarmEKG()
+	then
+		System.out.println("Pojavio se alarm.");
+end

@@ -16,7 +16,8 @@ public enum Codes implements Translation {
     LOGIN_PIN_SUBJECT("login_pin_subject"),
     LOGIN_PIN_MESSAGE("login_pin_message"),
     SIGN_UP_SET_PASSWORD_EMAIL("sign_up_set_password_email"),
-    SIGN_UP_SET_PASSWORD_SUBJECT("sign_up_set_password_subject");
+    SIGN_UP_SET_PASSWORD_SUBJECT("sign_up_set_password_subject"),
+    ALARM_RAD_SRCA("alarm_rad_srca");
 
 
     private final String code;

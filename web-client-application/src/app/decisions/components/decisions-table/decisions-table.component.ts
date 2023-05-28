@@ -25,7 +25,6 @@ export class DecisionsTableComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.decisions$ = this.store.select(selectDecisions);
     this.decisions$.subscribe(decisions => {
-      console.log(decisions);
       this.dataSource.data = decisions;
     });
   }
