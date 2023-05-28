@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {NeuroloskiPregled} from "../../../model/NeuroloskiPregled";
+import {Decision} from "../../../model/decision";
+import {NIHHS} from "../../../model/NIHHS";
+import {DecisionStatus} from "../../../model/decision-status";
 
 @Component({
   selector: 'app-nihhsskor',
@@ -6,6 +10,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./nihhsskor.component.scss']
 })
 export class NIHHSSkorComponent {
+  @Output() nihhsSkorEvent: EventEmitter<NIHHS> = new EventEmitter<NIHHS>();
+  @Input() odlukaOTrombolizi: Decision | null;
+
   elementiNIHHSSkale = [
     [{ime: 'Stanje svesti', opcije: ['Budan', 'Somnolentan', 'Sopor', 'Koma'], skor: 0, izabranaOpcija: ''}, {ime: "Stanje svesti - pitanja", opcije: ['Tacno odgovara', 'Na 1 tacno odgovara', 'Netacno odgovara'], skor: 0, izabranaOpcija: ''}, {ime: 'Stanje svesti - nalozi', opcije: ['Tacno izvrsava', 'Jedan tacno izvrsava', 'Netacno izvrsava oba naloga', 'koma'], skor: 0, izabranaOpcija: ''}],
     [{ime: "Pokreti bulbusa", opcije: ['Normalni', 'Paraliza pogleda', 'Paraliza i devijacija pogleda'], skor: 0, izabranaOpcija: ''}, {ime: "Sirina vidnog polja", opcije: ['Normalno', 'Parcijalna hemianopsija', 'Potpuna hemianopsija', 'Slepilo'], skor: 0, izabranaOpcija: ''}, {ime: "Mimicna motorika", opcije: ['Normalna', 'Minimalna pareza', 'Parcijalna pareza', 'Kompletna pareza'], skor: 0, izabranaOpcija: ''}],
@@ -17,6 +24,7 @@ export class NIHHSSkorComponent {
   proveriOdluku() {
     this.elementiNIHHSSkale.forEach((row) => {
       row.forEach((element) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const index = element.opcije.indexOf(element.izabranaOpcija);
         element.skor = index;
@@ -24,28 +32,33 @@ export class NIHHSSkorComponent {
     });
 
     const scores = this.elementiNIHHSSkale.flatMap((row) => row.map((element) => element.skor));
-    if (scores.includes(-1)) console.log("Sranje")
-    else {
-      const requestObject = {
-        stanjeSvesti: scores[0],
-        stanjeSvestiPitanja: scores[1],
-        stanjeSvestiNalozi: scores[2],
-        pokretiBulbusa: scores[3],
-        sirinaVidnogPolja: scores[4],
-        mimicnaPareza: scores[5],
-        motorikaLevaRuka: scores[6],
-        motorikaDesnaRuka: scores[7],
-        motorikaLevaNoga: scores[8],
-        motorikaDesnaNoga: scores[9],
-        ataksijaEkstremiteta: scores[10],
-        senzibilitet: scores[11],
-        govor: scores[12],
-        dizartrija: scores[13],
-        fenomenNeglekta: scores[14]
-      };
-      console.log(requestObject);
-    }
+    // if (scores.includes(-1)) {
+    //   console.log("Obavestenje za neispravne unose")
+    // }
+    //else {
+      const nihhsRequest = new NIHHS(
+        this.odlukaOTrombolizi?.pacijent?.jmbg,
+        this.odlukaOTrombolizi?.id,
+        scores[0],
+        scores[1],
+        scores[2],
+        scores[3],
+        scores[4],
+        scores[5],
+        scores[6],
+        scores[7],
+        scores[8],
+        scores[9],
+        scores[10],
+        scores[11],
+        scores[12],
+        scores[13],
+        scores[14]
+      );
+      this.nihhsSkorEvent.emit(nihhsRequest);
+   // }
 
   }
 
+  protected readonly DecisionStatus = DecisionStatus;
 }

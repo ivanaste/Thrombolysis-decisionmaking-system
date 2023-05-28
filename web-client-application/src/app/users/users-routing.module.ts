@@ -24,10 +24,6 @@ const routes: Routes = [
         path: 'edit/:id',
         component: UserProfileFormComponent,
       },
-      {
-        path: 'trenutakNastanka',
-        component: OdlukaOTromboliziComponent,
-      },
     ],
   },
 ];

@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OdlukaOTromboliziRepository extends JpaRepository<Odluka, UUID> {
+    Odluka findOdlukaById(UUID id);
 }

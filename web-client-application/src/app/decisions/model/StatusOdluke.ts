@@ -1,7 +1,0 @@
-export enum StatusOdluke {
-  U_PROCESU,
-  PRIHVACENA_FAZA_1,
-  PRIHVACENA_FAZA_2,
-  PRIHVACENA,
-  ODBIJENA
-}

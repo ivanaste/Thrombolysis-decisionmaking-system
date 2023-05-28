@@ -20,12 +20,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'doctor',
-    loadChildren: () =>
-      import('./users/users.module').then((module) => module.UsersModule),
-    canActivate: [],
-  },
-  {
     path: 'decisions',
     loadChildren: () =>
       import('./decisions/decisions.module').then((module) => module.DecisionsModule),

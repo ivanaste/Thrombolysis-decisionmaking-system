@@ -1,9 +1,8 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TrenutakNastanka} from "../../../model/TrenutakNastanka";
-import {StatusOdluke} from "../../../model/StatusOdluke";
 import {Decision} from "../../../model/decision";
-import {Observable} from "rxjs";
+import {DecisionStatus} from "../../../model/decision-status";
 
 @Component({
   selector: 'app-trenutak-nastanka-simptoma',
@@ -16,7 +15,7 @@ export class TrenutakNastankaSimptomaComponent {
   @ViewChild('timepicker') timepicker: any;
 
   @Output() trenutakNastankaObj: EventEmitter<TrenutakNastanka> = new EventEmitter<TrenutakNastanka>();
-  @Input() odlukaOTrombolizi: Observable<Decision> | null;
+  @Input() odlukaOTrombolizi: Decision | null;
 
   constructor(private formBuilder: FormBuilder) {
     this.myForm = this.formBuilder.group({
@@ -41,16 +40,18 @@ export class TrenutakNastankaSimptomaComponent {
   }
 
   proveriOdluku() {
-    const formValues = this.myForm.value;
-    const trenutakNastanka = new TrenutakNastanka(
-      formValues.jmbgPacijenta,
-      this.adjustTimeZoneOffset(formValues.datumRodjenjaPacijenta),
-      formValues.simptomiNastaliUTokuSna,
-      formValues.postojeSvedoci,
-      this.mergeTimeWithDate(formValues.vremeNastankaSimptoma, formValues.datumNastankaSimptoma),
-      formValues.stanjeSvesti.toUpperCase().replace(/ /g, "_")
-    );
-    this.trenutakNastankaObj.emit(trenutakNastanka);
+    if (this.myForm.valid) {
+      const formValues = this.myForm.value;
+      const trenutakNastanka = new TrenutakNastanka(
+        formValues.jmbgPacijenta,
+        this.adjustTimeZoneOffset(formValues.datumRodjenjaPacijenta),
+        formValues.simptomiNastaliUTokuSna,
+        formValues.postojeSvedoci,
+        this.mergeTimeWithDate(formValues.vremeNastankaSimptoma, formValues.datumNastankaSimptoma),
+        formValues.stanjeSvesti.toUpperCase().replace(/ /g, "_")
+      );
+      this.trenutakNastankaObj.emit(trenutakNastanka);
+    }
   }
 
   mergeTimeWithDate(time: string, date: Date): Date {
@@ -67,5 +68,5 @@ export class TrenutakNastankaSimptomaComponent {
     return date;
   }
 
-  protected readonly StatusOdluke = StatusOdluke;
+  protected readonly DecisionStatus = DecisionStatus;
 }

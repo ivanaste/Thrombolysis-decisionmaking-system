@@ -19,7 +19,7 @@ export class AuthEffects {
           .sendSecondStepLoginRequest(action.email, action.password)
           .pipe(
             map((authToken) => {
-              this.router.navigate(['doctor/trenutakNastanka']);
+              this.router.navigate(['decisions/trenutakNastanka']);
               return AuthActions.loginSuccess({
                 token: authToken.token,
               });
