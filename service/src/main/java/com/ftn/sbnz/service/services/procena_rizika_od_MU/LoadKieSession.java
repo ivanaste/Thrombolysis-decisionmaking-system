@@ -1,9 +1,6 @@
 package com.ftn.sbnz.service.services.procena_rizika_od_MU;
 
-import com.ftn.sbnz.model.models.NivoRizikaOdMU;
-import com.ftn.sbnz.model.models.NivoRizikaTemplateModel;
-import com.ftn.sbnz.model.models.OtkucajiSrcaTemplateModel;
-import com.ftn.sbnz.model.models.RadSrca;
+import com.ftn.sbnz.model.models.*;
 import lombok.RequiredArgsConstructor;
 import org.drools.core.BeliefSystemType;
 import org.drools.core.SessionConfiguration;
@@ -17,9 +14,14 @@ import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.utils.KieHelper;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -39,32 +41,16 @@ public class LoadKieSession {
         return kSession;
     }
 
-
     private KieSession createKieSessionFromDRL() throws IOException {
         KieBaseConfiguration config = KnowledgeBaseFactory.newKnowledgeBaseConfiguration();
 
         config.setOption( EventProcessingOption.STREAM );
 
         KieHelper kieHelper = new KieHelper();
-        List<InputStream> inputStreams = new ArrayList<>();
-
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/cep/cep.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/nivo_rizika_od_mu.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/anamneza.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/laboratorija.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/nastanakSimptoma.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/neuroloski_pregled.drl"));
-        inputStreams.add(ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/forward/nihhsSkor.drl"));
-
-        for (InputStream inputStream: inputStreams) {
-            kieHelper.addContent(readInputStreamAsString(inputStream), ResourceType.DRL);
-        }
+        getResourceFolderFiles(kieHelper);
 
         kieHelper.addContent(generisiNivoRizikaTemplate(), ResourceType.DRL);
-
-        String templateDrl = generisiOtkucajiSrcaTemplate();
-        System.out.println(templateDrl);
-        kieHelper.addContent(templateDrl, ResourceType.DRL);
+        kieHelper.addContent(generisiOtkucajiSrcaTemplate(), ResourceType.DRL);
 
         Results results = kieHelper.verify();
 
@@ -83,10 +69,14 @@ public class LoadKieSession {
         return kieBase.newKieSession( ksConf, null );
     }
 
-
-    private String readInputStreamAsString(InputStream inputStream) throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+    private static void getResourceFolderFiles(KieHelper kieHelper) throws IOException {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+        ResourcePatternResolver resolver = new
+                PathMatchingResourcePatternResolver(cl);
+        Resource[] resources = resolver.getResources("/rules/**/*.drl");
+        for (Resource resource : resources) {
+            kieHelper.addResource(ResourceFactory.newFileResource(resource.getFile()),
+                    ResourceType.DRL);
         }
     }
 
@@ -115,18 +105,13 @@ public class LoadKieSession {
 
     public void printDrl(KieSession kSession) {
         KieBase kieBase = kSession.getKieBase();
-
         Iterable<KiePackage> packages = kieBase.getKiePackages();
 
-        // Iterate over each package and retrieve the rules
         for (KiePackage kiePackage : packages) {
-            // Retrieve the rules from the package
             Collection<Rule> rules = kiePackage.getRules();
 
-            // Iterate over each rule and perform necessary operations
             for (Rule rule : rules) {
                 String ruleName = rule.getName();
-                // Do something with the rule, such as printing the name
                 System.out.println("Rule name: " + ruleName);
             }
         }
