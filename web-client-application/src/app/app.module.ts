@@ -43,10 +43,6 @@ import { NIHHSSkorComponent } from './decisions/components/odluka-o_trombolizi/n
     UserHomePageNoCsrComponent,
     UserHomePagePendingCsrComponent,
     UserHomePageCsrComponent,
-    OdlukaOTromboliziComponent,
-    TrenutakNastankaSimptomaComponent,
-    NeuroloskiPregledComponent,
-    NIHHSSkorComponent,
   ],
   imports: [
     BrowserModule,

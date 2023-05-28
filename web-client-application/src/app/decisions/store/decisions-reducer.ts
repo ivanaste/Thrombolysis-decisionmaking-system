@@ -2,18 +2,16 @@ import {Action, createReducer, on} from '@ngrx/store';
 import * as DecisionActions from "../store/decisions-actions";
 import {Decision} from "../model/decision";
 import {DecisionStatus} from "../model/decision-status";
+import {Patient} from "../../shared/model/patient";
 
 export interface State {
   decisions: Decision[];
-  odluka: Decision
+  odluka: Decision;
 }
 
 const initialState: State = {
   decisions: [],
-  odluka: {
-    id: '',
-    status: DecisionStatus.U_PROCESU
-  }
+  odluka: new Decision('', DecisionStatus.U_PROCESU)
 };
 
 const decisionsReducer = createReducer(

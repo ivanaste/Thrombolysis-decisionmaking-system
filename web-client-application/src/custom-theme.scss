@@ -159,6 +159,10 @@ table, .search-fields, mat-paginator {
   }
 }
 
+button:disabled {
+  opacity: 50%;
+}
+
 .red-btn-icon {
   path {
     fill: #F44336;

@@ -24,13 +24,13 @@ public class OdlukaOTromboliziController {
     }
 
     @PostMapping(value = "/neuroloskiPregled", produces = "application/json")
-    public String proveraOdlukeNaOsnovuNeuroloskogPregled(@RequestBody NeuroloskiPregledRequest neuroloskiPregledRequest) {
+    public Odluka proveraOdlukeNaOsnovuNeuroloskogPregled(@RequestBody NeuroloskiPregledRequest neuroloskiPregledRequest) {
 
         return odlukaOTromboliziService.proveriOdlukuNaOsnovuNeuroloskogPregleda(neuroloskiPregledRequest);
     }
 
     @PostMapping(value = "/nihhsSkor", produces = "application/json")
-    public String proveraOdlukeNaOsnovuNIHHSSkora(@RequestBody NIHHSRequest nihhsRequest) {
+    public Odluka proveraOdlukeNaOsnovuNIHHSSkora(@RequestBody NIHHSRequest nihhsRequest) {
 
         return odlukaOTromboliziService.proveriOdlukuNaOsnovuNIHHSSkora(nihhsRequest);
     }

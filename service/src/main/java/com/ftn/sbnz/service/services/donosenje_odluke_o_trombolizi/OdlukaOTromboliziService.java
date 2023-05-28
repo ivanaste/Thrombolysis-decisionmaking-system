@@ -59,22 +59,22 @@ public class OdlukaOTromboliziService {
         return odluka;
     }
 
-    public String proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {
+    public Odluka proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {
         final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(neuroloskiPregled.getIdOdluke(),
                 StatusOdluke.PRIHVACENA_FAZA_2,
                 neuroloskiPregled.kreirajKontraindikacije());
         Odluka odluka = izmeniStatusOdluke(neuroloskiPregled.getIdOdluke(), StatusOdluke.PRIHVACENA_FAZA_2);
         kieSession.insert(odlukaEvent);
         kieSession.fireAllRules();
-        return odluka.getStatus().getOpis();
+        return odluka;
     }
 
-    public String proveriOdlukuNaOsnovuNIHHSSkora(final NIHHSRequest nihhsRequest) {
+    public Odluka proveriOdlukuNaOsnovuNIHHSSkora(final NIHHSRequest nihhsRequest) {
         final Integer skor = izracunajNIHHSSkor(nihhsRequest);
         final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke());
         kieSession.insert(nihhs);
         kieSession.fireAllRules();
-        return odlukaOTromboliziRepository.getReferenceById(nihhsRequest.getIdOdluke()).getStatus().getOpis();
+        return odlukaOTromboliziRepository.getReferenceById(nihhsRequest.getIdOdluke());
     }
 
     public Integer izracunajNIHHSSkor(final NIHHSRequest nihhsRequest) {
@@ -113,10 +113,9 @@ public class OdlukaOTromboliziService {
     }
 
     public Odluka izmeniStatusOdluke(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
-        final Odluka odluka = odlukaOTromboliziRepository.getReferenceById(idOdluke);
+        final Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(idOdluke);
         odluka.setStatus(noviStatusOdluke);
-        odlukaOTromboliziRepository.save(odluka);
-        return odluka;
+        return odlukaOTromboliziRepository.save(odluka);
     }
 
     public void simulirajCT(final Odluka izmenjenaOdluka) {

@@ -11,6 +11,15 @@ import {SharedModule} from "../shared/shared.module";
 import { ProcenaRizikaOdMUComponent } from './components/procena-rizika-od-mu/procena-rizika-od-mu.component';
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
 import {MatRadioModule} from "@angular/material/radio";
+import {
+  TrenutakNastankaSimptomaComponent
+} from "./components/odluka-o_trombolizi/trenutak-nastanka-simptoma/trenutak-nastanka-simptoma.component";
+import {
+  NeuroloskiPregledComponent
+} from "./components/odluka-o_trombolizi/neuroloski-pregled/neuroloski-pregled.component";
+import {NIHHSSkorComponent} from "./components/odluka-o_trombolizi/nihhsskor/nihhsskor.component";
+import {OdlukaOTromboliziComponent} from "./components/odluka-o_trombolizi/odluka-otrombolizi.component";
+import {ArchwizardModule} from "angular-archwizard";
 
 
 
@@ -18,8 +27,11 @@ import {MatRadioModule} from "@angular/material/radio";
   declarations: [
     DecisionsTableComponent,
     DecisionsComponent,
+    OdlukaOTromboliziComponent,
     ProcenaRizikaOdMUComponent,
-
+    TrenutakNastankaSimptomaComponent,
+    NeuroloskiPregledComponent,
+    NIHHSSkorComponent,
   ],
   imports: [
     CommonModule,
@@ -27,8 +39,9 @@ import {MatRadioModule} from "@angular/material/radio";
     DecisionsRoutingModule,
     StoreModule.forFeature('decisions', fromDecisions.reducer),
     NgxMatTimepickerModule,
-    MatRadioModule
-  ]
+    MatRadioModule,
+    ArchwizardModule
+  ],
 })
 export class DecisionsModule {
 }

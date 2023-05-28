@@ -4,13 +4,13 @@
     <form [formGroup]="myForm">
       <div class="row">
         <div class="col-6">
-          <mat-form-field style="width: 80%">
+          <mat-form-field style="width: 90%">
             <mat-label>Jmbg pacijenta</mat-label>
             <input matInput formControlName="jmbgPacijenta">
           </mat-form-field>
         </div>
         <div class="col-6">
-          <mat-form-field style="width: 80%">
+          <mat-form-field style="width: 100%">
             <mat-label>Datum rodjenja pacijenta</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="datumRodjenjaPacijenta">
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -20,7 +20,7 @@
       </div>
       <div class="row">
         <div class="col-6">
-          <mat-form-field style="width: 80%">
+          <mat-form-field style="width: 90%">
             <mat-label>Datum nastanka simptoma</mat-label>
             <input matInput [matDatepicker]="picker1" formControlName="datumNastankaSimptoma">
             <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -28,7 +28,7 @@
           </mat-form-field>
         </div>
         <div class="col-6">
-          <mat-form-field style="width: 80%">
+          <mat-form-field style="width: 100%">
             <mat-label>Vreme nastanka simptoma</mat-label>
             <input
               type="text"
@@ -66,7 +66,7 @@
       </div>
       <div class="row">
         <div class="col-6">
-          <mat-form-field style="width: 80%">
+          <mat-form-field style="width: 90%">
             <mat-label>Stanje svesti</mat-label>
             <mat-select formControlName="stanjeSvesti" required>
               <mat-option *ngFor="let stanje of stanjaSvesti" [value]="stanje">
@@ -105,9 +105,13 @@
         </button>
       </div>
       <div class="col-6">
-        <button mat-button [disabled]="true"
-                class="odlukaButton"
-                style="justify-self: center; margin-left: 15%; color: white"
+<!--        <button mat-button [disabled]="odlukaOTrombolizi?.status === DecisionStatus.U_PROCESU || odlukaOTrombolizi?.status === DecisionStatus.ODBIJENA"-->
+<!--                style="justify-self: center; margin-left: 15%; background-color: black; color: white; width: 50%"-->
+<!--                type="button"-->
+<!--                awNextStep>Sledeći korak-->
+<!--        </button>-->
+        <button mat-button
+                style="justify-self: center; margin-left: 15%; background-color: black; color: white; width: 50%"
                 type="button"
                 awNextStep>Sledeći korak
         </button>

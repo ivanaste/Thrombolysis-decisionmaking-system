@@ -1,12 +1,15 @@
+{{(odlukaOTrombolizi$ | async)?.status}}
 <aw-wizard style="margin-top: 2%">
   <aw-wizard-step stepTitle="Nastanak simptoma">
     <app-trenutak-nastanka-simptoma (trenutakNastankaObj)="proveriOdlukuPrvaFaza($event)"
-                                    [odlukaOTrombolizi]="odlukaOTrombolizi$"></app-trenutak-nastanka-simptoma>
+                                    [odlukaOTrombolizi]="odlukaOTrombolizi$ | async"></app-trenutak-nastanka-simptoma>
   </aw-wizard-step>
   <aw-wizard-step stepTitle="Neuroloski pregled">
-    <app-neuroloski-pregled></app-neuroloski-pregled>
+    <app-neuroloski-pregled (neuroloskiPregledEvent)="proveriOdlukuDrugaFaza($event)"
+                            [odlukaOTrombolizi]="odlukaOTrombolizi$ | async"></app-neuroloski-pregled>
   </aw-wizard-step>
   <aw-wizard-step stepTitle="NIHHS skala">
-    <app-nihhsskor></app-nihhsskor>
+    <app-nihhsskor (nihhsSkorEvent)="proveriOdlukuTrecaFaza($event)"
+                   [odlukaOTrombolizi]="odlukaOTrombolizi$ | async"></app-nihhsskor>
   </aw-wizard-step>
 </aw-wizard>

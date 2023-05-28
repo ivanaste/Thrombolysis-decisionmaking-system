@@ -35,6 +35,32 @@ export class DecisionsEffects {
     );
   });
 
+  dobaviOdlukuDrugaFaza = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DecisionActions.dobaviOdlukuDrugaFaza.type),
+      switchMap((action) => {
+        return this.httpService
+          .proveriOdlukuDrugaFaza(action.neuroloskiPregled)
+          .pipe(map((odluka) => {
+            return DecisionActions.setOdluka({odluka: odluka})
+          }));
+      })
+    );
+  });
+
+  dobaviOdlukuTrecaFaza = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DecisionActions.dobaviOdlukuTrecaFaza.type),
+      switchMap((action) => {
+        return this.httpService
+          .proveriOdlukuTrecaFaza(action.nihhs)
+          .pipe(map((odluka) => {
+            return DecisionActions.setOdluka({odluka: odluka})
+          }));
+      })
+    );
+  });
+
 
   constructor(
     private notifierService: NotifierService,

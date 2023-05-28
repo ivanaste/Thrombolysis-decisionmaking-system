@@ -26,10 +26,6 @@ const routes: Routes = [
         component: UserProfileFormComponent,
       },
       {
-        path: 'trenutakNastanka',
-        component: OdlukaOTromboliziComponent,
-      },
-      {
         path: 'procenaRizikaOdMU',
         component: ProcenaRizikaOdMUComponent,
       }
