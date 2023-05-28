@@ -105,12 +105,7 @@
         </button>
       </div>
       <div class="col-6">
-<!--        <button mat-button [disabled]="odlukaOTrombolizi?.status === DecisionStatus.U_PROCESU || odlukaOTrombolizi?.status === DecisionStatus.ODBIJENA"-->
-<!--                style="justify-self: center; margin-left: 15%; background-color: black; color: white; width: 50%"-->
-<!--                type="button"-->
-<!--                awNextStep>Sledeći korak-->
-<!--        </button>-->
-        <button mat-button
+        <button mat-button [disabled]="odlukaOTrombolizi?.status !== DecisionStatus.PRIHVACENA_FAZA_1"
                 style="justify-self: center; margin-left: 15%; background-color: black; color: white; width: 50%"
                 type="button"
                 awNextStep>Sledeći korak

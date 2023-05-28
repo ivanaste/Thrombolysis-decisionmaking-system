@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NeuroloskiPregled} from "../../../model/NeuroloskiPregled";
 import {Decision} from "../../../model/decision";
 import {NIHHS} from "../../../model/NIHHS";
+import {DecisionStatus} from "../../../model/decision-status";
 
 @Component({
   selector: 'app-nihhsskor',
@@ -59,4 +60,5 @@ export class NIHHSSkorComponent {
 
   }
 
+  protected readonly DecisionStatus = DecisionStatus;
 }

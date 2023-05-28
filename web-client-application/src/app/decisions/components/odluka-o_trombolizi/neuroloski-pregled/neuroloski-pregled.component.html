@@ -21,10 +21,10 @@
   </div>
   <div class="col-3"></div>
 </div>
-<div class="row" style="margin-top: 1%">
-  <div class="col-3"></div>
-  <div class="col-6" style="margin-left: 7%">
-    <div class="row">
+<div class="row" style="margin-top: 1%;">
+  <div class="col"></div>
+  <div class="col">
+    <div class="row" style="margin-left: 5%;">
       <div class="col-4" style="width: 35%">
         <button mat-button type="button" style="color: white" awPreviousStep>Prethodni korak</button>
       </div>
@@ -32,14 +32,17 @@
         <button mat-button
                 class="odlukaButton"
                 (click)="proveriOdluku()"
+                [disabled]="odlukaOTrombolizi?.status !== DecisionStatus.PRIHVACENA_FAZA_1"
                 type="button" style="color: white">Proveri odluku
         </button>
       </div>
-      <div class="col-4" style="width: 30%">
-        <button mat-button type="button" style="color: white" awNextStep>Sledeci korak</button>
+      <div class="col-4" style="width: 35%">
+        <button mat-button type="button"
+                [disabled]="odlukaOTrombolizi?.status !== DecisionStatus.PRIHVACENA_FAZA_3"
+                style="color: white" awNextStep>Sledeci korak</button>
       </div>
     </div>
 
   </div>
-  <div class="col-3"></div>
+  <div class="col"></div>
 </div>

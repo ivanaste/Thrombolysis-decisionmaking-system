@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Decision} from "../../../model/decision";
 import {NeuroloskiPregled} from "../../../model/NeuroloskiPregled";
+import {DecisionStatus} from "../../../model/decision-status";
 
 
 export interface Bolest {
@@ -38,8 +39,22 @@ export class NeuroloskiPregledComponent {
         ime: bolest.ime.toUpperCase().replace(/ /g, "_")
       };
     });
-    const neuroloskiPregled = new NeuroloskiPregled(modifikovaniBolesti.map(bolest => bolest.ime), modifikovaniBolesti.map(bolest => bolest.datum), this.odlukaOTrombolizi?.id);
+    const neuroloskiPregled = new NeuroloskiPregled(modifikovaniBolesti.map(
+      bolest => bolest.ime),
+      modifikovaniBolesti.map(bolest => this.adjustTimeZoneOffset(bolest.datum)),
+      this.odlukaOTrombolizi?.id);
     this.neuroloskiPregledEvent.emit(neuroloskiPregled);
   }
 
+  private adjustTimeZoneOffset(date: Date | null): Date {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const timezoneOffset = date.getTimezoneOffset();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    date.setMinutes(date.getMinutes() - timezoneOffset);
+    return <Date>date;
+  }
+
+  protected readonly DecisionStatus = DecisionStatus;
 }
