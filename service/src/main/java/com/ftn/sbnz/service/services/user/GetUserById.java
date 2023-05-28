@@ -15,7 +15,7 @@ public class GetUserById {
 
     @Transactional(readOnly = true)
     public Person execute(UUID id) {
-        return personRepository.getReferenceById(id);
+        return personRepository.findById(id).get();
     }
 
 }

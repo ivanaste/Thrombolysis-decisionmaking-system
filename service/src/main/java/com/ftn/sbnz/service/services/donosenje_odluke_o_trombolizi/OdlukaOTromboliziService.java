@@ -84,7 +84,9 @@ public class OdlukaOTromboliziService {
         final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke());
         kieSession.insert(nihhs);
         kieSession.fireAllRules();
-        return odlukaOTromboliziRepository.getReferenceById(nihhsRequest.getIdOdluke());
+        Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(nihhsRequest.getIdOdluke());
+        if (odluka.getStatus().equals(StatusOdluke.PRIHVACENA_FAZA_6)) odluka.setStatus(StatusOdluke.PRIHVACENA);
+        return odlukaOTromboliziRepository.save(odluka);
     }
 
     public Integer izracunajNIHHSSkor(final NIHHSRequest nihhsRequest) {
@@ -152,7 +154,7 @@ public class OdlukaOTromboliziService {
 
     @Transactional(readOnly = true)
     public List<Odluka> dobaviOdluke() {
-        List<Odluka> odluke = odlukaOTromboliziRepository.findAll();
+        List<Odluka> odluke = odlukaOTromboliziRepository.findAllByStatusIn(List.of(StatusOdluke.PRIHVACENA, StatusOdluke.ODBIJENA));
         Collections.reverse(odluke);
         return odluke;
     }

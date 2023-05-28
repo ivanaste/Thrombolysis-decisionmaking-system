@@ -5,6 +5,7 @@ import {Injectable} from "@angular/core";
 import {NotifierService} from "../../core/notifier.service";
 import {Router} from "@angular/router";
 import {DecisionsHttpService} from "../service/decisions-http.service";
+import {DecisionStatus} from "../model/decision-status";
 
 
 @Injectable()
@@ -29,6 +30,8 @@ export class DecisionsEffects {
         return this.httpService
           .proveriOdlukuPrvaFaza(action.trenutakNastanka)
           .pipe(map((odluka) => {
+            if (odluka.status === DecisionStatus.ODBIJENA) this.notifierService.notifyErrorMessage("Primena trombolize odbijena");
+            else this.notifierService.notifySuccess("Pacijent zadovoljava uslove, predjite na sledeci korak");
             return DecisionActions.setOdluka({odluka: odluka})
           }));
       })
@@ -42,6 +45,8 @@ export class DecisionsEffects {
         return this.httpService
           .proveriOdlukuDrugaFaza(action.neuroloskiPregled)
           .pipe(map((odluka) => {
+            if (odluka.status === DecisionStatus.ODBIJENA) this.notifierService.notifyErrorMessage("Primena trombolize odbijena");
+            else this.notifierService.notifySuccess("Pacijent zadovoljava uslove, predjite na sledeci korak");
             return DecisionActions.setOdluka({odluka: odluka})
           }));
       })
@@ -55,6 +60,8 @@ export class DecisionsEffects {
         return this.httpService
           .proveriOdlukuTrecaFaza(action.nihhs)
           .pipe(map((odluka) => {
+            if (odluka.status === DecisionStatus.ODBIJENA) this.notifierService.notifyErrorMessage("Primena trombolize odbijena");
+            else this.notifierService.notifySuccess("Pacijent je podoban za primenu trombolize");
             return DecisionActions.setOdluka({odluka: odluka})
           }));
       })

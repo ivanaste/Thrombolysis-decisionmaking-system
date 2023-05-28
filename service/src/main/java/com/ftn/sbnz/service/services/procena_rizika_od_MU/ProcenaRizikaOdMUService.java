@@ -62,7 +62,7 @@ public class ProcenaRizikaOdMUService {
         kieSession.insert(procenaRizikaEvent);
         kieSession.fireAllRules();
 
-        ProcenaRizikaOdMU izmenjenaProcena = procenaRizikaOdMURepository.getReferenceById(procenaRizika.getId());
+        ProcenaRizikaOdMU izmenjenaProcena = procenaRizikaOdMURepository.findById(procenaRizika.getId()).get();
         NivoRizikaOdMU nivoRizika = izmenjenaProcena.getNivoRizika();
         if (nivoRizika.equals(NivoRizikaOdMU.PROCENA_U_TOKU)) {
             kieSession.insert(new ProcenaRizikaOdMUEvent(izmenjenaProcena.getId(), izmenjenaProcena.getPacijent().getJmbg(), NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE));
@@ -103,7 +103,7 @@ public class ProcenaRizikaOdMUService {
     }
 
     public ProcenaRizikaOdMU izmeniNivoRizika(final UUID idOdluke, final NivoRizikaOdMU noviNivoRizika) {
-        final ProcenaRizikaOdMU procenaRizika = procenaRizikaOdMURepository.getReferenceById(idOdluke);
+        final ProcenaRizikaOdMU procenaRizika = procenaRizikaOdMURepository.findById(idOdluke).get();
         procenaRizika.setNivoRizika(noviNivoRizika);
         procenaRizikaOdMURepository.save(procenaRizika);
         return procenaRizika;
