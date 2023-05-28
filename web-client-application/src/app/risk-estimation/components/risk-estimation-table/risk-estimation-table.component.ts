@@ -16,7 +16,7 @@ import {MatSort} from "@angular/material/sort";
 export class RiskEstimationTableComponent implements OnInit, AfterViewInit {
   riskEstimations$: Observable<RiskEstimation[]>;
   dataSource: MatTableDataSource<RiskEstimation>;
-  displayedColumns: string[] = ['Jmbg Pacijenta', 'Date', 'Nivo Rizika', 'Birth Date'];
+  displayedColumns: string[] = ['Jmbg Pacijenta', 'createdAt', 'nivoRizika', 'Birth Date'];
 
   constructor(private store: Store) {
     this.dataSource = new MatTableDataSource<RiskEstimation>();

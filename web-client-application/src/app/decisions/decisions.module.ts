@@ -36,7 +36,7 @@ import {ArchwizardModule} from "angular-archwizard";
     StoreModule.forFeature('decisions', fromDecisions.reducer),
     NgxMatTimepickerModule,
     MatRadioModule,
-    ArchwizardModule
+    ArchwizardModule,
   ],
 })
 export class DecisionsModule {

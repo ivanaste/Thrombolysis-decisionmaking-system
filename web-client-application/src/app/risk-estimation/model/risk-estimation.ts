@@ -5,4 +5,5 @@ export interface RiskEstimation {
   id: string,
   nivoRizika: NivoRizikaMu,
   pacijent: Patient,
+  createdAt: Date
 }

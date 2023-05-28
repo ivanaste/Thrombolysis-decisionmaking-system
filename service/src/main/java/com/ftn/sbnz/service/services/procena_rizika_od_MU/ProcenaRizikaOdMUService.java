@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +42,9 @@ public class ProcenaRizikaOdMUService {
 
     @Transactional(readOnly = true)
     public List<ProcenaRizikaOdMU> getAll() {
-        return procenaRizikaOdMURepository.findAll();
+        List<ProcenaRizikaOdMU> procene = procenaRizikaOdMURepository.findAll();
+        Collections.reverse(procene);
+        return procene;
     }
 
     public NivoRizikaOdMU utvrdiNivoRizikaTemplejt(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {

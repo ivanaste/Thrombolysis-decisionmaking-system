@@ -2,24 +2,24 @@
   <div class="decisions-table-content">
     <mat-table class="decisions-table" [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="Jmbg Pacijenta">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> JMBG Pacijenta</mat-header-cell>
+      <ng-container matColumnDef="pacijent.jmbg">
+        <mat-header-cell *matHeaderCellDef>JMBG Pacijenta</mat-header-cell>
         <mat-cell *matCellDef="let decision"> {{ decision.pacijent.jmbg }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="Date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Datum zahteva</mat-header-cell>
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Datum zahteva</mat-header-cell>
         <mat-cell *matCellDef="let decision"> {{ decision.createdAt | date: 'dd MMM yyyy, HH:mm:ss' }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="Status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
         <mat-cell
           *matCellDef="let decision"> {{ decision.status | capitalizedLowerCase }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="Birth Date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Datum rodjenja</mat-header-cell>
+      <ng-container matColumnDef="Datum rodjenja">
+        <mat-header-cell *matHeaderCellDef>Datum rodjenja</mat-header-cell>
         <mat-cell
           *matCellDef="let decision"> {{ decision.pacijent.datumRodjenja | date }} </mat-cell>
       </ng-container>

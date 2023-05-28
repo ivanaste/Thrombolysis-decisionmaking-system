@@ -16,7 +16,11 @@ import {MatSort} from "@angular/material/sort";
 export class DecisionsTableComponent implements OnInit, AfterViewInit {
   decisions$: Observable<Decision[]>;
   dataSource: MatTableDataSource<Decision>;
-  displayedColumns: string[] = ['Jmbg Pacijenta', 'Date', 'Status', 'Birth Date'];
+  displayedColumns: string[] = ['pacijent.jmbg', 'createdAt', 'status', 'Datum rodjenja'];
+
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private store: Store) {
     this.dataSource = new MatTableDataSource<Decision>();
@@ -33,7 +37,4 @@ export class DecisionsTableComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
 }

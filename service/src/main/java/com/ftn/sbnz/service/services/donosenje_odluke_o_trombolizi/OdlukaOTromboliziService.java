@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -151,6 +152,8 @@ public class OdlukaOTromboliziService {
 
     @Transactional(readOnly = true)
     public List<Odluka> dobaviOdluke() {
-        return odlukaOTromboliziRepository.findAll();
+        List<Odluka> odluke = odlukaOTromboliziRepository.findAll();
+        Collections.reverse(odluke);
+        return odluke;
     }
 }
