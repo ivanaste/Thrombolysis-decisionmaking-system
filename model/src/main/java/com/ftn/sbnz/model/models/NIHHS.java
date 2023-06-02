@@ -4,8 +4,10 @@ import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class NIHHS {
 
@@ -14,5 +16,4 @@ public class NIHHS {
 	private String jmbgPacijenta;
 
 	private UUID idOdluke;
-
 }

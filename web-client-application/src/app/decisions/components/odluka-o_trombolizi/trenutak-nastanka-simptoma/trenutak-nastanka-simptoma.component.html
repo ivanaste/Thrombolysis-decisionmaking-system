@@ -1,0 +1,118 @@
+<div class="row" style="margin-top: 5%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <form [formGroup]="myForm">
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 90%">
+            <mat-label>Jmbg pacijenta</mat-label>
+            <input matInput formControlName="jmbgPacijenta">
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field style="width: 100%">
+            <mat-label>Datum rodjenja pacijenta</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="datumRodjenjaPacijenta">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 90%">
+            <mat-label>Datum nastanka simptoma</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="datumNastankaSimptoma">
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field style="width: 100%">
+            <mat-label>Vreme nastanka simptoma</mat-label>
+            <input
+              type="text"
+              matInput
+              [ngxMatTimepicker]="timepicker"
+              [format]="24"
+              readonly
+              formControlName="vremeNastankaSimptoma"
+            />
+
+            <mat-icon
+              matPrefix
+              *ngIf="myForm.controls['stanjeSvesti'].value && !myForm.controls['stanjeSvesti'].disabled"
+              (click)="onClear()"
+              style="margin-right: 5%"
+            >
+              close
+            </mat-icon>
+
+            <mat-icon
+              matSuffix
+              *ngIf="!myForm.controls['vremeNastankaSimptoma'].disabled"
+              (click)="openFromIcon(timepicker)"
+            >schedule
+            </mat-icon
+            >
+          </mat-form-field>
+
+          <ngx-mat-timepicker
+            #timepicker
+            [enableKeyboardInput]="true"
+          ></ngx-mat-timepicker>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field style="width: 90%">
+            <mat-label>Stanje svesti</mat-label>
+            <mat-select formControlName="stanjeSvesti" required>
+              <mat-option *ngFor="let stanje of stanjaSvesti" [value]="stanje">
+                {{stanje}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-checkbox color="green" formControlName="postojeSvedoci"
+                        *ngIf="myForm.controls['stanjeSvesti'].value !== 'Pri svesti'">Postoje svedoci
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
+            nastali u toku
+            sna
+          </mat-checkbox>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-3"></div>
+</div>
+<div class="row" style="margin-top: 5%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-6">
+        <button mat-button
+                class="odlukaButton"
+                style="justify-self: center; margin-left: 15%; color: white"
+                type="button" (click)="proveriOdluku()">Proveri odluku
+        </button>
+      </div>
+      <div class="col-6">
+        <button mat-button [disabled]="odlukaOTrombolizi?.status !== DecisionStatus.PRIHVACENA_FAZA_1"
+                style="justify-self: center; margin-left: 15%; background-color: black; color: white; width: 50%"
+                type="button"
+                awNextStep>Sledeći korak
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3"></div>
+</div>

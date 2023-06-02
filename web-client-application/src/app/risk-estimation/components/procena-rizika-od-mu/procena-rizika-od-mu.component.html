@@ -1,0 +1,91 @@
+<div class="row" style="margin-top: 4%">
+  <div class="col-6"></div>
+  <div class="col-12">
+    <mat-card style="padding: 5px;   border-radius: 16px;   overflow: hidden;   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+">
+      <mat-card-header style="justify-content: center; margin-top: 0; margin-bottom: 10px">
+        <mat-card-title>
+          <h3>Procena rizika od mozdanog udara</h3>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="procenaRizikaForm">
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field style="width: 90%">
+                <mat-label>Jmbg pacijenta</mat-label>
+                <input matInput formControlName="jmbgPacijenta">
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field style="width: 100%">
+                <mat-label>Datum rodjenja pacijenta</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="datumRodjenjaPacijenta">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field style="width: 90%">
+                <mat-label>Trajanje simptoma (min)</mat-label>
+                <input matInput formControlName="trajanjeSimptoma">
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field style="width: 100%">
+                <mat-label>Stenoza krvnog suda (%)</mat-label>
+                <input matInput formControlName="stenozaKrvnogSuda">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row" style="display: flex; flex-direction: column">
+            <h5 style="color: lightseagreen">Klinicki simptomi:</h5>
+            <mat-radio-group formControlName="klinickiSimptom">
+              <div class="row">
+                <div class="col-3">
+                  <mat-radio-button class="custom-radio-button" value="hemipareza">Hemipareza</mat-radio-button>
+                </div>
+                <div class="col-4">
+                  <mat-radio-button style="margin-left: 5%" class="custom-radio-button" value="hemiplegija">Hemiplegija
+                  </mat-radio-button>
+                </div>
+                <div class="col-5">
+                  <mat-radio-button style="margin-left: 5%" class="custom-radio-button" value="smetnjeGovora">Smetnje
+                    govora bez pareze
+                  </mat-radio-button>
+                </div>
+              </div>
+            </mat-radio-group>
+          </div>
+          <div class="row" style="margin-top: 5%">
+            <div class="col">
+              <mat-checkbox color="green" formControlName="dijabetes">Dijabetes
+              </mat-checkbox>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+              <div class="col">
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10%">
+            <div class="col"></div>
+            <div class="col">
+              <button mat-button
+                      class="odlukaButton"
+                      style="color: white; background-color: black; width: 100%"
+                      type="button" (click)="proceniRizikOdMU()">Proveri odluku
+              </button>
+            </div>
+            <div class="col"></div>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-6">
+  </div>
+</div>

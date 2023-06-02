@@ -1,0 +1,33 @@
+template header
+minBrojOtkucajaSrca
+maxBrojOtkucajaSrca
+radSrca
+
+package template;
+
+import com.ftn.sbnz.model.events.OtkucajSrcaEvent;
+import com.ftn.sbnz.model.models.AlarmEKG;
+import com.ftn.sbnz.model.models.RadSrca;
+
+template "brojOtkucaja"
+
+rule "rad_srca_@{radSrca}"
+	when
+		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval == null)
+		$brojOtkucaja: Number(intValue > @{minBrojOtkucajaSrca} && intValue < @{maxBrojOtkucajaSrca}) from accumulate(
+		    $otkucaj2: OtkucajSrcaEvent(
+		        this != $otkucaj1,
+		        jmbgPacijenta == $jmbgPacijenta1,
+		        rrInterval == null) over window: time(1m),
+		    count($otkucaj2)
+		)
+		String(this == "First Minute Passed")
+		not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.@{radSrca}))
+	then
+		System.out.println("Broj otkucaja srca: " + $brojOtkucaja);
+		System.out.println("Alarm - Pacijent ima @{radSrca} rad srca");
+		insert(new AlarmEKG($jmbgPacijenta1, RadSrca.@{radSrca}));
+end
+
+
+end template

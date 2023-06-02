@@ -26,16 +26,13 @@ public class OdlukaOTromboliziEvent {
 
 	private boolean postojeSvedoci;
 
-	private Monitoring monitoring;
+	private Pritisak pritisak;
 
 	private List<ZnakIshemije> znaciIshemije;
 
 	private Laboratorija laboratorija;
 
 	private List<Kontraindikacija> kontraindikacije;
-
-	public OdlukaOTromboliziEvent() {
-	}
 
 	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke) {
 		this.idOdluke = idOdluke;
@@ -64,8 +61,8 @@ public class OdlukaOTromboliziEvent {
 		this.kontraindikacije = kontraindikacije;
 	}
 
-	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final Monitoring monitoring) {
+	public OdlukaOTromboliziEvent(final UUID idOdluke, final StatusOdluke statusOdluke, final Pritisak pritisak) {
 		this(idOdluke, statusOdluke);
-		this.monitoring = monitoring;
+		this.pritisak = pritisak;
 	}
 }

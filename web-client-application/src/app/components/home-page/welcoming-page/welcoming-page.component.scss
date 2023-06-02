@@ -1,0 +1,103 @@
+@import "src/custom-theme";
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+section {
+  max-width: 700px;
+  margin-top: 5rem;
+
+  p {
+    margin-top: 1rem;
+    text-align: justify;
+  }
+}
+
+.main-services {
+  display: grid;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  grid-template-columns: calc(33.33% - 1rem) auto calc(33.33% - 1rem);
+  grid-template-rows: auto auto 40% 40%;
+  grid-gap: 1rem;
+}
+
+mat-icon {
+  min-width: 50%;
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+
+h3, h5, h4, p {
+  text-align: center;
+  color: $tds-dark-gray;
+  margin: 0
+}
+
+h4 {
+  font-weight: normal;
+  margin-top: -1rem;
+}
+
+mat-card > p {
+  font-size: 13px;
+}
+
+mat-card {
+  display: flex;
+  padding: 10%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+mat-card > mat-icon {
+  justify-self: center;
+  align-self: center;
+}
+
+mat-card p {
+  text-align: center;
+  color: $tds-dark-gray;
+  margin: 0;
+  font-size: 13px;
+  visibility: hidden; /* hide the element */
+}
+
+mat-card p.visible {
+  visibility: visible; /* show the element */
+  height: auto; /* expand the element to fit its content */
+}
+
+.btn {
+  min-width: fit-content;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+.start-using {
+  display: flex;
+  flex-direction: column;
+}
+
+.start-using > a {
+  align-self: center;
+  max-width: 300px;
+  margin-top: 2rem;
+}

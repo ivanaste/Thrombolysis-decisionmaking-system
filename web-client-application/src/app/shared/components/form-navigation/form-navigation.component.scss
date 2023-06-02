@@ -1,0 +1,59 @@
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  position: relative;
+  margin-bottom: 15px;
+  padding: 0 15%;
+}
+
+.step {
+  z-index: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+}
+
+.number {
+  background-color: #91e85b;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  font-size: 1.2rem;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+  width: 2.5rem;
+  z-index: 2;
+}
+
+.label {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.step.empty .number {
+  background-color: #fff;
+  border: 2px solid #bdbdbd;
+  color: #bdbdbd;
+}
+
+.step.active .number {
+  background-color: #fff;
+  border: 2px solid #91e85b;
+  color: #91e85b;
+}
+
+.progress-bar {
+  height: 2px;
+  background-color: #91e85b;
+  position: absolute;
+  bottom: -1px;
+  left: 15%;
+  transition: width 0.3s ease;
+}

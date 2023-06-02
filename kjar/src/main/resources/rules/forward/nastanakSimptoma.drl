@@ -3,7 +3,6 @@ package forward;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.StanjeSvesti;
 import com.ftn.sbnz.model.models.StatusOdluke;
-import com.ftn.sbnz.model.events.HeartBeatEvent;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

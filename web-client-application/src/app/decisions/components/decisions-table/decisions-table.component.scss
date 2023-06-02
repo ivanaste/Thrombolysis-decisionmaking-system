@@ -1,0 +1,42 @@
+.decisions-table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.decisions-table-content {
+  width: 50%;
+  padding: 30px;
+}
+
+mat-table, mat-paginator {
+  border: 2px solid #ccc;
+  border-collapse: collapse;
+
+}
+
+mat-row:nth-child(even) {
+  background-color: lightgrey;
+}
+
+mat-header-cell {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+mat-row:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+mat-cell,
+mat-header-cell {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+mat-row {
+  height: 50px;
+}
+

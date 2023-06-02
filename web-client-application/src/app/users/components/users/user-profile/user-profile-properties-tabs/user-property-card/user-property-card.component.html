@@ -1,0 +1,22 @@
+<a [routerLink]="'/admin/properties/property/' + property.uuid">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar svgIcon="property-avatar"></mat-icon>
+      <mat-card-title>{{property.name | titlecase}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <span class="attribute-container">
+        <span class="attribute-name">Address</span>
+        <span class="attribute-value">{{property.address | titlecase}}</span>
+      </span>
+      <span class="attribute-container">
+        <span class="attribute-name">Owner</span>
+        <span class="attribute-value">{{property.owner.email}}</span>
+      </span>
+      <span class="attribute-container">
+        <span class="attribute-name">Number of guests</span>
+        <span class="attribute-value">{{property.members.length - 1}}</span>
+      </span>
+    </mat-card-content>
+  </mat-card>
+</a>

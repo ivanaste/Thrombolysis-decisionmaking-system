@@ -1,0 +1,21 @@
+<nav>
+  <div class="container">
+    <div class="row" style="justify-content: space-between;">
+      <a id="logo" class="navbar-logo">
+        <img src="../../../assets/logo.png" alt="Thromoblysis" width="40px" height="50px">
+      </a>
+      <div class="menu">
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka</a>
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Istorija procena rizika od MU</a>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content: center">
+      <div class="menu">
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions/trenutakNastanka">Odluka o primeni trombolize</a>
+        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations/procenaRizikaOdMU">Procena rizika od MU</a>
+        <a *ngIf="userRole" routerLink="/" (click)="logout()">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>

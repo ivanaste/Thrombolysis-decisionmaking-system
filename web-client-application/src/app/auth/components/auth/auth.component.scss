@@ -1,0 +1,93 @@
+@import "../../../../custom-theme";
+
+:host {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+mat-card.form {
+  max-width: 600px;
+  margin: auto;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+mat-card-header.form {
+  margin: auto;
+  font-size: 24px;
+}
+
+mat-card-header.form *::after {
+  content: '';
+  display: block;
+  width: calc(100% + 40px);
+  height: 1px;
+  background-color: $tds-gray;
+  margin-top: 5px;
+  translate: -20px;
+}
+
+mat-card-content.form {
+  padding: 0;
+  margin-top: 30px;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 70%;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  width: 70%;
+  margin: auto;
+}
+
+.button-row:nth-child(1) {
+  margin-top: 20px;
+}
+
+.divider-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  background-color: $tds-gray;
+  opacity: 0.5;
+}
+
+.or {
+  padding: 0 20px;
+  color: $tds-dark-gray;
+  user-select: none;
+}
+
+.question-row {
+  display: flex;
+  justify-content: left;
+  width: 70%;
+  margin: auto;
+}
+
+mat-card-footer.form {
+  padding: 0 0 16px 0;
+}
+
+@media screen and (min-width: 641px) {
+  .question-row {
+    width: calc(70% - (70% - 200px) / 2);
+  }
+}

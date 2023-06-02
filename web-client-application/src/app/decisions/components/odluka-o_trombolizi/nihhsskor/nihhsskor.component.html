@@ -1,0 +1,43 @@
+<div class="row" style="margin-top: 5%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <div class="row" *ngFor="let trojkaElemenata of elementiNIHHSSkale">
+      <ng-container *ngFor="let element of trojkaElemenata">
+        <div class="col">
+          <mat-form-field style="width: 90%">
+            <mat-label>{{element.ime}}</mat-label>
+            <mat-select required [(ngModel)]="element.izabranaOpcija">
+              <mat-option *ngFor="let opcija of element.opcije" [value]="opcija">
+                {{opcija}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="col-3"></div>
+</div>
+<div class="row" style="margin-top: 1%">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-6">
+        <button mat-button
+                style="justify-self: center; margin-left: 15%; color: white; width: 70%"
+                type="button"
+                awPreviousStep>Prethodni korak
+        </button>
+      </div>
+      <div class="col-6">
+        <button mat-button
+                [disabled]="odlukaOTrombolizi?.status !== DecisionStatus.PRIHVACENA_FAZA_3"
+                style="justify-self: center; margin-left: 15%; color: white; width: 70%"
+                type="button" (click)="proveriOdluku()">Proveri odluku
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3"></div>
+</div>

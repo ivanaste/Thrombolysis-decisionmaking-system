@@ -1,0 +1,6 @@
+<div class="container">
+  <app-user-profile-actions *ngIf="this.loggedInUsersRole === 'ADMIN' && user.role !== 'TENANT'"
+                            [userId]="user.id"></app-user-profile-actions>
+  <app-user-profile-info [user]="user" [isAdminLogged]="this.loggedInUsersRole === 'ADMIN'"></app-user-profile-info>
+  <app-user-profile-properties-tabs [user]="user" [properties]="properties"></app-user-profile-properties-tabs>
+</div>
