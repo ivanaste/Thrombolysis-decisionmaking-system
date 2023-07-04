@@ -26,6 +26,10 @@ public class Pacijent extends BaseEntity {
     @JsonIgnore
     private List<Odluka> odlukeOTrombolizi;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pacijent")
+    @JsonIgnore
+    private List<BolestPacijenta> bolesti;
+
     public Integer dobaviGodine() {
         return Period.between(this.datumRodjenja, LocalDate.now()).getYears();
     }

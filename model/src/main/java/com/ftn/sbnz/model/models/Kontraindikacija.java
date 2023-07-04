@@ -11,6 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Kontraindikacija {
 
-    private VrstaKontraindikacije vrsta;
+    private VrstaBolesti vrsta;
     private LocalDate datum;
 }

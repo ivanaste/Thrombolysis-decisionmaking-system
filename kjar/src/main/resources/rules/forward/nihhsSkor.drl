@@ -47,14 +47,3 @@ salience 100
 		System.out.println("Na CT-u je primecen " + $znakIshemije + ", tako da se pacijentu ne moze primeniti terapija");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
-
-//rule "Faza 5 - Ukoliko postoji gubitak granice između sive i bele mase ili hipoatenuacija bazalnih ganglija, primena terapije je moguća"
-//no-loop true
-//salience 20
-//	when
-//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_4, $znaciIshemije: znaciIshemije)
-//		$znakIshemije: ZnakIshemije() from $znaciIshemije
-//		eval($znakIshemije.ordinal() == 0 || $znakIshemije.ordinal() == 3)
-//	then
-//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.PRIHVACENA_FAZA_5) };
-//end

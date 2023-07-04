@@ -3,7 +3,7 @@ package forward;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.StatusOdluke;
 import com.ftn.sbnz.model.models.Kontraindikacija;
-import com.ftn.sbnz.model.models.VrstaKontraindikacije;
+import com.ftn.sbnz.model.models.VrstaBolesti;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -14,7 +14,7 @@ salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaKontraindikacije.INTRAKRANIJALNA_HEMORAGIJA || $kontraindikacija.getVrsta() == VrstaKontraindikacije.AKUTNI_INFARKT_MIOKARDA) &&
+		eval(($kontraindikacija.getVrsta() == VrstaBolesti.INTRAKRANIJALNA_HEMORAGIJA || $kontraindikacija.getVrsta() == VrstaBolesti.AKUTNI_INFARKT_MIOKARDA) &&
 		ChronoUnit.MONTHS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 3)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodna tri meseca.");
@@ -27,7 +27,7 @@ salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval($kontraindikacija.getVrsta() == VrstaKontraindikacije.OPERATIVNA_INTERVENCIJA &&
+		eval($kontraindikacija.getVrsta() == VrstaBolesti.OPERATIVNA_INTERVENCIJA &&
 		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 14)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju jer je imao vecu operativnu intervenciju u prethodnih 14 dana.");
@@ -40,7 +40,7 @@ salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaKontraindikacije.ARTERIJSKA_PUNKCIJA || $kontraindikacija.getVrsta() == VrstaKontraindikacije.LUMBALNA_PUNKCIJA) &&
+		eval(($kontraindikacija.getVrsta() == VrstaBolesti.ARTERIJSKA_PUNKCIJA || $kontraindikacija.getVrsta() == VrstaBolesti.LUMBALNA_PUNKCIJA) &&
 		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 7)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnih 7 dana.");
@@ -53,7 +53,7 @@ salience 20
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaKontraindikacije.GASTROINTESTINALNO_KRVARENJE || $kontraindikacija.getVrsta() == VrstaKontraindikacije.UROGENITALNO_KRVARENJE) &&
+		eval(($kontraindikacija.getVrsta() == VrstaBolesti.GASTROINTESTINALNO_KRVARENJE || $kontraindikacija.getVrsta() == VrstaBolesti.UROGENITALNO_KRVARENJE) &&
 		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 21)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnom 21 danu.");

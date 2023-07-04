@@ -1,6 +1,9 @@
 package com.ftn.sbnz.model.models;
 
-public enum VrstaKontraindikacije {
+import lombok.Getter;
+
+@Getter
+public enum VrstaBolesti {
     OPERATIVNA_INTERVENCIJA,
     INTRAKRANIJALNA_HEMORAGIJA,
     GASTROINTESTINALNO_KRVARENJE,

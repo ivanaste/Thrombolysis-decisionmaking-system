@@ -25,9 +25,9 @@ import lombok.experimental.FieldDefaults;
 public class Odluka extends BaseEntity {
 
 	@ManyToOne
-	private Pacijent pacijent;
+	Pacijent pacijent;
 
 	@Enumerated(EnumType.STRING)
-	private StatusOdluke status = StatusOdluke.PRIHVACENA_FAZA_1;
+	StatusOdluke status = StatusOdluke.PRIHVACENA_FAZA_1;
 
 }

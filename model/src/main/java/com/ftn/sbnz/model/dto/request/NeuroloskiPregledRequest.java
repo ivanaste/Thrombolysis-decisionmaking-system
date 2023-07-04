@@ -1,7 +1,8 @@
 package com.ftn.sbnz.model.dto.request;
 
 import com.ftn.sbnz.model.models.Kontraindikacija;
-import com.ftn.sbnz.model.models.VrstaKontraindikacije;
+import com.ftn.sbnz.model.models.VrstaBolesti;
+import com.ftn.sbnz.model.models.VrstaBolesti;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class NeuroloskiPregledRequest {
 	private UUID idOdluke;
-	private List<VrstaKontraindikacije> kontraindikacije;
+	private List<VrstaBolesti> kontraindikacije;
 
 	private List<LocalDate> datumiDesavanjaKontraindikacija;
 

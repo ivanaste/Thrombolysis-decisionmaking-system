@@ -41,11 +41,11 @@ public class ServiceApplication {
         final String[] beanNames = ctx.getBeanDefinitionNames();
         Arrays.sort(beanNames);
 
-        final StringBuilder sb = new StringBuilder("Application beans:\n");
-        for (final String beanName : beanNames) {
-            sb.append(beanName + "\n");
-        }
-        log.info(sb.toString());
+//        final StringBuilder sb = new StringBuilder("Application beans:\n");
+//        for (final String beanName : beanNames) {
+//            sb.append(beanName + "\n");
+//        }
+//        log.info(sb.toString());
     }
 
     @Bean
