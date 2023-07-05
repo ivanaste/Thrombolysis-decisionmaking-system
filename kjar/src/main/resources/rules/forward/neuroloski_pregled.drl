@@ -1,64 +1,64 @@
-package forward;
+//package forward;
+//
+//import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
+//import com.ftn.sbnz.model.models.StatusOdluke;
+//import com.ftn.sbnz.model.models.Kontraindikacija;
+//import com.ftn.sbnz.model.models.VrstaBolesti;
+//import java.time.LocalDate;
+//import java.time.temporal.ChronoUnit;
 
-import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
-import com.ftn.sbnz.model.models.StatusOdluke;
-import com.ftn.sbnz.model.models.Kontraindikacija;
-import com.ftn.sbnz.model.models.VrstaBolesti;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
-
-rule "Faza 2 - Ukoliko je pacijent, u prethodna tri meseca, imao intrakranijalnu hemoragiju ili akutni infarkt miokarda, nije podoban za terapiju."
-no-loop true
-salience 20
-	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
-		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaBolesti.INTRAKRANIJALNA_HEMORAGIJA || $kontraindikacija.getVrsta() == VrstaBolesti.AKUTNI_INFARKT_MIOKARDA) &&
-		ChronoUnit.MONTHS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 3)
-	then
-		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodna tri meseca.");
-		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
-end
-
-rule "Faza 2 - Ukoliko je pacijent, u prethodnih 14 dana, imao vecu operativnu intervenciju, nije podoban za terapiju."
-no-loop true
-salience 20
-	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
-		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval($kontraindikacija.getVrsta() == VrstaBolesti.OPERATIVNA_INTERVENCIJA &&
-		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 14)
-	then
-		System.out.println("Pacijent ne moze da primi terapiju jer je imao vecu operativnu intervenciju u prethodnih 14 dana.");
-		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
-end
-
-rule "Faza 2 - Ukoliko je pacijent, u prethodnih 7 dana, imao arterijsku ili lumbalnu punkciju, nije podoban za terapiju."
-no-loop true
-salience 20
-	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
-		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaBolesti.ARTERIJSKA_PUNKCIJA || $kontraindikacija.getVrsta() == VrstaBolesti.LUMBALNA_PUNKCIJA) &&
-		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 7)
-	then
-		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnih 7 dana.");
-		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
-end
-
-rule "Faza 2 - Ukoliko je pacijent, u prethodnom 21 danu, imao gastrointestinalno ili urogenitalno krvarenje, nije podoban za terapiju."
-no-loop true
-salience 20
-	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
-		$kontraindikacija: Kontraindikacija() from $kontraindikacije
-		eval(($kontraindikacija.getVrsta() == VrstaBolesti.GASTROINTESTINALNO_KRVARENJE || $kontraindikacija.getVrsta() == VrstaBolesti.UROGENITALNO_KRVARENJE) &&
-		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 21)
-	then
-		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnom 21 danu.");
-		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
-end
+//rule "Faza 2 - Ukoliko je pacijent, u prethodna tri meseca, imao intrakranijalnu hemoragiju ili akutni infarkt miokarda, nije podoban za terapiju."
+//no-loop true
+//salience 20
+//	when
+//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
+//		$kontraindikacija: Kontraindikacija() from $kontraindikacije
+//		eval(($kontraindikacija.getVrsta() == VrstaBolesti.INTRAKRANIJALNA_HEMORAGIJA || $kontraindikacija.getVrsta() == VrstaBolesti.AKUTNI_INFARKT_MIOKARDA) &&
+//		ChronoUnit.MONTHS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 3)
+//	then
+//		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodna tri meseca.");
+//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+//end
+//
+//rule "Faza 2 - Ukoliko je pacijent, u prethodnih 14 dana, imao vecu operativnu intervenciju, nije podoban za terapiju."
+//no-loop true
+//salience 20
+//	when
+//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
+//		$kontraindikacija: Kontraindikacija() from $kontraindikacije
+//		eval($kontraindikacija.getVrsta() == VrstaBolesti.OPERATIVNA_INTERVENCIJA &&
+//		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 14)
+//	then
+//		System.out.println("Pacijent ne moze da primi terapiju jer je imao vecu operativnu intervenciju u prethodnih 14 dana.");
+//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+//end
+//
+//rule "Faza 2 - Ukoliko je pacijent, u prethodnih 7 dana, imao arterijsku ili lumbalnu punkciju, nije podoban za terapiju."
+//no-loop true
+//salience 20
+//	when
+//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
+//		$kontraindikacija: Kontraindikacija() from $kontraindikacije
+//		eval(($kontraindikacija.getVrsta() == VrstaBolesti.ARTERIJSKA_PUNKCIJA || $kontraindikacija.getVrsta() == VrstaBolesti.LUMBALNA_PUNKCIJA) &&
+//		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 7)
+//	then
+//		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnih 7 dana.");
+//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+//end
+//
+//rule "Faza 2 - Ukoliko je pacijent, u prethodnom 21 danu, imao gastrointestinalno ili urogenitalno krvarenje, nije podoban za terapiju."
+//no-loop true
+//salience 20
+//	when
+//		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2, $kontraindikacije: kontraindikacije)
+//		$kontraindikacija: Kontraindikacija() from $kontraindikacije
+//		eval(($kontraindikacija.getVrsta() == VrstaBolesti.GASTROINTESTINALNO_KRVARENJE || $kontraindikacija.getVrsta() == VrstaBolesti.UROGENITALNO_KRVARENJE) &&
+//		ChronoUnit.DAYS.between($kontraindikacija.getDatum(), LocalDate.now()) <= 21)
+//	then
+//		System.out.println("Pacijent ne moze da primi terapiju jer je imao " + $kontraindikacija.getVrsta() + " u prethodnom 21 danu.");
+//		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+//end
 
 
 //rule "Faza 2 - Ukoliko je pacijent, u prethodna 3 meseca, imao MU ili TIA, nije podoban za terapiju."

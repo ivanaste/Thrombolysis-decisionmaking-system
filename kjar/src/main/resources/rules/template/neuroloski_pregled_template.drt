@@ -1,0 +1,30 @@
+template header
+vrstaBolesti
+jedinicaVremena
+vrednost
+
+package template;
+
+import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
+import com.ftn.sbnz.model.models.StatusOdluke;
+import com.ftn.sbnz.model.models.Kontraindikacija;
+import com.ftn.sbnz.model.models.VrstaBolesti;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+template "neuroloski_pregled"
+
+rule "neuroloski_pregled_@{vrstaBolesti}"
+no-loop true
+salience 20
+	when
+		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2 || statusOdluke == StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI, $kontraindikacije: kontraindikacije)
+		$kontraindikacija: Kontraindikacija() from $kontraindikacije
+		eval($kontraindikacija.getVrsta() == VrstaBolesti.@{vrstaBolesti} &&
+		ChronoUnit.@{jedinicaVremena}.between($kontraindikacija.getDatum(), LocalDate.now()) <= @{vrednost})
+	then
+		System.out.println("Pacijent ne moze da primi terapiju zbog: " + $kontraindikacija.getVrsta() + " in @{vrednost} " + ChronoUnit.@{jedinicaVremena} + ".");
+		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+end
+
+end template

@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "bolesti")
@@ -19,4 +20,6 @@ public class BolestPacijenta extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     VrstaBolesti vrstaBolesti;
+
+    LocalDate datumDesavanja;
 }

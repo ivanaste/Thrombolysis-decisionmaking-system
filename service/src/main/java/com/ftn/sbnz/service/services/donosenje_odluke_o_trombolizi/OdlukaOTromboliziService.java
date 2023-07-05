@@ -8,6 +8,7 @@ import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
 import com.ftn.sbnz.service.repository.PersonRepository;
 import com.ftn.sbnz.service.services.alarm.AlarmListener;
+import com.ftn.sbnz.service.services.bolesti.BolestiService;
 import com.ftn.sbnz.service.services.korisnik.KorisnikService;
 import com.ftn.sbnz.service.services.mail.SendMail;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
@@ -26,7 +27,7 @@ import java.util.UUID;
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija) {
+    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
@@ -36,6 +37,7 @@ public class OdlukaOTromboliziService {
         this.sendMail = sendMail;
         this.personRepository = personRepository;
         this.PacijentiNaEKGu = PacijentiNaEKGu;
+        this.bolestiService = bolestiService;
         OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
         AlarmListener alarmListener = new AlarmListener(this.sendMail, this.personRepository);
         kieSession.addEventListener(eventListener);
@@ -57,6 +59,8 @@ public class OdlukaOTromboliziService {
     private final PersonRepository personRepository;
     private final Map<String, Pacijent> PacijentiNaEKGu;
 
+    private final BolestiService bolestiService;
+
 
     public Odluka proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
         Pacijent pacijent = korisnikService.sacuvajPacijenta(nastanakSimptomaRequest.getJmbgPacijenta(), nastanakSimptomaRequest.getDatumRodjenjaPacijenta());
@@ -64,13 +68,25 @@ public class OdlukaOTromboliziService {
 
         final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),
                 nastanakSimptomaRequest.isNastaliUTokuSna());
-        final Odluka odluka = new Odluka(pacijent, StatusOdluke.PRIHVACENA_FAZA_1);
+        Odluka odluka = new Odluka(pacijent, StatusOdluke.PRIHVACENA_FAZA_1);
         odlukaOTromboliziRepository.save(odluka);
-        final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_1, simptomi, nastanakSimptomaRequest.isPostojeSvedoci());
+
+        proveriOdlukuNaOsnovuPrethodnihBolesti(pacijent.getJmbg(), odluka.getId());
+
+        odluka = odlukaOTromboliziRepository.findOdlukaById(odluka.getId());
+        if (!odluka.getStatus().equals(StatusOdluke.ODBIJENA)) {
+            final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(odluka.getId(), StatusOdluke.PRIHVACENA_FAZA_1, simptomi, nastanakSimptomaRequest.isPostojeSvedoci());
+            kieSession.insert(odlukaEvent);
+            kieSession.fireAllRules();
+        }
+        return odluka;
+    }
+
+    public void proveriOdlukuNaOsnovuPrethodnihBolesti(String jmbgPacijenta, UUID idOdluke) {
+        final OdlukaOTromboliziEvent odlukaEvent = new OdlukaOTromboliziEvent(idOdluke,
+                StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI, bolestiService.kreirajKontraindikacijeOdPrethodnihBolestiPacijenta(jmbgPacijenta));
         kieSession.insert(odlukaEvent);
         kieSession.fireAllRules();
-
-        return odluka;
     }
 
     public Odluka proveriOdlukuNaOsnovuNeuroloskogPregleda(final NeuroloskiPregledRequest neuroloskiPregled) {
@@ -129,8 +145,9 @@ public class OdlukaOTromboliziService {
         kieSession.fireAllRules();
     }
 
-    public Odluka izmeniStatusOdluke(final UUID idOdluke, final StatusOdluke noviStatusOdluke) {
+    public Odluka izmeniStatusOdluke(final UUID idOdluke, StatusOdluke noviStatusOdluke) {
         final Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(idOdluke);
+        if (noviStatusOdluke.equals(StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI)) noviStatusOdluke = StatusOdluke.PRIHVACENA_FAZA_1;
         odluka.setStatus(noviStatusOdluke);
         return odlukaOTromboliziRepository.save(odluka);
     }

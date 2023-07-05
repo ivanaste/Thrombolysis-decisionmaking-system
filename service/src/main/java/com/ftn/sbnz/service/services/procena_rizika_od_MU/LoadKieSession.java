@@ -29,10 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +54,10 @@ public class LoadKieSession {
 
         kieHelper.addContent(generisiNivoRizikaTemplate(), ResourceType.DRL);
         kieHelper.addContent(generisiOtkucajiSrcaTemplate(), ResourceType.DRL);
+        kieHelper.addContent(generisiNeuroloskiPregledTemplate(), ResourceType.DRL);
+
+        System.out.println(generisiNeuroloskiPregledTemplate());
+
 
         Results results = kieHelper.verify();
 
@@ -81,6 +85,22 @@ public class LoadKieSession {
             kieHelper.addResource(ResourceFactory.newFileResource(resource.getFile()),
                     ResourceType.DRL);
         }
+    }
+
+    public String generisiNeuroloskiPregledTemplate() {
+        InputStream neuroloski_pregled_template = ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/template/neuroloski_pregled_template.drt");
+        List<NeuroloskiPregledTemplateModel> data = new ArrayList<>();
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.INTRAKRANIJALNA_HEMORAGIJA, ChronoUnit.MONTHS.toString().toUpperCase(), 3));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.AKUTNI_INFARKT_MIOKARDA, ChronoUnit.MONTHS.toString().toUpperCase(), 3));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.OPERATIVNA_INTERVENCIJA, ChronoUnit.DAYS.toString().toUpperCase(), 14));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.ARTERIJSKA_PUNKCIJA, ChronoUnit.DAYS.toString().toUpperCase(), 7));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.LUMBALNA_PUNKCIJA, ChronoUnit.DAYS.toString().toUpperCase(), 7));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.GASTROINTESTINALNO_KRVARENJE, ChronoUnit.WEEKS.toString().toUpperCase(), 3));
+        data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.UROGENITALNO_KRVARENJE, ChronoUnit.WEEKS.toString().toUpperCase(), 3));
+
+
+        ObjectDataCompiler converter = new ObjectDataCompiler();
+        return converter.compile(data, neuroloski_pregled_template);
     }
 
     public String generisiNivoRizikaTemplate() {
@@ -116,6 +136,7 @@ public class LoadKieSession {
             for (Rule rule : rules) {
                 String ruleName = rule.getName();
                 System.out.println("Rule name: " + ruleName);
+                System.out.println("Rule: " + rule);
             }
         }
     }
