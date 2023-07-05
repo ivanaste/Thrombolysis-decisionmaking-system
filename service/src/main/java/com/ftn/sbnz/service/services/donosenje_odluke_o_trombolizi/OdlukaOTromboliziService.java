@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -101,7 +103,7 @@ public class OdlukaOTromboliziService {
 
     public Odluka proveriOdlukuNaOsnovuNIHHSSkora(final NIHHSRequest nihhsRequest) {
         final Integer skor = izracunajNIHHSSkor(nihhsRequest);
-        final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke());
+        final NIHHS nihhs = new NIHHS(skor, nihhsRequest.getJmbgPacijenta(), nihhsRequest.getIdOdluke(), new Date());
         kieSession.insert(nihhs);
         kieSession.fireAllRules();
         Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(nihhsRequest.getIdOdluke());

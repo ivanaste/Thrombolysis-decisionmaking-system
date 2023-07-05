@@ -29,18 +29,24 @@ public class AlarmListener extends DefaultAgendaEventListener {
         if (matchedObject instanceof AlarmEKG ruleEvent) {
             final List<Person> doctors = personRepository.findAll();
             EmailDetails emailDetails = new EmailDetails();
-            switch (ruleEvent.getRadSrca()) {
-                case UBRZAN -> {
-                    emailDetails = new EmailDetails("", Translator.toLocale(
-                            Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.UBRZAN)}), "EKG ALARM");
-                }
-                case USPOREN -> {
-                    emailDetails = new EmailDetails("", Translator.toLocale(
-                            Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.USPOREN)}), "EKG ALARM");
-                }
-                case ATRIJALNA_FIBRILACIJA -> {
-                    emailDetails = new EmailDetails("", Translator.toLocale(
-                            Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.ATRIJALNA_FIBRILACIJA)}), "EKG ALARM");
+            if (ruleEvent.isIregularanNIIHS()) {
+                emailDetails = new EmailDetails("", Translator.toLocale(
+                        Codes.ALARM_IREGULARAN_NIHHS, new String[]{ruleEvent.getJmbgPacijenta(), "NIHHS skor je iregularan."}), "NIHHS ALARM");
+            }
+            else {
+                switch (ruleEvent.getRadSrca()) {
+                    case UBRZAN -> {
+                        emailDetails = new EmailDetails("", Translator.toLocale(
+                                Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.UBRZAN)}), "EKG ALARM");
+                    }
+                    case USPOREN -> {
+                        emailDetails = new EmailDetails("", Translator.toLocale(
+                                Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.USPOREN)}), "EKG ALARM");
+                    }
+                    case ATRIJALNA_FIBRILACIJA -> {
+                        emailDetails = new EmailDetails("", Translator.toLocale(
+                                Codes.ALARM_RAD_SRCA, new String[]{ruleEvent.getJmbgPacijenta(), this.getMessage(RadSrca.ATRIJALNA_FIBRILACIJA)}), "EKG ALARM");
+                    }
                 }
             }
             for (Person doctor : doctors) {
