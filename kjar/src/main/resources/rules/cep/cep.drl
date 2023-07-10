@@ -87,6 +87,56 @@ rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."
         insert(new AlarmEKG($jmbgPacijenta1, RadSrca.ATRIJALNA_FIBRILACIJA));
 end
 
+rule "Ukoliko postoji vise od 3 P zubca za poslednji R zubac, pacijent visokorizican"
+    when
+        $rZubac: OtkucajSrcaEvent($jmbgPacijenta: jmbgPacijenta, $rZubacId: rZubac, rrInterval == null)
+        Number(intValue >= 4) from accumulate(
+        		    $pZubac: OtkucajSrcaEvent(
+        		        this != $rZubac,
+        		        jmbgPacijenta == $jmbgPacijenta,
+        		        rZubac == $rZubacId,
+        		        rrInterval == null),
+        		    count($pZubac)
+        		)
+        not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
+
+    then
+    	System.out.println("Alarm postoji vise od 3 P zubaca za poslednji r zubac!!");
+        insert(new AlarmEKG($jmbgPacijenta, RadSrca.ATRIJALNA_FIBRILACIJA));
+end
+
+rule "Ukoliko je odnos r zubaca i p zubaca 1:2 ili vise, pacijent visokorizican"
+    when
+        $rZubacEvent: OtkucajSrcaEvent($jmbgPacijenta: jmbgPacijenta, $rZubacId: rZubac, rrInterval == null)
+        String(this == "First Minute Passed")
+        $brojRZubaca: Number() from accumulate(
+                            $rZubac: OtkucajSrcaEvent(
+                                this != $rZubacEvent,
+                                jmbgPacijenta == $jmbgPacijenta,
+                                rZubac != null,
+                                rrInterval == null,
+                                pZubac == null) over window: time(1m),
+                            count($rZubac)
+                        )
+         $brojPZubaca: Number() from accumulate(
+                            $pZubac: OtkucajSrcaEvent(
+                                this != $rZubacEvent,
+                                jmbgPacijenta == $jmbgPacijenta,
+                                rZubac != null,
+                                rrInterval == null,
+                                pZubac != null) over window: time(1m),
+                            count($pZubac)
+                        )
+        eval(($brojPZubaca.doubleValue() / $brojRZubaca.doubleValue()) >= 2.0)
+        not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
+    then
+        Double brRZubacaDouble = $brojRZubaca.doubleValue();
+        Double brPZubacaDouble = $brojPZubaca.doubleValue();
+        System.out.println("Alarm odnos R i P zubaca veci od 1:2!!");
+        insert(new AlarmEKG($jmbgPacijenta, RadSrca.ATRIJALNA_FIBRILACIJA));
+
+end
+
 
 //
 //rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."

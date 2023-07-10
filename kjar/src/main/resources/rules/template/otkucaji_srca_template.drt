@@ -13,12 +13,14 @@ template "brojOtkucaja"
 
 rule "rad_srca_@{radSrca}"
 	when
-		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval == null)
+		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval == null, rZubac != null, pZubac == null)
 		$brojOtkucaja: Number(intValue > @{minBrojOtkucajaSrca} && intValue < @{maxBrojOtkucajaSrca}) from accumulate(
 		    $otkucaj2: OtkucajSrcaEvent(
 		        this != $otkucaj1,
 		        jmbgPacijenta == $jmbgPacijenta1,
-		        rrInterval == null) over window: time(1m),
+		        rrInterval == null,
+		        rZubac != null,
+		         pZubac == null ) over window: time(1m),
 		    count($otkucaj2)
 		)
 		String(this == "First Minute Passed")
