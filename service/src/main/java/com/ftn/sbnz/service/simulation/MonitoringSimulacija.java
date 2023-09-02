@@ -1,7 +1,8 @@
 package com.ftn.sbnz.service.simulation;
 
 import com.ftn.sbnz.model.events.OtkucajSrcaEvent;
-import com.ftn.sbnz.model.models.*;
+import com.ftn.sbnz.model.models.Pacijent;
+import com.ftn.sbnz.model.models.Pritisak;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieSession;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 @Component
 @Data
@@ -21,6 +24,7 @@ public class MonitoringSimulacija {
     private final Random random = new Random();
     private final KieSession kieSession;
     private final Map<String, Pacijent> pacijentiNaEKGu;
+    private final Map<String, LocalDateTime> rZubciPacijenata = new HashMap<>();
 
     private boolean prvaSimulacija = true;
 
@@ -34,32 +38,33 @@ public class MonitoringSimulacija {
     }
 
     @Scheduled(fixedDelay = 100)
-    public void simulirajOtkucajeSrca() throws InterruptedException {
+    public void simulajRIntervale() throws InterruptedException {
         if (prvaSimulacija) lastMinuteCheckTime = LocalDateTime.now();
         prvaSimulacija = false;
         Duration duration = Duration.between(lastMinuteCheckTime, LocalDateTime.now());
-        if (duration.toMinutes() == 1) {
+        if (duration.toSeconds() == 10) {
             this.kieSession.insert("First Minute Passed");
             this.kieSession.fireAllRules();
         }
-        //int randomDelay = random.nextInt(100) + 100;
 
-        for(String jmbgPacijenta: pacijentiNaEKGu.keySet()) {
-            System.out.println("Otkucaj srca pacijenta ciji je jmbg " + jmbgPacijenta);
-            this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta));
-            this.kieSession.fireAllRules();
-        }
-        //Thread.sleep(randomDelay);
-    }
-
-    @Scheduled(fixedDelay = 400)
-    public void simulirajRRintervale() throws InterruptedException {
         //600 i 1200ms kod zdravog coveka
-        int randomDelay = random.nextInt(4000) + 100;
+        int randomDelay = random.nextInt(1200);
+        int brojPZubaca = random.nextInt(3) + random.nextInt(3);
+        UUID rZubacId = UUID.randomUUID();
 
-        for(String jmbgPacijenta: pacijentiNaEKGu.keySet()) {
-            System.out.println("RR signal " + randomDelay + " pacijenta ciji je jmbg " + jmbgPacijenta);
-            this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta, randomDelay));
+        for (String jmbgPacijenta : pacijentiNaEKGu.keySet()) {
+            LocalDateTime vremeRZubca = LocalDateTime.now();
+            if (rZubciPacijenata.containsKey(jmbgPacijenta)) {
+                long rrInterval = Duration.between(vremeRZubca, rZubciPacijenata.get(jmbgPacijenta)).toMillis();
+                this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta, (int) rrInterval));
+            }
+            for (int i = 0; i < brojPZubaca; i++) {
+                System.out.println("P zubac  pacijenta ciji je jmbg " + jmbgPacijenta);
+                this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta, rZubacId, UUID.randomUUID()));
+            }
+            this.kieSession.insert(new OtkucajSrcaEvent(jmbgPacijenta, rZubacId));
+            System.out.println("R zubac " + vremeRZubca + " pacijenta ciji je jmbg " + jmbgPacijenta);
+            rZubciPacijenata.put(jmbgPacijenta, vremeRZubca);
             this.kieSession.fireAllRules();
         }
         Thread.sleep(randomDelay);
