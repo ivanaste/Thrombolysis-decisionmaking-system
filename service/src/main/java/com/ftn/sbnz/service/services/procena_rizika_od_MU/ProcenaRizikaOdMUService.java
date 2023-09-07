@@ -7,7 +7,7 @@ import com.ftn.sbnz.model.models.Pacijent;
 import com.ftn.sbnz.model.models.Pritisak;
 import com.ftn.sbnz.model.models.ProcenaRizikaOdMU;
 import com.ftn.sbnz.service.repository.ProcenaRizikaOdMURepository;
-import com.ftn.sbnz.service.services.korisnik.KorisnikService;
+import com.ftn.sbnz.service.services.korisnik.PacijentService;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
@@ -23,14 +23,14 @@ import java.util.UUID;
 @Service
 public class ProcenaRizikaOdMUService {
 
-    private final KorisnikService korisnikService;
+    private final PacijentService korisnikService;
     private final KieSession kieSession;
     private final ProcenaRizikaOdMURepository procenaRizikaOdMURepository;
     private final Map<String, Pacijent> PacijentiNaEKGu;
     private final MonitoringSimulacija monitoringSimulacija;
 
     @Autowired
-    public ProcenaRizikaOdMUService(KorisnikService korisnikService, KieSession kieSession, ProcenaRizikaOdMURepository procenaRizikaOdMURepository, Map<String, Pacijent> pacijentiNaEKGu, MonitoringSimulacija monitoringSimulacija) {
+    public ProcenaRizikaOdMUService(PacijentService korisnikService, KieSession kieSession, ProcenaRizikaOdMURepository procenaRizikaOdMURepository, Map<String, Pacijent> pacijentiNaEKGu, MonitoringSimulacija monitoringSimulacija) {
         this.korisnikService = korisnikService;
         this.kieSession = kieSession;
         this.procenaRizikaOdMURepository = procenaRizikaOdMURepository;

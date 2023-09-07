@@ -9,7 +9,7 @@ import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
 import com.ftn.sbnz.service.repository.PersonRepository;
 import com.ftn.sbnz.service.services.alarm.AlarmListener;
 import com.ftn.sbnz.service.services.bolesti.BolestiService;
-import com.ftn.sbnz.service.services.korisnik.KorisnikService;
+import com.ftn.sbnz.service.services.korisnik.PacijentService;
 import com.ftn.sbnz.service.services.mail.SendMail;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
 import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ import java.util.UUID;
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final KorisnikService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
+    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final PacijentService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
@@ -50,7 +49,7 @@ public class OdlukaOTromboliziService {
 
     private final OdlukaOTromboliziRepository odlukaOTromboliziRepository;
 
-    private final KorisnikService korisnikService;
+    private final PacijentService korisnikService;
 
     private final CTSimulacija ctSimulacija;
 
@@ -149,7 +148,8 @@ public class OdlukaOTromboliziService {
 
     public Odluka izmeniStatusOdluke(final UUID idOdluke, StatusOdluke noviStatusOdluke) {
         final Odluka odluka = odlukaOTromboliziRepository.findOdlukaById(idOdluke);
-        if (noviStatusOdluke.equals(StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI)) noviStatusOdluke = StatusOdluke.PRIHVACENA_FAZA_1;
+        if (noviStatusOdluke.equals(StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI))
+            noviStatusOdluke = StatusOdluke.PRIHVACENA_FAZA_1;
         odluka.setStatus(noviStatusOdluke);
         return odlukaOTromboliziRepository.save(odluka);
     }

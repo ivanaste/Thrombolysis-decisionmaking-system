@@ -30,6 +30,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./risk-estimation/risk-estimation.module').then((module) => module.RiskEstimationModule),
     canActivate: [],
+  },
+  {
+    path: 'patients',
+    loadChildren: () =>
+      import('./patients/patients.module').then((module) => module.PatientsModule),
+    canActivate: [],
   }
 ];
 
