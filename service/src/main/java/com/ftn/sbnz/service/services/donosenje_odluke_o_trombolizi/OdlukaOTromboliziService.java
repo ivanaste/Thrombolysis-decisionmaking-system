@@ -65,7 +65,7 @@ public class OdlukaOTromboliziService {
 
 
     public Odluka proveriOdlukuNaOsnovuNastankaSimptoma(final NastanakSimptomaRequest nastanakSimptomaRequest) {
-        Pacijent pacijent = korisnikService.sacuvajPacijenta(nastanakSimptomaRequest.getJmbgPacijenta(), nastanakSimptomaRequest.getDatumRodjenjaPacijenta());
+        Pacijent pacijent = korisnikService.getPacijentByJmbg(nastanakSimptomaRequest.getJmbgPacijenta());
         PacijentiNaEKGu.putIfAbsent(pacijent.getJmbg(), pacijent);
 
         final Simptomi simptomi = new Simptomi(nastanakSimptomaRequest.getTrenutakNastanka(), nastanakSimptomaRequest.getStanjeSvesti(),

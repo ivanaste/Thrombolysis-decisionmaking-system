@@ -1,6 +1,6 @@
 package com.ftn.sbnz.service.services.jwt;
 
-import com.ftn.sbnz.model.models.Person;
+import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.service.services.user.GetUserByEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +18,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Person user = getUserByEmail.execute(username);
+        final Korisnik user = getUserByEmail.execute(username);
 
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("DOCTOR")));
     }

@@ -26,13 +26,14 @@ public class KorisnikService {
 		return korisnikRepository.getPacijentByJmbg(jmbg);
 	}
 
-	@Transactional
-	public Pacijent sacuvajPacijenta(String jmbg, LocalDate datumRodjenja) {
-		Pacijent pacijent = korisnikRepository.getPacijentByJmbg(jmbg);
-		if (Objects.isNull(pacijent)) {
-			pacijent = Pacijent.builder().jmbg(jmbg).datumRodjenja(datumRodjenja).role(Role.PATIENT).build();
-			return korisnikRepository.save(pacijent);
-		}
-		return pacijent;
-	}
+//	@Transactional
+//	public Pacijent sacuvajPacijenta(String jmbg, LocalDate datumRodjenja) {
+//		Pacijent pacijent = korisnikRepository.getPacijentByJmbg(jmbg);
+//		if (Objects.isNull(pacijent)) {
+//			pacijent = new Pacijent();
+//			pacijent = Pacijent.builder().jmbg(jmbg).datumRodjenja(datumRodjenja).role(Role.PATIENT).build();
+//			return korisnikRepository.save(pacijent);
+//		}
+//		return pacijent;
+//	}
 }

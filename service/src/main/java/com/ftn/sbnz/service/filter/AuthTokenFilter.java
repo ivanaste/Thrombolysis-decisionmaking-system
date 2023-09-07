@@ -1,6 +1,6 @@
 package com.ftn.sbnz.service.filter;
 
-import com.ftn.sbnz.model.models.Person;
+import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.service.services.jwt.JwtValidateAndGetUsername;
 import com.ftn.sbnz.service.services.user.GetUserByEmail;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        final Person user = getUserByEmail.execute(username);
+        final Korisnik user = getUserByEmail.execute(username);
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("DOCTOR")));
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

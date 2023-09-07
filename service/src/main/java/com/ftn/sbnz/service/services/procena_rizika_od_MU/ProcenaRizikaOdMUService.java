@@ -45,7 +45,7 @@ public class ProcenaRizikaOdMUService {
     }
 
     public NivoRizikaOdMU utvrdiNivoRizika(final ProcenaRizikaOdMURequest procenaRizikaOdMURequest) throws IOException {
-        Pacijent pacijent = korisnikService.sacuvajPacijenta(procenaRizikaOdMURequest.getJmbgPacijenta(), procenaRizikaOdMURequest.getDatumRodjenjaPacijenta());
+        Pacijent pacijent = korisnikService.getPacijentByJmbg(procenaRizikaOdMURequest.getJmbgPacijenta());
         PacijentiNaEKGu.putIfAbsent(pacijent.getJmbg(), pacijent);
 
         final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);

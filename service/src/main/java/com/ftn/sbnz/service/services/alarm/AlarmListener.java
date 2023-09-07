@@ -2,7 +2,7 @@ package com.ftn.sbnz.service.services.alarm;
 
 import com.ftn.sbnz.model.models.AlarmEKG;
 import com.ftn.sbnz.model.models.EmailDetails;
-import com.ftn.sbnz.model.models.Person;
+import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.model.models.RadSrca;
 import com.ftn.sbnz.service.repository.PersonRepository;
 import com.ftn.sbnz.service.services.mail.SendMail;
@@ -27,7 +27,7 @@ public class AlarmListener extends DefaultAgendaEventListener {
     public void afterMatchFired(final AfterMatchFiredEvent event) {
         final Object matchedObject = event.getMatch().getObjects().get(0);
         if (matchedObject instanceof AlarmEKG ruleEvent) {
-            final List<Person> doctors = personRepository.findAll();
+            final List<Korisnik> doctors = personRepository.findAll();
             EmailDetails emailDetails = new EmailDetails();
             if (ruleEvent.isIregularanNIIHS()) {
                 emailDetails = new EmailDetails("", Translator.toLocale(
@@ -49,7 +49,7 @@ public class AlarmListener extends DefaultAgendaEventListener {
                     }
                 }
             }
-            for (Person doctor : doctors) {
+            for (Korisnik doctor : doctors) {
                 emailDetails.setRecipient(doctor.getEmail());
                 sendMail.execute(emailDetails);
             }

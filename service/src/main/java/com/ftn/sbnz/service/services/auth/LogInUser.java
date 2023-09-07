@@ -2,7 +2,7 @@ package com.ftn.sbnz.service.services.auth;
 
 import com.ftn.sbnz.model.dto.request.LoginRequest;
 import com.ftn.sbnz.model.dto.response.AuthTokenResponse;
-import com.ftn.sbnz.model.models.Person;
+import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.service.configProperties.CustomProperties;
 import com.ftn.sbnz.service.services.jwt.JwtGenerateToken;
 import com.ftn.sbnz.service.services.user.GetUserByEmail;
@@ -38,7 +38,7 @@ public class LogInUser {
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        final Person user = getUserByEmail.execute(userDetails.getUsername());
+        final Korisnik user = getUserByEmail.execute(userDetails.getUsername());
         String authToken = jwtGenerateToken.execute(user.getEmail(), customProperties.getAuthTokenExpirationMilliseconds(), user.getRole().toString());
         return ResponseEntity.status(HttpStatus.OK).body(new AuthTokenResponse(authToken));
     }

@@ -103,6 +103,10 @@ public class LoadKieSession {
         return converter.compile(data, neuroloski_pregled_template);
     }
 
+    //Preporuka:
+    //omoguciti doktoru da definise templejte sa fronta i da se skladiste u bazi podataka ili drl fajlovima
+    //pa da moze da edituje
+
     public String generisiNivoRizikaTemplate() {
         InputStream nivo_rizika_template = ProcenaRizikaOdMUService.class.getResourceAsStream("/rules/template/nivo_rizika_template.drt");
 

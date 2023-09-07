@@ -18,8 +18,8 @@ public enum Codes implements Translation {
     SIGN_UP_SET_PASSWORD_EMAIL("sign_up_set_password_email"),
     SIGN_UP_SET_PASSWORD_SUBJECT("sign_up_set_password_subject"),
     ALARM_RAD_SRCA("alarm_rad_srca"),
-    ALARM_IREGULARAN_NIHHS("alarm_iregularan_nihhs");
-
+    ALARM_IREGULARAN_NIHHS("alarm_iregularan_nihhs"),
+    SIGNUP_PASSWORD("signup_password");
     private final String code;
 
     Codes(String code) {

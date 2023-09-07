@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @SuperBuilder
 @FieldNameConstants
-public class Person extends BaseEntity {
+public class Korisnik extends BaseEntity {
     @Column(name = "email", nullable = false)
     String email;
 
