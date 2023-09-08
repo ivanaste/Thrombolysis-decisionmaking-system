@@ -1,0 +1,59 @@
+<div class="workers-table-container">
+  <div class="workers-table-content">
+    <mat-form-field appearance="fill" style="width: 25%">
+      <mat-label>Search</mat-label>
+      <button matTooltip="Search" matPrefix mat-icon-button>
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+      <input matInput [(ngModel)]="search" placeholder="Search" (ngModelChange)="onSearchInput()">
+    </mat-form-field>
+    <mat-table class="workers-table" [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="Email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Email</mat-header-cell>
+        <mat-cell
+          *matCellDef="let worker"> {{ worker.email }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Ime">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Ime</mat-header-cell>
+        <mat-cell
+          *matCellDef="let worker"> {{ worker.name | capitalizedLowerCase }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Prezime">
+        <mat-header-cell *matHeaderCellDef> Prezime</mat-header-cell>
+        <mat-cell
+          *matCellDef="let worker"> {{ worker.surname | capitalizedLowerCase }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Uloga">
+        <mat-header-cell *matHeaderCellDef> Uloga</mat-header-cell>
+        <mat-cell
+          *matCellDef="let worker">
+          <ng-container *ngIf="worker.role === 'DOCTOR'">
+            {{ 'Doktor' }}
+          </ng-container>
+          <ng-container *ngIf="worker.role === 'NURSE'">
+            {{ 'Medicinska sestra' }}
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Brisanje">
+        <mat-header-cell *matHeaderCellDef> Brisanje</mat-header-cell>
+        <mat-cell *matCellDef="let worker">
+          <button mat-icon-button color="warn" (click)="onDelete(worker.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" (click)="editWorker(row)"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

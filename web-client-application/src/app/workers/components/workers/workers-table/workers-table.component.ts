@@ -4,20 +4,20 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Store} from "@ngrx/store";
-import {User} from "../../../model/User";
-import {PatientsService} from "../../../service/patients.service";
+import {WorkersService} from "../../../service/workers.service";
 import {Router} from "@angular/router";
 import {selectRole} from "../../../../auth/store/auth.selectors";
+import {User} from "../../../../patients/model/User";
 
 @Component({
-  selector: 'app-patients-table',
-  templateUrl: './patients-table.component.html',
-  styleUrls: ['./patients-table.component.scss']
+  selector: 'app-workers-table',
+  templateUrl: './workers-table.component.html',
+  styleUrls: ['./workers-table.component.scss']
 })
-export class PatientsTableComponent implements OnInit, AfterViewInit {
-  patients$: Observable<User[]>;
+export class WorkersTableComponent implements OnInit, AfterViewInit {
+  workers$: Observable<User[]>;
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Brisanje'];
+  displayedColumns: string[] = ['Email', 'Ime', 'Prezime', 'Uloga', 'Brisanje'];
   search = "";
   private searchSubject: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
@@ -28,14 +28,14 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private store: Store, private patientsService: PatientsService, private router: Router) {
+  constructor(private store: Store, private workersService: WorkersService, private router: Router) {
     this.dataSource = new MatTableDataSource<User>();
   }
 
   ngOnInit(): void {
-    this.patients$ = this.patientsService.getAll();
-    this.patients$.pipe(take(1)).subscribe(patients => {
-      this.dataSource.data = patients;
+    this.workers$ = this.workersService.getAll();
+    this.workers$.pipe(take(1)).subscribe(workers => {
+      this.dataSource.data = workers;
     })
     this.storeSubscription = this.store
       .select(selectRole)
@@ -50,8 +50,8 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      this.patients$.subscribe(patient => {
-        this.dataSource.data = patient.filter(patient => patient?.jmbg.includes(this.search) || patient?.name.includes(this.search) || patient?.surname.includes(this.search) || patient?.email.includes(this.search));
+      this.workers$.subscribe(worker => {
+        this.dataSource.data = worker.filter(worker => worker?.name.includes(this.search) || worker?.surname.includes(this.search) || worker?.email.includes(this.search));
       });
     });
   }
@@ -60,13 +60,13 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
     this.searchSubject.next(this.search);
   }
 
-  editPatient(row: any) {
+  editWorker(row: any) {
     this.router.navigate(['/patients/edit/', row.email]);
   }
 
   onDelete(id: string) {
-    this.patientsService.delete(id).subscribe((patients) => {
-      this.dataSource.data = patients;
+    this.workersService.delete(id).subscribe((korisnici) => {
+      this.dataSource.data = korisnici;
     })
   }
 

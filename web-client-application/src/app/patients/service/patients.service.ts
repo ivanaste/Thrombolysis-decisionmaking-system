@@ -2,13 +2,12 @@ import {Inject, Injectable} from '@angular/core';
 import {APP_SERVICE_CONFIG, AppConfig} from "../../app-config/app-config";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../model/User";
-import {Patient} from "../../shared/model/patient";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientsService {
-  GET_PATIENTS = 'pacijent'
+  PATIENTS = 'pacijent'
   GET_USER = 'korisnik/'
   CHANGE_USER = 'korisnik'
 
@@ -18,7 +17,7 @@ export class PatientsService {
   }
 
   getAll() {
-    return this.http.get<User[]>(this.config.apiEndpoint + this.GET_PATIENTS, {})
+    return this.http.get<User[]>(this.config.apiEndpoint + this.PATIENTS, {})
   }
 
   getUser(email: string | null) {
@@ -32,5 +31,9 @@ export class PatientsService {
       prezime: user.surname,
       datumRodjenja: user.datumRodjenja
     })
+  }
+
+  delete(id: string) {
+    return this.http.delete<User[]>(this.config.apiEndpoint + this.PATIENTS + '/' + id);
   }
 }

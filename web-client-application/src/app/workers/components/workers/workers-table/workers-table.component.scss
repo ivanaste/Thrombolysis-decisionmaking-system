@@ -1,16 +1,12 @@
-.patients-table-container {
+.workers-table-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.patients-table-content {
-  width: 50%;
+.workers-table-content {
+  width: 60%;
   padding: 30px;
-}
-
-.small-width {
-  width: 10%;
 }
 
 mat-table, mat-paginator {

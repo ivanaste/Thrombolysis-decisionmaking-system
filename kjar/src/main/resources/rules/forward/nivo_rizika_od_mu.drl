@@ -51,7 +51,6 @@ salience 10000
         		)
 	then
 		System.out.println("Pacijent ima visok rizik od MU, jer je uocena atrijalna fibrilacija.");
-		//treba da se posalje websocket
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
 end
 

@@ -36,6 +36,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./patients/patients.module').then((module) => module.PatientsModule),
     canActivate: [],
+  },
+  {
+    path: 'workers',
+    loadChildren: () =>
+      import('./workers/workers.module').then((module) => module.WorkersModule),
+    canActivate: [],
   }
 ];
 

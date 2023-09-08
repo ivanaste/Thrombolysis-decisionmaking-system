@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,11 @@ public class PacijentService {
             return pacijentRepository.save(pacijent);
         }
         return pacijent;
+    }
+
+    @Transactional
+    public void obrisiPoId(UUID id) {
+        pacijentRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)

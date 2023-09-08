@@ -33,6 +33,16 @@
       </ng-container>
 
 
+      <ng-container matColumnDef="Brisanje">
+        <mat-header-cell *matHeaderCellDef class="small-width"> Brisanje</mat-header-cell>
+        <mat-cell *matCellDef="let patient">
+          <button mat-icon-button color="warn" (click)="onDelete(patient.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <ng-container *ngIf="userRole === 'NURSE'">
         <mat-row *matRowDef="let row; columns: displayedColumns" (click)="editPatient(row)"></mat-row>

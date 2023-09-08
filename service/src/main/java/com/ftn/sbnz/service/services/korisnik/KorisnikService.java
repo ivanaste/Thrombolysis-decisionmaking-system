@@ -5,14 +5,12 @@ import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.model.models.Pacijent;
 import com.ftn.sbnz.model.models.Role;
 import com.ftn.sbnz.service.repository.KorisnikRepository;
-import com.ftn.sbnz.service.repository.PacijentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +32,16 @@ public class KorisnikService {
             ((Pacijent) korisnik).setDatumRodjenja(registrationRequest.getDatumRodjenja());
         }
         return korisnikRepository.save(korisnik);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Korisnik> dobaviSve() {
+        return this.korisnikRepository.findAllByRoleIn(List.of(Role.DOCTOR, Role.NURSE));
+    }
+
+    @Transactional
+    public void obrisiPoId(UUID id) {
+        this.korisnikRepository.deleteById(id);
     }
 
 }

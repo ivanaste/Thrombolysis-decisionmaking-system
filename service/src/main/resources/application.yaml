@@ -7,8 +7,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
-      ddl-auto: update
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
     host: smtp.gmail.com
