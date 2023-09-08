@@ -1,0 +1,42 @@
+<div class="patients-table-container">
+  <div class="patients-table-content">
+    <mat-form-field appearance="fill" style="width: 25%">
+      <mat-label>Search</mat-label>
+      <button matTooltip="Search" matPrefix mat-icon-button>
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+      <input matInput [(ngModel)]="search" placeholder="Search" (ngModelChange)="onSearchInput()">
+    </mat-form-field>
+    <mat-table class="patients-table" [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="Jmbg Pacijenta">
+        <mat-header-cell *matHeaderCellDef> JMBG Pacijenta</mat-header-cell>
+        <mat-cell *matCellDef="let patient"> {{ patient.jmbg }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Datum rodjenja">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Datum rodjenja</mat-header-cell>
+        <mat-cell
+          *matCellDef="let patient"> {{ patient.datumRodjenja | date: 'dd MMM yyyy, HH:mm:ss' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Ime">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Ime</mat-header-cell>
+        <mat-cell
+          *matCellDef="let patient"> {{ patient.name | capitalizedLowerCase }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Prezime">
+        <mat-header-cell *matHeaderCellDef> Prezime</mat-header-cell>
+        <mat-cell
+          *matCellDef="let patient"> {{ patient.surname | capitalizedLowerCase }} </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

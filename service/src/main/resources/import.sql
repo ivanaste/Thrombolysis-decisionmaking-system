@@ -2,7 +2,8 @@ insert into person (id, created_at, email, name, password, role, surname) values
 insert into person (id, created_at, email, name, password, role, surname) values ('c0b224ed-c867-4c8e-964d-912d06224e53', CURRENT_TIMESTAMP, 'gocaftn@gmail.com', 'Goca', '$2a$10$5tykbOhp3Uo2QrY2t3/uCOmsuwvEZl4KgEgZgN3At6JB3HQX.Z75y', 'NURSE', 'Mirkovic');
 insert into person (id, created_at, email, name, password, role, surname) values ('7c343aa6-32f7-462d-b46a-5d20152b1010', CURRENT_TIMESTAMP, 'nikolaftn@gmail.com', 'Nikola', '$2a$10$5tykbOhp3Uo2QrY2t3/uCOmsuwvEZl4KgEgZgN3At6JB3HQX.Z75y', 'ADMIN', 'Stevanovic');
 
--- insert into pacijent (id, created_at, datum_rodjenja, jmbg, role) values ('a3ee4f83-b5e5-4560-8174-33989ece2e3d', CURRENT_TIMESTAMP, '2000-01-01', '3112999000000', 'PATIENT');
+insert into pacijent (id, created_at, datum_rodjenja, jmbg, role, email, name, surname, password) values ('a3ee4f83-b5e5-4560-8174-33989ece2e3d', CURRENT_TIMESTAMP, '2000-01-01', '3112999000000', 'PATIENT', 'milicftn+123@gmail.com', 'Mico', 'Milic','$2a$10$5tykbOhp3Uo2QrY2t3/uCOmsuwvEZl4KgEgZgN3At6JB3HQX.Z75y');
+insert into pacijent (id, created_at, datum_rodjenja, jmbg, role, email, name, surname, password) values ('bb81a893-a236-498b-8591-2b8164a45f57', CURRENT_TIMESTAMP, '2000-01-01', '3112999000000', 'PATIENT', 'istevanovic3112+123@gmail.com', 'Ivana', 'Stevanovic','$2a$10$5tykbOhp3Uo2QrY2t3/uCOmsuwvEZl4KgEgZgN3At6JB3HQX.Z75y');
 
 -- insert into bolesti (id, created_at, vrsta_bolesti, pacijent_id, datum_desavanja) values ('3a835eb5-6403-49b8-8739-026f1c655fa6', CURRENT_TIMESTAMP, 'GASTROINTESTINALNO_KRVARENJE', 'a3ee4f83-b5e5-4560-8174-33989ece2e3d', '2022-06-29');
 -- insert into bolesti (id, created_at, vrsta_bolesti, pacijent_id, datum_desavanja) values ('747fee19-a692-49e6-afe6-3efffb1c67b9', CURRENT_TIMESTAMP, 'INTRAKRANIJALNA_HEMORAGIJA', 'a3ee4f83-b5e5-4560-8174-33989ece2e3d', '2022-06-01');
