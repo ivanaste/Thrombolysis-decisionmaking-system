@@ -1,11 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {debounceTime, distinctUntilChanged, Observable, Subject, take, takeUntil} from "rxjs";
+import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, take, takeUntil} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Store} from "@ngrx/store";
-import {Patient} from "../../model/Patient";
-import {PatientsService} from "../../service/patients.service";
+import {User} from "../../../model/User";
+import {PatientsService} from "../../../service/patients.service";
+import {Router} from "@angular/router";
+import {selectRole} from "../../../../auth/store/auth.selectors";
 
 @Component({
   selector: 'app-patients-table',
@@ -13,19 +15,21 @@ import {PatientsService} from "../../service/patients.service";
   styleUrls: ['./patients-table.component.scss']
 })
 export class PatientsTableComponent implements OnInit, AfterViewInit {
-  patients$: Observable<Patient[]>;
-  dataSource: MatTableDataSource<Patient>;
+  patients$: Observable<User[]>;
+  dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime'];
   search = "";
   private searchSubject: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
+  storeSubscription!: Subscription;
+  userRole: string | null = null;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private store: Store, private patientsService: PatientsService) {
-    this.dataSource = new MatTableDataSource<Patient>();
+  constructor(private store: Store, private patientsService: PatientsService, private router: Router) {
+    this.dataSource = new MatTableDataSource<User>();
   }
 
   ngOnInit(): void {
@@ -33,6 +37,9 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
     this.patients$.pipe(take(1)).subscribe(patients => {
       this.dataSource.data = patients;
     })
+    this.storeSubscription = this.store
+      .select(selectRole)
+      .subscribe((role) => (this.userRole = role));
   }
 
   ngAfterViewInit(): void {
@@ -51,6 +58,10 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
 
   onSearchInput(): void {
     this.searchSubject.next(this.search);
+  }
+
+  editPatient(row: any) {
+    this.router.navigate(['/patients/edit/', row.email]);
   }
 
 }

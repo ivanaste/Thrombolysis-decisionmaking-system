@@ -6,7 +6,7 @@ export const login = createAction(
 );
 
 export const patientSignup = createAction(
-  '[Auth] Patient Signup',
+  '[Auth] User Signup',
   props<{ email: string; jmbg: string; ime: string; prezime: string; datumRodjenja: string}>()
 );
 

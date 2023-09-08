@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { selectRole } from '../../auth/store/auth.selectors';
+import { selectRole, selectToken } from '../../auth/store/auth.selectors';
 import { Store } from '@ngrx/store';
 import { filter, Subscription } from 'rxjs';
 import { logout } from '../../auth/store/auth.actions';
@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   showMobileMenu = false;
   storeSubscription!: Subscription;
   userRole: string | null = null;
+  userToken: string | null = null;
   welcomingPageIsActive = false;
 
   constructor(private store: Store, private router: Router) {}
@@ -36,6 +37,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.storeSubscription = this.store
       .select(selectRole)
       .subscribe((role) => (this.userRole = role));
+    this.storeSubscription = this.store
+      .select(selectToken)
+      .subscribe((token) => (this.userToken = token));
   }
 
   logout() {

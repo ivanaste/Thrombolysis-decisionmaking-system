@@ -6,7 +6,7 @@ import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
-import com.ftn.sbnz.service.repository.PersonRepository;
+import com.ftn.sbnz.service.repository.KorisnikRepository;
 import com.ftn.sbnz.service.services.alarm.AlarmListener;
 import com.ftn.sbnz.service.services.bolesti.BolestiService;
 import com.ftn.sbnz.service.services.korisnik.PacijentService;
@@ -28,7 +28,7 @@ import java.util.UUID;
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final PersonRepository personRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final PacijentService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
+    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final KorisnikRepository korisnikRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final PacijentService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
@@ -36,11 +36,11 @@ public class OdlukaOTromboliziService {
         this.laboratorijaSimulacija = new LaboratorijaSimulacija();
         this.ctSimulacija = new CTSimulacija();
         this.sendMail = sendMail;
-        this.personRepository = personRepository;
+        this.korisnikRepository = korisnikRepository;
         this.PacijentiNaEKGu = PacijentiNaEKGu;
         this.bolestiService = bolestiService;
         OdlukaOTromboliziEventListener eventListener = new OdlukaOTromboliziEventListener(this);
-        AlarmListener alarmListener = new AlarmListener(this.sendMail, this.personRepository);
+        AlarmListener alarmListener = new AlarmListener(this.sendMail, this.korisnikRepository);
         kieSession.addEventListener(eventListener);
         kieSession.addEventListener(alarmListener);
     }
@@ -57,7 +57,7 @@ public class OdlukaOTromboliziService {
 
     private final MonitoringSimulacija monitoringSimulacija;
     private final SendMail sendMail;
-    private final PersonRepository personRepository;
+    private final KorisnikRepository korisnikRepository;
     private final Map<String, Pacijent> PacijentiNaEKGu;
 
     private final BolestiService bolestiService;

@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from "../auth/guards/auth.guard";
-import {PatientsTableComponent} from "./components/patients-table/patients-table.component";
+import {PatientsTableComponent} from "./components/patients/patients-table/patients-table.component";
 import {PatientsComponent} from "./components/patients/patients.component";
+import {EditPatientComponent} from "./components/patients/edit-patient/edit-patient.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,11 @@ const routes: Routes = [
       {
         path: '',
         component: PatientsTableComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'edit/:email',
+        component: EditPatientComponent,
         canActivate: [AuthGuard],
       },
     ]

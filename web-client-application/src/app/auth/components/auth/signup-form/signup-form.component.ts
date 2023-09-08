@@ -21,10 +21,10 @@ export class SignupFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.signupForm = new FormGroup({
-      email: new FormControl('istevanovic3112@gmail.com', [Validators.required, Validators.email]),
-      jmbg: new FormControl('3112232731', [Validators.required]),
-      ime: new FormControl('Ivana', [Validators.required]),
-      prezime: new FormControl('Stevanovic', [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      jmbg: new FormControl(null, [Validators.required]),
+      ime: new FormControl(null, [Validators.required]),
+      prezime: new FormControl(null, [Validators.required]),
       datumRodjenja: new FormControl(null, [Validators.required]),
       role: new FormControl('DOCTOR', [Validators.required]),
     });

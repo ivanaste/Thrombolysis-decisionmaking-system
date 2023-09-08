@@ -4,7 +4,7 @@ import com.ftn.sbnz.model.models.AlarmEKG;
 import com.ftn.sbnz.model.models.EmailDetails;
 import com.ftn.sbnz.model.models.Korisnik;
 import com.ftn.sbnz.model.models.RadSrca;
-import com.ftn.sbnz.service.repository.PersonRepository;
+import com.ftn.sbnz.service.repository.KorisnikRepository;
 import com.ftn.sbnz.service.services.mail.SendMail;
 import com.ftn.sbnz.service.translations.Codes;
 import com.ftn.sbnz.service.translations.Translator;
@@ -20,14 +20,14 @@ import java.util.List;
 public class AlarmListener extends DefaultAgendaEventListener {
 
     private final SendMail sendMail;
-    private final PersonRepository personRepository;
+    private final KorisnikRepository korisnikRepository;
 
 
     @Override
     public void afterMatchFired(final AfterMatchFiredEvent event) {
         final Object matchedObject = event.getMatch().getObjects().get(0);
         if (matchedObject instanceof AlarmEKG ruleEvent) {
-            final List<Korisnik> doctors = personRepository.findAll();
+            final List<Korisnik> doctors = korisnikRepository.findAll();
             EmailDetails emailDetails = new EmailDetails();
             if (ruleEvent.isIregularanNIIHS()) {
                 emailDetails = new EmailDetails("", Translator.toLocale(

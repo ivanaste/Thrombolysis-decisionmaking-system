@@ -1,0 +1,50 @@
+<mat-card class="form" style="margin-top: 3%">
+  <mat-card-header class="form">
+    <mat-card-title>Izmena informacija o {{userRole === 'NURSE'? 'pacijentu' : 'radniku'}}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="form">
+    <form [formGroup]="patientForm" (ngSubmit)="editPatient()">
+      <section>
+        <div class="input-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Unesite email" formControlName="email">
+          </mat-form-field>
+        </div>
+        <div class="input-row" *ngIf="userRole === 'NURSE'">
+          <mat-form-field appearance="fill">
+            <mat-label>Jmbg</mat-label>
+            <input matInput placeholder="Unesite jmbg" formControlName="jmbg">
+          </mat-form-field>
+        </div>
+        <div class="input-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Ime</mat-label>
+            <input matInput placeholder="Unesite ime"
+                   formControlName="ime">
+          </mat-form-field>
+        </div>
+        <div class="input-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Prezime</mat-label>
+            <input matInput placeholder="Unesite prezime"
+                   formControlName="prezime">
+          </mat-form-field>
+        </div>
+        <div class="input-row" *ngIf="userRole === 'NURSE'">
+          <mat-form-field appearance="fill">
+            <mat-label>Datum rodjenja</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="datumRodjenja">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <div class="button-row">
+        <button type="submit" mat-raised-button class="btn" style="color: white; background-color: black">Izmeni informacije</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

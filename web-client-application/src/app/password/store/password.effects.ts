@@ -53,9 +53,9 @@ export class PasswordEffects {
       return this.actions$.pipe(
         ofType(PasswordActions.changePasswordSuccess.type),
         map(() => {
-          const message = 'You have successfully changed your password.';
+          const message = 'Uspešno ste promenili lozinku.';
           this.notifierService.notifySuccess(message);
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
         })
       );
     },
