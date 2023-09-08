@@ -5,6 +5,16 @@ export const login = createAction(
   props<{ email: string; password: string; }>()
 );
 
+export const patientSignup = createAction(
+  '[Auth] Patient Signup',
+  props<{ email: string; jmbg: string; ime: string; prezime: string; datumRodjenja: string}>()
+);
+
+export const workerSignup = createAction(
+  '[Auth] Worker Signup',
+  props<{ email: string; ime: string; prezime: string; uloga: string}>()
+);
+
 export const loginSuccess = createAction(
   '[Auth] Login Success',
   props<{ token: string; cookie?: string }>()
@@ -42,6 +52,8 @@ const all = union({
   signUpSuccess,
   confirmEmail,
   confirmEmailSuccess,
+  patientSignup,
+  workerSignup
 });
 
 export type AuthActionsUnion = typeof all;

@@ -5,11 +5,13 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { StoreModule } from '@ngrx/store';
 import * as fromAuth from './store/auth.reducer';
+import { SignupFormComponent } from './components/auth/signup-form/signup-form.component';
 
 @NgModule({
   declarations: [
     LoginFormComponent,
     AuthComponent,
+    SignupFormComponent,
   ],
   imports: [
     AuthRoutingModule,

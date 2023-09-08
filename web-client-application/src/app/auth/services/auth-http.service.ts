@@ -46,12 +46,26 @@ export class AuthHttpService {
     return this.http.post(this.config.apiEndpoint + this.LOGOUT, {});
   }
 
-  sendSignUpRequest(email: string, password: string, role: string) {
-    return this.http.post(this.config.apiEndpoint + this.SIGN_UP, {
-      email,
-      password,
-      role,
-    });
+  sendSignUpRequest(email: string, role: string, ime: string, prezime: string, jmbg?: string, datumRodjenja?: string) {
+    let body;
+    if (role === 'PATIENT') {
+      body = {
+        email,
+        role,
+        jmbg,
+        ime,
+        prezime,
+        datumRodjenja
+      }
+    } else {
+      body = {
+        email,
+        role,
+        ime,
+        prezime,
+      }
+    }
+    return this.http.post(this.config.apiEndpoint + this.SIGN_UP, body);
   }
 
   sendEmailConfirmationRequest(token: string) {

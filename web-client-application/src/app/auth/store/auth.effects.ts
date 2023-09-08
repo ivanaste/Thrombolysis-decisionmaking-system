@@ -67,12 +67,23 @@ export class AuthEffects {
     {dispatch: false}
   );
 
-  sign_up = createEffect(() => {
+  patient_sign_up = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthActions.signUp.type),
+      ofType(AuthActions.patientSignup.type),
       switchMap((action) => {
         return this.httpService
-          .sendSignUpRequest(action.email, action.password, action.role)
+          .sendSignUpRequest(action.email, 'PATIENT', action.ime, action.prezime, action.jmbg, action.datumRodjenja)
+          .pipe(map(() => AuthActions.signUpSuccess()));
+      })
+    );
+  });
+
+  worker_sign_up = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthActions.workerSignup.type),
+      switchMap((action) => {
+        return this.httpService
+          .sendSignUpRequest(action.email, action.uloga, action.ime, action.prezime)
           .pipe(map(() => AuthActions.signUpSuccess()));
       })
     );
@@ -84,7 +95,7 @@ export class AuthEffects {
         ofType(AuthActions.signUpSuccess.type),
         map(() => {
           const message =
-            'Your sign up request has been sent. Please go check your email.';
+            'Uspešna registracija';
           this.notifierService.notifySuccess(message);
         })
       );

@@ -28,18 +28,29 @@ public class RegisterNewUser {
 
     public Korisnik execute(RegistrationRequest registrationRequest) {
         final String password = generatePassword.execute();
-        final Korisnik korisnik = Korisnik.builder()
-                .email(registrationRequest.getEmail())
-                .name(registrationRequest.getIme())
-                .surname(registrationRequest.getPrezime())
-                .role(registrationRequest.getRole())
-                .password(passwordEncoder.encode(password))
-                .build();
+        Korisnik korisnik;
+
         if (registrationRequest.getRole().equals(Role.PATIENT)) {
-            ((Pacijent) korisnik).setDatumRodjenja(registrationRequest.getDatumRodjenja());
-            ((Pacijent) korisnik).setJmbg(registrationRequest.getJmbg());
+            korisnik = new Pacijent(
+                    registrationRequest.getEmail(),
+                    passwordEncoder.encode(password),
+                    registrationRequest.getIme(),
+                    registrationRequest.getPrezime(),
+                    registrationRequest.getRole(),
+                    registrationRequest.getJmbg(),
+                    registrationRequest.getDatumRodjenja()
+            );
+        } else {
+            korisnik = Korisnik.builder()
+                    .email(registrationRequest.getEmail())
+                    .name(registrationRequest.getIme())
+                    .surname(registrationRequest.getPrezime())
+                    .role(registrationRequest.getRole())
+                    .password(passwordEncoder.encode(password))
+                    .build();
         }
-        EmailDetails emailDetails = new EmailDetails(korisnik.getEmail(), Translator.toLocale(
+
+                EmailDetails emailDetails = new EmailDetails(korisnik.getEmail(), Translator.toLocale(
                 Codes.SIGNUP_PASSWORD, new String[]{password}), "USPESNA REGISTRACIJA");
         sendMail.execute(emailDetails);
 

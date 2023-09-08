@@ -10,6 +10,7 @@ import com.ftn.sbnz.service.services.auth.RegisterNewUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @PreAuthorize("hasAnyRole('NURSE','ADMIN')")
     public void register(@Valid @RequestBody RegistrationRequest registrationRequest) {
         registerNewUser.execute(registrationRequest);
     }

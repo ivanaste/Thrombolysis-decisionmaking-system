@@ -7,6 +7,7 @@
       <div class="menu">
         <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka</a>
         <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Istorija procena rizika od MU</a>
+        <a *ngIf="userRole === 'NURSE' || userRole === 'ADMIN'" routerLink="auth/signup">Registruj {{userRole === 'NURSE'? 'pacijenta': 'radnika'}}</a>
       </div>
     </div>
 
