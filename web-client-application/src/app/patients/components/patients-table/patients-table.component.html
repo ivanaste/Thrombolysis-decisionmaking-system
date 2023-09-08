@@ -17,7 +17,7 @@
       <ng-container matColumnDef="Datum rodjenja">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Datum rodjenja</mat-header-cell>
         <mat-cell
-          *matCellDef="let patient"> {{ patient.datumRodjenja | date: 'dd MMM yyyy, HH:mm:ss' }} </mat-cell>
+          *matCellDef="let patient"> {{ patient.datumRodjenja | date: 'dd MMM yyyy' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="Ime">

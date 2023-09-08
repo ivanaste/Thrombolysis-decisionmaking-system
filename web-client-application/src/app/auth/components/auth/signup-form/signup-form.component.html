@@ -12,7 +12,7 @@
             <input matInput placeholder="Unesite email" formControlName="email">
           </mat-form-field>
         </div>
-        <div class="input-row" *ngIf="userRole === 'PATIENT'">
+        <div class="input-row" *ngIf="userRole === 'NURSE'">
           <mat-form-field appearance="fill">
             <mat-label>Jmbg</mat-label>
             <input matInput placeholder="Unesite jmbg" formControlName="jmbg">
@@ -32,7 +32,7 @@
                    formControlName="prezime">
           </mat-form-field>
         </div>
-        <div class="input-row" *ngIf="userRole === 'PATIENT'">
+        <div class="input-row" *ngIf="userRole === 'NURSE'">
           <mat-form-field appearance="fill">
             <mat-label>Datum rodjenja</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="datumRodjenja">

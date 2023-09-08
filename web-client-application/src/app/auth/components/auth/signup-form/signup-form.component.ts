@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
-import {login, patientSignup, workerSignup} from '../../../store/auth.actions';
+import {patientSignup, workerSignup} from '../../../store/auth.actions';
 import {Subscription} from "rxjs";
 import {selectRole} from "../../../store/auth.selectors";
 
@@ -39,7 +39,7 @@ export class SignupFormComponent implements OnInit {
     const ime = this.signupForm.controls['ime'].value;
     const prezime = this.signupForm.controls['prezime'].value;
     console.log(this.userRole)
-    if (this.userRole === 'PATIENT') {
+    if (this.userRole === 'NURSE') {
       const jmbg = this.signupForm.controls['jmbg'].value;
       const datumRodjenja = this.signupForm.controls['datumRodjenja'].value;
       this.store.dispatch(patientSignup({email, jmbg, ime, prezime, datumRodjenja}));
