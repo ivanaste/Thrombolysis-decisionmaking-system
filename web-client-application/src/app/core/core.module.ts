@@ -8,10 +8,9 @@ import {environment} from '../../environments/environment.prod';
 import {AuthEffects} from '../auth/store/auth.effects';
 import {AuthInterceptor} from '../auth/auth.interceptor';
 import {ErrorInterceptor} from './error.interceptor';
-import {UsersEffects} from '../users/store/users.effects';
 import {PasswordEffects} from '../password/store/password.effects';
 import {reducers} from "./store/core.reducer";
-import {DecisionsEffects} from "../decisions/store/decisions-effects";
+import {DecisionsEffects} from "../therapy-decision/store/decisions-effects";
 import {RiskEstimationEffects} from "../risk-estimation/store/risk-estimation-effects";
 
 @NgModule({
@@ -35,7 +34,6 @@ import {RiskEstimationEffects} from "../risk-estimation/store/risk-estimation-ef
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([
       AuthEffects,
-      UsersEffects,
       PasswordEffects,
       DecisionsEffects,
       RiskEstimationEffects,

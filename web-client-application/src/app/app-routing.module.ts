@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: 'decisions',
     loadChildren: () =>
-      import('./decisions/decisions.module').then((module) => module.DecisionsModule),
+      import('./therapy-decision/therapy-decision.module').then((module) => module.TherapyDecisionModule),
     canActivate: [],
   },
   {
