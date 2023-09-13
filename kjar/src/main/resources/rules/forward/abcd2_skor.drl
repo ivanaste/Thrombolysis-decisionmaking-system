@@ -1,0 +1,85 @@
+package forward;
+
+import com.ftn.sbnz.model.models.ABCD2;
+
+rule "Izracunavanje abcd2 skora - pritisak"
+no-loop true
+salience 6
+	when
+		$abcd2: ABCD2(pritisak.getSistolni() > 140 || pritisak.getDijastolni() > 90,
+		              nivoRacunanja == 0)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 1) };
+		modify ($abcd2) { setNivoRacunanja(1) };
+end
+
+rule "Izracunavanje abcd2 skora - godine pacijenta"
+no-loop true
+salience 5
+	when
+		$abcd2: ABCD2(godinePacijenta > 60, nivoRacunanja <= 1)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 1) };
+		modify ($abcd2) { setNivoRacunanja(2) };
+end
+
+rule "Izracunavanje abcd2 skora - hemipareza ili hemiplegija"
+no-loop true
+salience 4
+	when
+		$abcd2: ABCD2(isHemipareza() || isHemiplegija(), nivoRacunanja <= 2)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 2) };
+		modify ($abcd2) { setNivoRacunanja(3) };
+end
+
+rule "Izracunavanje abcd2 skora - smetnje govora"
+no-loop true
+salience 3
+	when
+		$abcd2: ABCD2(isSmetnjeGovora(), nivoRacunanja <= 3)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 1) };
+		modify ($abcd2) { setNivoRacunanja(4) };
+end
+
+rule "Izracunavanje abcd2 skora - trajanje simptoma preko sat vremena"
+no-loop true
+salience 2
+	when
+		$abcd2: ABCD2(trajanjeSimptoma >= 60, nivoRacunanja <= 4)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 2) };
+		modify ($abcd2) { setNivoRacunanja(5) };
+end
+
+rule "Izracunavanje abcd2 skora - trajanje simptoma preko 10 minuta"
+no-loop true
+salience 2
+	when
+		$abcd2: ABCD2(trajanjeSimptoma > 10 && trajanjeSimptoma < 60, nivoRacunanja <= 4)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 1) };
+		modify ($abcd2) { setNivoRacunanja(5) };
+end
+
+rule "Izracunavanje abcd2 skora - ima dijabetes"
+no-loop true
+salience 1
+	when
+		$abcd2: ABCD2(isDijabetes(), nivoRacunanja <= 5)
+	then
+		modify ($abcd2) { setSkor($abcd2.getSkor() + 1) };
+		modify ($abcd2) { setNivoRacunanja(6) };
+		modify ($abcd2) { setUProcesu(false) };
+end
+
+rule "Izracunavanje abcd2 skora - nema dijabetes"
+no-loop true
+salience 1
+	when
+		$abcd2: ABCD2(!isDijabetes(), nivoRacunanja <= 5)
+	then
+		modify ($abcd2) { setUProcesu(false) };
+end
+

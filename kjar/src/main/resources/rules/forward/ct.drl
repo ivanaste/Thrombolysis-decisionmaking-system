@@ -13,6 +13,7 @@ salience 100
 		$znakIshemije: ZnakIshemije() from $znaciIshemije
 		eval($znakIshemije.ordinal() == 1 || $znakIshemije.ordinal() == 2)
 	then
-		System.out.println("Na CT-u je primecen " + $znakIshemije + ", tako da se pacijentu ne moze primeniti terapija");
+		System.out.println("Na CT-u je primecen " + $znakIshemije + ", te se pacijentu ne moze primeniti terapija");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
+

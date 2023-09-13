@@ -7,8 +7,6 @@ import java.lang.Math;
 import java.util.Date;
 import java.lang.Integer;
 
-global Integer rezultat;
-
 
 rule "Iregularan NIHHS skor"
 salience 30
@@ -16,7 +14,6 @@ salience 30
         $poslednjiNihhs: NIHHS($jmbgPacijenta1: jmbgPacijenta, $skor1: skor)
         $pretposlednjiElLista: List(size == 1) from accumulate(
             NIHHS(this != $poslednjiNihhs, jmbgPacijenta == $jmbgPacijenta1, $skor2: skor) over window:length(2),
-            //moze sum
             collectList($skor2)
         )
         $pretposlednjiNihhs: Integer() from $pretposlednjiElLista[0]
@@ -24,7 +21,6 @@ salience 30
         not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, iregularanNIIHS == true))
 
 	then
-	    System.out.println("Razlika poslednja dva NIHHS skora: " + Math.abs($skor1 - $pretposlednjiNihhs));
 	    System.out.println("Alarm - Kod pacijenta su uoceni iregularni NIHHS skorovi");
         insert(new AlarmEKG($jmbgPacijenta1, true));
 end

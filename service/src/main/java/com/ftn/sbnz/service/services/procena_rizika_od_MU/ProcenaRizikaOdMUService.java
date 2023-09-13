@@ -2,10 +2,7 @@ package com.ftn.sbnz.service.services.procena_rizika_od_MU;
 
 import com.ftn.sbnz.model.dto.request.ProcenaRizikaOdMURequest;
 import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
-import com.ftn.sbnz.model.models.NivoRizikaOdMU;
-import com.ftn.sbnz.model.models.Pacijent;
-import com.ftn.sbnz.model.models.Pritisak;
-import com.ftn.sbnz.model.models.ProcenaRizikaOdMU;
+import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.ProcenaRizikaOdMURepository;
 import com.ftn.sbnz.service.services.korisnik.PacijentService;
 import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
@@ -48,13 +45,15 @@ public class ProcenaRizikaOdMUService {
         Pacijent pacijent = korisnikService.getPacijentByJmbg(procenaRizikaOdMURequest.getJmbgPacijenta());
         PacijentiNaEKGu.putIfAbsent(pacijent.getJmbg(), pacijent);
 
-        final Integer ABCD2Skor = izracunajABCD2Skor(procenaRizikaOdMURequest, pacijent);
-
-        System.out.println("ABCD2 skor: " + ABCD2Skor);
         ProcenaRizikaOdMU procenaRizika = new ProcenaRizikaOdMU(pacijent, NivoRizikaOdMU.PROCENA_U_TOKU);
         procenaRizika = procenaRizikaOdMURepository.save(procenaRizika);
 
-        final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, ABCD2Skor, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
+        final Pritisak pritisak = monitoringSimulacija.simulirajMerenjePritiska();
+        final ABCD2 ABCD2Skor = new ABCD2(procenaRizika.getId(), pacijent.dobaviGodine(), pritisak, procenaRizikaOdMURequest.isHemipareza(), procenaRizikaOdMURequest.isHemiplegija(), procenaRizikaOdMURequest.isSmetnjeGovora(), procenaRizikaOdMURequest.getTrajanjeSimptoma(), procenaRizikaOdMURequest.isDijabetes());
+        kieSession.insert(ABCD2Skor);
+        kieSession.fireAllRules();
+
+        final ProcenaRizikaOdMUEvent procenaRizikaEvent = new ProcenaRizikaOdMUEvent(procenaRizika.getId(), pacijent.getJmbg(), NivoRizikaOdMU.PROCENA_U_TOKU, procenaRizikaOdMURequest.getStenozaSimptomatskogKrvnogSuda());
         kieSession.insert(procenaRizika.getId());
         kieSession.insert(procenaRizikaEvent);
         kieSession.fireAllRules();

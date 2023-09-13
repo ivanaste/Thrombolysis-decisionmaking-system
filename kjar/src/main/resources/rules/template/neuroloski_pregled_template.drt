@@ -18,13 +18,16 @@ rule "neuroloski_pregled_@{vrstaBolesti}"
 no-loop true
 salience 20
 	when
-		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2 || statusOdluke == StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI, $kontraindikacije: kontraindikacije)
+		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_2
+		                                  || statusOdluke == StatusOdluke.PRIHVACENA_NA_OSNOVU_BOLESTI,
+		                                  $kontraindikacije: kontraindikacije)
 		$kontraindikacija: Kontraindikacija() from $kontraindikacije
 		eval($kontraindikacija.getVrsta() == VrstaBolesti.@{vrstaBolesti} &&
 		ChronoUnit.@{jedinicaVremena}.between($kontraindikacija.getDatum(), LocalDate.now()) <= @{vrednost})
 	then
-		System.out.println("Pacijent ne moze da primi terapiju zbog: " + $kontraindikacija.getVrsta() + " in @{vrednost} " + ChronoUnit.@{jedinicaVremena} + ".");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
 
 end template
+
+

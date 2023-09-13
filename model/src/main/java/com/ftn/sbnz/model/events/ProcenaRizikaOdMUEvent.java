@@ -15,15 +15,13 @@ import java.util.UUID;
 public class ProcenaRizikaOdMUEvent {
     private UUID idProceneRizika;
     private NivoRizikaOdMU nivoRizika;
-    private Integer ABCD2Skor;
     private int stenozaKrvnogSuda;
     private String jmbgPacijenta;
 
-    public ProcenaRizikaOdMUEvent(UUID idProceneRizika, String jmbgPacijenta, NivoRizikaOdMU nivoRizika, Integer ABCD2Skor, Integer stenozaKrvnogSuda) {
+    public ProcenaRizikaOdMUEvent(UUID idProceneRizika, String jmbgPacijenta, NivoRizikaOdMU nivoRizika, Integer stenozaKrvnogSuda) {
         this.idProceneRizika = idProceneRizika;
         this.jmbgPacijenta = jmbgPacijenta;
         this.nivoRizika = nivoRizika;
-        this.ABCD2Skor = ABCD2Skor;
         this.stenozaKrvnogSuda = stenozaKrvnogSuda;
     }
 
