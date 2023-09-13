@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 rule "Faza 1 - Proslo vise od 4 ipo sata nakon simptoma"
 no-loop true
 	when
-		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1, $trenutak: simptomi.getTrenutakNastanka(), $trenutak != null)
+		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1,
+		                            $trenutak: simptomi.getTrenutakNastanka(), $trenutak != null)
 		$duration: Duration() from Duration.between($trenutak, LocalDateTime.now())
     	eval($duration.toHours() > 4 || ($duration.toHours() == 4 && $duration.toMinutesPart() >= 30))
 	then
@@ -21,7 +22,8 @@ end
 rule "Faza 1 - Simptomi nastali u toku visesatnog sna"
 no-loop true
 	when
-		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1, simptomi.isNastaliUTokuSna() == true)
+		$t1: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_1,
+		                            simptomi.isNastaliUTokuSna() == true)
 	then
 		System.out.println("Simptomi nastali u toku sna");
     	modify ($t1) { setStatusOdluke(StatusOdluke.ODBIJENA) };

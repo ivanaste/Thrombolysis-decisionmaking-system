@@ -1,0 +1,19 @@
+package forward;
+
+import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
+import com.ftn.sbnz.model.models.StatusOdluke;
+import com.ftn.sbnz.model.models.ZnakIshemije;
+
+
+rule "Faza 5 - Ukoliko postoji hiperdenzni arterijski znak ili edamatozni girus sa zaravnjenim sulkusima, primena terapije nije moguća"
+no-loop true
+salience 100
+	when
+		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_5, $znaciIshemije: znaciIshemije)
+		$znakIshemije: ZnakIshemije() from $znaciIshemije
+		eval($znakIshemije.ordinal() == 1 || $znakIshemije.ordinal() == 2)
+	then
+		System.out.println("Na CT-u je primecen " + $znakIshemije + ", te se pacijentu ne moze primeniti terapija");
+		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
+end
+

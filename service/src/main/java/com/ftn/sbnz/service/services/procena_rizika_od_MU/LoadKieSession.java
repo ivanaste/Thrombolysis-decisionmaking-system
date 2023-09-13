@@ -98,7 +98,6 @@ public class LoadKieSession {
         data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.GASTROINTESTINALNO_KRVARENJE, ChronoUnit.WEEKS.toString().toUpperCase(), 3));
         data.add(new NeuroloskiPregledTemplateModel(VrstaBolesti.UROGENITALNO_KRVARENJE, ChronoUnit.WEEKS.toString().toUpperCase(), 3));
 
-
         ObjectDataCompiler converter = new ObjectDataCompiler();
         return converter.compile(data, neuroloski_pregled_template);
     }

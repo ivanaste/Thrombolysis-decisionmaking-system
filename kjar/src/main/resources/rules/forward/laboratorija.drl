@@ -3,12 +3,16 @@ package forward;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.StatusOdluke;
 
-rule "Faza 6 - Ukoliko je INR veci od 1.7, broj trombocita manji od 100 000 ili glikemija manja od 2.7 ili veca 22.2, pacijent nije podoban za terapiju."
+rule "Faza 6 - Ukoliko laboratorijski nalaz nije dobar, pacijent nije podoban za terapiju."
 no-loop true
 	when
 		$odlukaEvent: OdlukaOTromboliziEvent(statusOdluke == StatusOdluke.PRIHVACENA_FAZA_6, $lab: laboratorija)
-		eval($lab.getINR() > 1.7 || $lab.getTrombociti() < 100000 || $lab.getGlikemija() < 2.7 || $lab.getGlikemija() > 22.2)
+		eval($lab.getINR() > 1.7
+		  || $lab.getTrombociti() < 100000
+		  || $lab.getGlikemija() < 2.7
+		  || $lab.getGlikemija() > 22.2)
 	then
 		System.out.println("Pacijent ne moze da primi terapiju zbog laboratorije.");
 		modify ($odlukaEvent) { setStatusOdluke(StatusOdluke.ODBIJENA) };
 end
+
