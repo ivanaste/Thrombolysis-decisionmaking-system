@@ -5,10 +5,10 @@ import * as RiskActions from '../../store/risk-estimation-actions';
 
 @Component({
   selector: 'app-procena-rizika-od-mu',
-  templateUrl: './procena-rizika-od-mu.component.html',
-  styleUrls: ['./procena-rizika-od-mu.component.scss']
+  templateUrl: './risk-estimation-form.component.html',
+  styleUrls: ['./risk-estimation-form.component.scss']
 })
-export class ProcenaRizikaOdMUComponent {
+export class RiskEstimationFormComponent {
   procenaRizikaForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private store: Store) {
