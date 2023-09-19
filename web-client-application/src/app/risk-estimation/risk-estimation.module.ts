@@ -5,7 +5,6 @@ import {RiskEstimationRoutingModule} from './risk-estimation-routing.module';
 import {StoreModule} from '@ngrx/store';
 import * as fromDecisions from './store/risk-estimation-reducer';
 import {RiskEstimationTableComponent} from './components/risk-estimation-table/risk-estimation-table.component';
-import {RiskEstimationComponent} from './components/risk-estimation/risk-estimation.component';
 import {SharedModule} from "../shared/shared.module";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
 import {MatRadioModule} from "@angular/material/radio";
@@ -14,9 +13,8 @@ import {RiskEstimationFormComponent} from "./components/risk-estimation-form/ris
 
 @NgModule({
   declarations: [
+    RiskEstimationFormComponent,
     RiskEstimationTableComponent,
-    RiskEstimationFormComponent,
-    RiskEstimationFormComponent,
   ],
   imports: [
     CommonModule,
