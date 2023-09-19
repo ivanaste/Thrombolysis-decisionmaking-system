@@ -3,13 +3,13 @@ import {RouterModule, Routes} from '@angular/router';
 import {RiskEstimationComponent} from "./components/risk-estimation/risk-estimation.component";
 import {RiskEstimationTableComponent} from "./components/risk-estimation-table/risk-estimation-table.component";
 import {RiskEstimationResolver} from "./resolvers/risk-estimation.resolver";
-import {ProcenaRizikaOdMUComponent} from "./components/procena-rizika-od-mu/procena-rizika-od-mu.component";
+import {RiskEstimationFormComponent} from "./components/risk-estimation-form/risk-estimation-form.component";
 import {AuthGuard} from "../auth/guards/auth.guard";
 
 const routes: Routes = [
   {
     path: '',
-    component: RiskEstimationComponent,
+    component: RiskEstimationFormComponent,
     canActivate: [AuthGuard],
     children: [
       {
@@ -21,7 +21,7 @@ const routes: Routes = [
       {
         path: 'procenaRizikaOdMU/:jmbg/:datumRodjenja',
         canActivate: [AuthGuard],
-        component: ProcenaRizikaOdMUComponent,
+        component: RiskEstimationFormComponent,
       },
     ]
   }

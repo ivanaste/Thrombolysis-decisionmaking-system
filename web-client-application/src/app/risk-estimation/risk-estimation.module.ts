@@ -9,14 +9,14 @@ import {RiskEstimationComponent} from './components/risk-estimation/risk-estimat
 import {SharedModule} from "../shared/shared.module";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
 import {MatRadioModule} from "@angular/material/radio";
-import {ProcenaRizikaOdMUComponent} from "./components/procena-rizika-od-mu/procena-rizika-od-mu.component";
+import {RiskEstimationFormComponent} from "./components/risk-estimation-form/risk-estimation-form.component";
 
 
 @NgModule({
   declarations: [
     RiskEstimationTableComponent,
-    RiskEstimationComponent,
-    ProcenaRizikaOdMUComponent,
+    RiskEstimationFormComponent,
+    RiskEstimationFormComponent,
   ],
   imports: [
     CommonModule,

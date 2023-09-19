@@ -6,17 +6,17 @@ import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-procena-rizika-od-mu',
-  templateUrl: './procena-rizika-od-mu.component.html',
-  styleUrls: ['./procena-rizika-od-mu.component.scss']
+  templateUrl: 'risk-estimation-form.component.html',
+  styleUrls: ['./risk-estimation-form.component.scss']
 })
-export class ProcenaRizikaOdMUComponent implements OnInit {
+export class RiskEstimationFormComponent implements OnInit {
   procenaRizikaForm: FormGroup;
   jmbgPacijenta: string;
   datumRodjenjaPacijenta: Date;
 
   constructor(private formBuilder: FormBuilder, private store: Store, private route: ActivatedRoute) {
     this.procenaRizikaForm = this.formBuilder.group({
-      jmbgPacijenta: new FormControl({value: null, disabled: true}),
+      jmbgPacijenta: new FormControl({value: this.jmbgPacijenta, disabled: true}),
       trajanjeSimptoma: ['', Validators.required],
       klinickiSimptom: ['', Validators.required],
       stenozaKrvnogSuda: ['', Validators.required],
@@ -28,6 +28,7 @@ export class ProcenaRizikaOdMUComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.jmbgPacijenta = params.get('jmbg') || '';
+      console.log(params)
       const datumRodjenjaString = params.get('datumRodjenja') || new Date();
       this.datumRodjenjaPacijenta = new Date(datumRodjenjaString);
       this.procenaRizikaForm.get('jmbgPacijenta')?.setValue(this.jmbgPacijenta);
