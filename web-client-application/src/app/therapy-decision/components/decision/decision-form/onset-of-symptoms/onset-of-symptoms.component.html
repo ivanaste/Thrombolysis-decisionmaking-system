@@ -10,12 +10,10 @@
           </mat-form-field>
         </div>
         <div class="col-6">
-          <mat-form-field style="width: 100%">
-            <mat-label>Datum rodjenja pacijenta</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="datumRodjenjaPacijenta">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
+            nastali u toku
+            sna
+          </mat-checkbox>
         </div>
       </div>
       <div class="row">
@@ -78,14 +76,6 @@
         <div class="col-6">
           <mat-checkbox color="green" formControlName="postojeSvedoci"
                         *ngIf="myForm.controls['stanjeSvesti'].value !== 'Pri svesti'">Postoje svedoci
-          </mat-checkbox>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-checkbox color="green" formControlName="simptomiNastaliUTokuSna">Simptomi su
-            nastali u toku
-            sna
           </mat-checkbox>
         </div>
       </div>

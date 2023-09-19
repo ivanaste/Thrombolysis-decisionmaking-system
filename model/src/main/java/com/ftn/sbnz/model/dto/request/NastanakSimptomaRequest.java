@@ -18,8 +18,6 @@ public class NastanakSimptomaRequest {
 
 	private String jmbgPacijenta;
 
-	private LocalDate datumRodjenjaPacijenta;
-
 	private LocalDateTime trenutakNastanka;
 
 	private StanjeSvesti stanjeSvesti;

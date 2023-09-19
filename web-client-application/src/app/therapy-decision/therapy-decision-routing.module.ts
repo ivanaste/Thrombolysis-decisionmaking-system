@@ -19,7 +19,7 @@ const routes: Routes = [
         resolve: [DecisionsResolver]
       },
       {
-        path: 'trenutakNastanka',
+        path: 'trenutakNastanka/:jmbg',
         component: DecisionFormComponent,
       },
     ]

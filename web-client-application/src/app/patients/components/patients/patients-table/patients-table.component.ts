@@ -17,7 +17,7 @@ import {selectRole} from "../../../../auth/store/auth.selectors";
 export class PatientsTableComponent implements OnInit, AfterViewInit {
   patients$: Observable<User[]>;
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Brisanje'];
+  displayedColumns: string[] = ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Procena rizika', 'Primena terapije', 'Brisanje'];
   search = "";
   private searchSubject: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
@@ -62,6 +62,14 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
 
   editPatient(row: any) {
     this.router.navigate(['/patients/edit/', row.email]);
+  }
+
+  makeDecision(patient: any) {
+    this.router.navigate(['/decisions/trenutakNastanka/', patient.jmbg]);
+  }
+
+  makeRistEstimation(patient: any) {
+    this.router.navigate(['/risk-estimations/procenaRizikaOdMU/', patient.jmbg, patient.datumRodjenja]);
   }
 
   onDelete(id: string) {

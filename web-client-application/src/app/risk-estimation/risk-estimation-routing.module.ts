@@ -19,7 +19,7 @@ const routes: Routes = [
         resolve: [RiskEstimationResolver]
       },
       {
-        path: 'procenaRizikaOdMU',
+        path: 'procenaRizikaOdMU/:jmbg/:datumRodjenja',
         canActivate: [AuthGuard],
         component: ProcenaRizikaOdMUComponent,
       },
