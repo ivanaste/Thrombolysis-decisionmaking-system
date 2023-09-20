@@ -17,7 +17,7 @@ import {selectRole} from "../../../../auth/store/auth.selectors";
 export class PatientsTableComponent implements OnInit, AfterViewInit {
   patients$: Observable<User[]>;
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Procena rizika', 'Primena terapije', 'Brisanje'];
+  displayedColumns: string[];
   search = "";
   private searchSubject: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
@@ -40,6 +40,7 @@ export class PatientsTableComponent implements OnInit, AfterViewInit {
     this.storeSubscription = this.store
       .select(selectRole)
       .subscribe((role) => (this.userRole = role));
+    this.displayedColumns = this.userRole === 'NURSE' ? ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Brisanje'] : ['Jmbg Pacijenta', 'Datum rodjenja', 'Ime', 'Prezime', 'Procena rizika', 'Primena terapije', 'Brisanje'];
   }
 
   ngAfterViewInit(): void {
