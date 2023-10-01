@@ -1,6 +1,8 @@
 <mat-card class="form" style="margin-top: 3%">
   <mat-card-header class="form">
-    <mat-card-title>Izmena informacija o {{userRole === 'NURSE'? 'pacijentu' : 'radniku'}}</mat-card-title>
+    <mat-card-title *ngIf="loggedInUserRole === 'NURSE'">Izmena informacija o pacijentu</mat-card-title>
+    <mat-card-title *ngIf="loggedInUserRole === 'ADMIN' && user.role === 'NURSE'">Izmena informacija o medicinskoj sestri</mat-card-title>
+    <mat-card-title *ngIf="loggedInUserRole === 'ADMIN' && user.role === 'DOCTOR'">Izmena informacija o doktoru</mat-card-title>
   </mat-card-header>
 
   <mat-card-content class="form">
@@ -12,7 +14,7 @@
             <input matInput placeholder="Unesite email" formControlName="email">
           </mat-form-field>
         </div>
-        <div class="input-row" *ngIf="userRole === 'NURSE'">
+        <div class="input-row" *ngIf="loggedInUserRole === 'NURSE'">
           <mat-form-field appearance="fill">
             <mat-label>Jmbg</mat-label>
             <input matInput placeholder="Unesite jmbg" formControlName="jmbg">
@@ -32,7 +34,7 @@
                    formControlName="prezime">
           </mat-form-field>
         </div>
-        <div class="input-row" *ngIf="userRole === 'NURSE'">
+        <div class="input-row" *ngIf="loggedInUserRole === 'NURSE'">
           <mat-form-field appearance="fill">
             <mat-label>Datum rodjenja</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="datumRodjenja">

@@ -1,32 +1,42 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TrenutakNastanka} from "../../../../model/TrenutakNastanka";
 import {Decision} from "../../../../model/decision";
 import {DecisionStatus} from "../../../../model/decision-status";
+import {take} from "rxjs";
+import {selectRole} from "../../../../../auth/store/auth.selectors";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-trenutak-nastanka-simptoma',
   templateUrl: './onset-of-symptoms.component.html',
   styleUrls: ['./onset-of-symptoms.component.scss']
 })
-export class OnsetOfSymptomsComponent {
+export class OnsetOfSymptomsComponent implements OnInit {
   myForm: FormGroup;
+  jmbgPacijenta: string;
   stanjaSvesti: string[] = ['Pri svesti', 'Poremecaj u razumevanju govora', 'Poremecaj u izrazavanju govora', 'Mentalno retardiran', 'Dementan']
   @ViewChild('timepicker') timepicker: any;
 
   @Output() trenutakNastankaObj: EventEmitter<TrenutakNastanka> = new EventEmitter<TrenutakNastanka>();
   @Input() odlukaOTrombolizi: Decision | null;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute) {
     this.myForm = this.formBuilder.group({
-      jmbgPacijenta: ['', Validators.required],
-      datumRodjenjaPacijenta: [new Date(2000, 0, 1), Validators.required],
+      jmbgPacijenta: new FormControl({value: null, disabled: true}),
       simptomiNastaliUTokuSna: [''],
       postojeSvedoci: [''],
       vremeNastankaSimptoma: ['', Validators.required],
       datumNastankaSimptoma: [new Date(), Validators.required],
       stanjeSvesti: ['Pri svesti', Validators.required]
     });
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.jmbgPacijenta = params.get('jmbg') || '';
+      this.myForm.get('jmbgPacijenta')?.setValue(this.jmbgPacijenta);
+    })
   }
 
   openFromIcon(timepicker: { open: () => void }) {
@@ -43,8 +53,7 @@ export class OnsetOfSymptomsComponent {
     if (this.myForm.valid) {
       const formValues = this.myForm.value;
       const trenutakNastanka = new TrenutakNastanka(
-        formValues.jmbgPacijenta,
-        this.adjustTimeZoneOffset(formValues.datumRodjenjaPacijenta),
+        this.jmbgPacijenta,
         formValues.simptomiNastaliUTokuSna,
         formValues.postojeSvedoci,
         this.mergeTimeWithDate(formValues.vremeNastankaSimptoma, formValues.datumNastankaSimptoma),

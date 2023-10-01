@@ -5,10 +5,13 @@
         <img src="../../../assets/logo.png" alt="Thromoblysis" width="40px" height="50px">
       </a>
       <div class="menu">
-        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Istorija odluka o primeni terapije</a>
-        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Istorija procena rizika od MU</a>
+        <button mat-button [matMenuTriggerFor]="istorijaMenu" style="color: white; font-size: large"><a>Pregled istorije</a></button>
+        <mat-menu #istorijaMenu="matMenu">
+          <button mat-menu-item *ngIf="userRole === 'DOCTOR'" routerLink="/decisions">Odluke o primeni terapije</button>
+          <button mat-menu-item *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations">Procene rizika od MU</button>
+        </mat-menu>
         <a *ngIf="userRole === 'NURSE' || userRole === 'ADMIN'"
-           routerLink="auth/signup">Registruj {{userRole === 'NURSE' ? 'pacijenta' : 'radnika'}}</a>
+           routerLink="auth/signup">Registracija {{userRole === 'NURSE' ? 'pacijenta' : 'radnika'}}</a>
         <a *ngIf="userRole === 'DOCTOR' || userRole === 'NURSE'" routerLink="/patients">Pacijenti</a>
         <a *ngIf="userRole === 'ADMIN'" routerLink="/workers">Radnici</a>
       </div>
@@ -16,10 +19,10 @@
 
     <div class="row" style="justify-content: center">
       <div class="menu">
-        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions/trenutakNastanka">Odluka o primeni trombolize</a>
-        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations/procenaRizikaOdMU">Procena rizika od MU</a>
+<!--        <a *ngIf="userRole === 'DOCTOR'" routerLink="/decisions/trenutakNastanka">Odluka o primeni trombolize</a>-->
+<!--        <a *ngIf="userRole === 'DOCTOR'" routerLink="/risk-estimations/procenaRizikaOdMU">Procena rizika od MU</a>-->
         <a *ngIf="userRole" routerLink="/password/change/{{this.userToken}}">Promena lozinke</a>
-        <a *ngIf="userRole" routerLink="/" (click)="logout()">Log Out</a>
+        <a *ngIf="userRole" routerLink="/" (click)="logout()">Odjavi se</a>
       </div>
     </div>
   </div>

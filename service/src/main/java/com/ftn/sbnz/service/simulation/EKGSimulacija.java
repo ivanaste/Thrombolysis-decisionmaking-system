@@ -32,7 +32,7 @@ public class EKGSimulacija {
 
     public Pritisak simulirajMerenjePritiska() {
         Pritisak pritisak = new Pritisak();
-        pritisak.setSistolni((int) GenerisiRandomVrednosti.execute(90.00, 180.00));
+        pritisak.setSistolni((int) GenerisiRandomVrednosti.execute(90.00, 200.00));
         pritisak.setDijastolni((int) GenerisiRandomVrednosti.execute(60.00, 120.00));
         return pritisak;
     }

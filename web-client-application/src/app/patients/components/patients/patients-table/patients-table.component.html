@@ -1,7 +1,7 @@
 <div class="patients-table-container">
   <div class="patients-table-content">
     <mat-form-field appearance="fill" style="width: 25%">
-      <mat-label>Search</mat-label>
+      <mat-label>Pretraži</mat-label>
       <button matTooltip="Search" matPrefix mat-icon-button>
         <mat-icon svgIcon="search"></mat-icon>
       </button>
@@ -10,7 +10,7 @@
     <mat-table class="patients-table" [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Jmbg Pacijenta">
-        <mat-header-cell *matHeaderCellDef> JMBG Pacijenta</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>JMBG</mat-header-cell>
         <mat-cell *matCellDef="let patient"> {{ patient.jmbg }} </mat-cell>
       </ng-container>
 
@@ -32,6 +32,23 @@
           *matCellDef="let patient"> {{ patient.surname | capitalizedLowerCase }} </mat-cell>
       </ng-container>
 
+      <ng-container *ngIf="userRole === 'DOCTOR'" matColumnDef="Procena rizika">
+        <mat-header-cell *matHeaderCellDef class="small-width">Rizik od moždanog udara</mat-header-cell>
+        <mat-cell *matCellDef="let patient">
+          <button mat-icon-button (click)="makeRistEstimation(patient)">
+            <mat-icon>donut_large</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngIf="userRole === 'DOCTOR'" matColumnDef="Primena terapije">
+        <mat-header-cell *matHeaderCellDef class="small-width">Trombolitička terapija</mat-header-cell>
+        <mat-cell *matCellDef="let patient">
+          <button mat-icon-button (click)="makeDecision(patient)">
+            <mat-icon>donut_large</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="Brisanje">
         <mat-header-cell *matHeaderCellDef class="small-width"> Brisanje</mat-header-cell>

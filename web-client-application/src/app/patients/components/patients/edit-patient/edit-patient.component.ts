@@ -18,7 +18,7 @@ export class EditPatientComponent implements OnInit {
   user$: Observable<User>;
   user: User;
   storeSubscription!: Subscription;
-  userRole: string | null = null;
+  loggedInUserRole: string | null = null;
 
   constructor(private route: ActivatedRoute, private patientsService: PatientsService, private store: Store, private notifierService: NotifierService) {
   }
@@ -46,7 +46,7 @@ export class EditPatientComponent implements OnInit {
       })
       this.storeSubscription = this.store
         .select(selectRole)
-        .subscribe((role) => (this.userRole = role));
+        .subscribe((role) => (this.loggedInUserRole = role));
     });
 
   }
@@ -54,7 +54,7 @@ export class EditPatientComponent implements OnInit {
   editPatient() {
     this.user.name = this.patientForm.controls['ime'].value;
     this.user.surname = this.patientForm.controls['prezime'].value;
-    if (this.userRole === 'NURSE') {
+    if (this.loggedInUserRole === 'NURSE') {
       this.user.datumRodjenja = this.patientForm.controls['datumRodjenja'].value
       this.user.datumRodjenja = this.adjustTimeZoneOffset(this.user.datumRodjenja);
     }

@@ -12,29 +12,21 @@ import java.util.Random;
 @Data
 public class CTSimulacija {
 
-    private List<ZnakIshemije> uoceniZnaciIshemije;
+    private static final Integer MAX_BROJ_ZNAKOVA = 3;
 
     public List<ZnakIshemije> simulirajOcitavanjeCTa() {
-        // Simulirajte očitavanje temperature
         final Random random = new Random();
-        final int randomValue = random.nextInt(3);
-        return dobaviRandomZnakoveIshemije(randomValue);
-    }
+        final ZnakIshemije[] moguciZnaci = ZnakIshemije.values();
 
-    private List<ZnakIshemije> dobaviRandomZnakoveIshemije(final int brojZnakova) {
-        final Random random = new Random();
-        final ZnakIshemije[] znaci = ZnakIshemije.values();
+        final List<ZnakIshemije> uoceniZnaci = new ArrayList<>();
 
-        final List<ZnakIshemije> randomZnaci = new ArrayList<>();
-
-        for (int i = 0; i < brojZnakova; i++) {
-            final int randomIndex = random.nextInt(znaci.length);
-            final ZnakIshemije randomZnak = znaci[randomIndex];
-            if (!randomZnaci.contains(randomZnak)) {
-                randomZnaci.add(znaci[randomIndex]);
+        for (int i = 0; i < MAX_BROJ_ZNAKOVA; i++) {
+            final int randomIndex = random.nextInt(moguciZnaci.length);
+            final ZnakIshemije randomZnak = moguciZnaci[randomIndex];
+            if (!uoceniZnaci.contains(randomZnak)) {
+                uoceniZnaci.add(moguciZnaci[randomIndex]);
             }
         }
-
-        return randomZnaci;
-    }
+        return uoceniZnaci;    }
 }
+
