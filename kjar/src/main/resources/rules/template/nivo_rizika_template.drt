@@ -22,8 +22,8 @@ no-loop true
         $ABCD2: ABCD2($procenaRizika.getIdProceneRizika() == idProcene, uProcesu == false,
                       skor >= @{minSkor}, skor < @{maxSkor})
     then
-        System.out.println("Pacijent ima ABCD2 skor " + $ABCD2.getSkor() + ", te je nivo rizika od MU: @{noviNivoRizika}.");
     	modify ($procenaRizika) { setNivoRizika(NivoRizikaOdMU.@{noviNivoRizika}) };
 end
 
 end template
+

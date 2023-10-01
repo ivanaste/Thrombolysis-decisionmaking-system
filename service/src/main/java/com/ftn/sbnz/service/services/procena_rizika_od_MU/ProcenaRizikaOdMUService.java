@@ -5,7 +5,7 @@ import com.ftn.sbnz.model.events.ProcenaRizikaOdMUEvent;
 import com.ftn.sbnz.model.models.*;
 import com.ftn.sbnz.service.repository.ProcenaRizikaOdMURepository;
 import com.ftn.sbnz.service.services.korisnik.PacijentService;
-import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
+import com.ftn.sbnz.service.simulation.EKGSimulacija;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ public class ProcenaRizikaOdMUService {
     private final KieSession kieSession;
     private final ProcenaRizikaOdMURepository procenaRizikaOdMURepository;
     private final Map<String, Pacijent> PacijentiNaEKGu;
-    private final MonitoringSimulacija monitoringSimulacija;
+    private final EKGSimulacija monitoringSimulacija;
 
     @Autowired
-    public ProcenaRizikaOdMUService(PacijentService korisnikService, KieSession kieSession, ProcenaRizikaOdMURepository procenaRizikaOdMURepository, Map<String, Pacijent> pacijentiNaEKGu, MonitoringSimulacija monitoringSimulacija) {
+    public ProcenaRizikaOdMUService(PacijentService korisnikService, KieSession kieSession, ProcenaRizikaOdMURepository procenaRizikaOdMURepository, Map<String, Pacijent> pacijentiNaEKGu, EKGSimulacija monitoringSimulacija) {
         this.korisnikService = korisnikService;
         this.kieSession = kieSession;
         this.procenaRizikaOdMURepository = procenaRizikaOdMURepository;

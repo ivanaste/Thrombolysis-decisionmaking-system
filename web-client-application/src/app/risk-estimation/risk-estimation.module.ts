@@ -14,6 +14,7 @@ import {RiskEstimationFormComponent} from "./components/risk-estimation-form/ris
 
 @NgModule({
   declarations: [
+    RiskEstimationComponent,
     RiskEstimationTableComponent,
     RiskEstimationFormComponent,
     RiskEstimationFormComponent,

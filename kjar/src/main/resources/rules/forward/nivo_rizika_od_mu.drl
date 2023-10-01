@@ -39,9 +39,12 @@ import java.util.UUID;
 
 //ako je status procena u toku, znaci da su prosle prve tri faze, proverava da li postoji ijedan alarm za atrijalnu fibrilaciju
 rule "Ukoliko je utvrdjena atrijalna fibrilacija, pacijent ima visok rizik od MU"
-salience 10000
+salience 100
 	when
-		$nivoRizika: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta, nivoRizika == NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE)
+		$nivoRizika: ProcenaRizikaOdMUEvent(
+		                 $jmbgPacijenta1: jmbgPacijenta,
+		                 nivoRizika == NivoRizikaOdMU.PROCENA_RIZIKA_OD_ATRIJALNE_FIBRILACIJE
+		                 )
 		Number(intValue >= 1) from accumulate(
         		    $alarm: AlarmEKG(
         		        jmbgPacijenta == $jmbgPacijenta1,
@@ -50,16 +53,17 @@ salience 10000
         		    count($alarm)
         		)
 	then
-		System.out.println("Pacijent ima visok rizik od MU, jer je uocena atrijalna fibrilacija.");
 		modify ($nivoRizika) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
 end
 
 
 rule "Ukoliko se kod pacijenta TIA javi unutar tri dana, postoji visok rizik od MU."
 no-loop true
-salience 1000
+salience 100
 	when
-		$procenaRizika1: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta, $idProceneRizika1: idProceneRizika, nivoRizika == NivoRizikaOdMU.PROCENA_U_TOKU)
+		$procenaRizika1: ProcenaRizikaOdMUEvent($jmbgPacijenta1: jmbgPacijenta,
+		                                    $idProceneRizika1: idProceneRizika,
+		 nivoRizika == NivoRizikaOdMU.PROCENA_U_TOKU)
         $idTrenutneProcene: UUID(this == $idProceneRizika1)
 		Number(intValue >= 1) from accumulate(
         		    $procenaRizika2: ProcenaRizikaOdMUEvent(
@@ -70,7 +74,6 @@ salience 1000
         		    count($procenaRizika2)
         		)
 	then
-		System.out.println("Pacijent ima visok rizik od MU, jer se TIA ponovio unutar tri dana.");
 		modify ($procenaRizika1) { setNivoRizika(NivoRizikaOdMU.VISOK_RIZIK) };
 end
 

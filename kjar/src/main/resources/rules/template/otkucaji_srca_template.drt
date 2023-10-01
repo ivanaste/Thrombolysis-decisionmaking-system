@@ -26,10 +26,7 @@ rule "rad_srca_@{radSrca}"
 		String(this == "First Minute Passed")
 		not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.@{radSrca}))
 	then
-		System.out.println("Broj otkucaja srca: " + $brojOtkucaja);
-		System.out.println("Alarm - Pacijent ima @{radSrca} rad srca");
 		insert(new AlarmEKG($jmbgPacijenta1, RadSrca.@{radSrca}));
 end
-
 
 end template

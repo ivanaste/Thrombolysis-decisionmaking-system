@@ -5,15 +5,15 @@ import com.ftn.sbnz.model.dto.request.NastanakSimptomaRequest;
 import com.ftn.sbnz.model.dto.request.NeuroloskiPregledRequest;
 import com.ftn.sbnz.model.events.OdlukaOTromboliziEvent;
 import com.ftn.sbnz.model.models.*;
-import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
 import com.ftn.sbnz.service.repository.KorisnikRepository;
+import com.ftn.sbnz.service.repository.OdlukaOTromboliziRepository;
 import com.ftn.sbnz.service.services.alarm.AlarmListener;
 import com.ftn.sbnz.service.services.bolesti.BolestiService;
 import com.ftn.sbnz.service.services.korisnik.PacijentService;
 import com.ftn.sbnz.service.services.mail.SendMail;
 import com.ftn.sbnz.service.simulation.CTSimulacija;
+import com.ftn.sbnz.service.simulation.EKGSimulacija;
 import com.ftn.sbnz.service.simulation.LaboratorijaSimulacija;
-import com.ftn.sbnz.service.simulation.MonitoringSimulacija;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.UUID;
 public class OdlukaOTromboliziService {
 
     @Autowired
-    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final KorisnikRepository korisnikRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final PacijentService korisnikService, final MonitoringSimulacija monitoringSimulacija, final BolestiService bolestiService) {
+    public OdlukaOTromboliziService(final KieSession kieSession, Map<String, Pacijent> PacijentiNaEKGu, final KorisnikRepository korisnikRepository, final SendMail sendMail, final OdlukaOTromboliziRepository odlukaOTromboliziRepository, final PacijentService korisnikService, final EKGSimulacija monitoringSimulacija, final BolestiService bolestiService) {
         this.kieSession = kieSession;
         this.odlukaOTromboliziRepository = odlukaOTromboliziRepository;
         this.korisnikService = korisnikService;
@@ -55,7 +55,7 @@ public class OdlukaOTromboliziService {
 
     private final LaboratorijaSimulacija laboratorijaSimulacija;
 
-    private final MonitoringSimulacija monitoringSimulacija;
+    private final EKGSimulacija monitoringSimulacija;
     private final SendMail sendMail;
     private final KorisnikRepository korisnikRepository;
     private final Map<String, Pacijent> PacijentiNaEKGu;

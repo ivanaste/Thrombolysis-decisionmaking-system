@@ -53,41 +53,30 @@ global java.lang.Integer indexGlobal;
 //end
 
 
-rule "Ukoliko postoji pet otkucaja srca, izracunaj razliku RR intervala."
+rule "Ako je razlika poslednjih 5 RR intervala veća od tri, sumnja se na atrijalnu fibrilaciju."
 	when
 		$otkucaj1: OtkucajSrcaEvent($jmbgPacijenta1: jmbgPacijenta, rrInterval != null)
 		$posljednjih5: List(size >= 5) from collect(
                 OtkucajSrcaEvent(jmbgPacijenta == $jmbgPacijenta1, rrInterval != null) over window:length(5)
             )
-        not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
         $prviOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(0))
         $drugiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(1))
         $treciOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(2))
         $cetvrtiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(3))
         $petiOtkucaj: OtkucajSrcaEvent(this == $posljednjih5.get(4))
         eval(
-            (Math.abs($prviOtkucaj.getRrInterval() - $drugiOtkucaj.getRrInterval())
-            +
-            Math.abs($drugiOtkucaj.getRrInterval() - $treciOtkucaj.getRrInterval())
-            +
-            Math.abs($treciOtkucaj.getRrInterval() - $cetvrtiOtkucaj.getRrInterval())
-            +
-            Math.abs($cetvrtiOtkucaj.getRrInterval() - $petiOtkucaj.getRrInterval())) >= 4000
+            ($prviOtkucaj.getRrInterval() + $drugiOtkucaj.getRrInterval()
+            + $treciOtkucaj.getRrInterval() + $cetvrtiOtkucaj.getRrInterval()
+            + $petiOtkucaj.getRrInterval()
+            )
+            >= 4000
         )
+        not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta1, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
 	then
-	    int razlika = Math.abs($prviOtkucaj.getRrInterval() - $drugiOtkucaj.getRrInterval())
-                                     +
-                                     Math.abs($drugiOtkucaj.getRrInterval() - $treciOtkucaj.getRrInterval())
-                                     +
-                                     Math.abs($treciOtkucaj.getRrInterval() - $cetvrtiOtkucaj.getRrInterval())
-                                     +
-                                     Math.abs($cetvrtiOtkucaj.getRrInterval() - $petiOtkucaj.getRrInterval());
-	    System.out.println("Razlika RR intervala: " + razlika);
-	    System.out.println("Alarm - Kod pacijenta se sumnja na atrijalnu fibrilaciju");
         insert(new AlarmEKG($jmbgPacijenta1, RadSrca.ATRIJALNA_FIBRILACIJA));
 end
 
-rule "Ukoliko postoji vise od 3 P zubca za poslednji R zubac, pacijent visokorizican"
+rule "Ukoliko postoji vise od tri P zupca za poslednji R zubac, sumnja se na atrijalnu fibrilaciju"
     when
         $rZubac: OtkucajSrcaEvent($jmbgPacijenta: jmbgPacijenta, $rZubacId: rZubac, rrInterval == null)
         Number(intValue >= 4) from accumulate(
@@ -101,11 +90,10 @@ rule "Ukoliko postoji vise od 3 P zubca za poslednji R zubac, pacijent visokoriz
         not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
 
     then
-    	System.out.println("Alarm postoji vise od 3 P zubaca za poslednji r zubac!!");
         insert(new AlarmEKG($jmbgPacijenta, RadSrca.ATRIJALNA_FIBRILACIJA));
 end
 
-rule "Ukoliko je odnos r zubaca i p zubaca 1:2 ili vise, pacijent visokorizican"
+rule "Ukoliko je odnos R zubaca i P zubaca 1:2 ili više, sumnja se na atrijalnu fibrilaciju"
     when
         $rZubacEvent: OtkucajSrcaEvent($jmbgPacijenta: jmbgPacijenta, $rZubacId: rZubac, rrInterval == null)
         String(this == "First Minute Passed")
@@ -130,11 +118,7 @@ rule "Ukoliko je odnos r zubaca i p zubaca 1:2 ili vise, pacijent visokorizican"
         eval(($brojPZubaca.doubleValue() / $brojRZubaca.doubleValue()) >= 2.0)
         not(AlarmEKG(jmbgPacijenta == $jmbgPacijenta, radSrca == RadSrca.ATRIJALNA_FIBRILACIJA))
     then
-        Double brRZubacaDouble = $brojRZubaca.doubleValue();
-        Double brPZubacaDouble = $brojPZubaca.doubleValue();
-        System.out.println("Alarm odnos R i P zubaca veci od 1:2!!");
         insert(new AlarmEKG($jmbgPacijenta, RadSrca.ATRIJALNA_FIBRILACIJA));
-
 end
 
 
